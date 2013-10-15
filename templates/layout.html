@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>CS157A Project</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css" />
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
+    </head>
+    <body>
+        <div data-role="page">
+            <div data-role="header">
+                <h1>CS157A Project</h1>
+            </div>
+            <div data-role="content">
+                <table data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
+                    <tbody>
+                        <tr>
+                        {% for entry in entries %}
+                            <td>{{ entry.title }}</td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form action="http://127.0.0.1:8051/" name="signupForm" id="signupForm" method="post">
+                <button data-inline="true" type="submit">Show All Book Tuples</button>
+            </form>
+        </div>
+    </body>
+</html>
