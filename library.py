@@ -10,9 +10,8 @@ from flask import Flask, request, session, g, redirect, url_for, \
 app = Flask(__name__)
 
 def connect_db():
-    return MySQLdb.connect(host='us-cdbr-east-04.cleardb.com', \
-        user='bebdd7a70588f7', passwd='a6c7c20c', \
-        db='heroku_59b3847e37c77e1', cursorclass=MySQLdb.cursors.DictCursor)
+    return MySQLdb.connect(host='us-cdbr-east-04.cleardb.com', user='bebdd7a70588f7',
+        passwd='a6c7c20c', db='heroku_59b3847e37c77e1')
 
 @app.before_request
 def before_request():
@@ -24,12 +23,14 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
-@app.route('/')
-def show_entries():
+@app.route('/<table>')
+def show_entries(table):
     cur = g.db.cursor()
-    cur.execute('select name from user')
-    entries = [dict(title=row['name']) for row in cur.fetchall()]
-    return render_template('layout.html', entries=entries)
+    cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "%s"' % (table))
+    headers = cur.fetchall()
+    cur.execute('SELECT * FROM %s' % (table))
+    entries = cur.fetchall()
+    return render_template('layout.html', headers=headers, entries=entries)
 
 if __name__ == '__main__':
     app.run(debug="True")

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html>
     <head>
@@ -15,12 +15,24 @@
             </div>
             <div data-role="content">
                 <table data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
-                    <tbody>
+                    {% set count = {'value': 0} %}
+                    <thead>
                         <tr>
-                        {% for entry in entries %}
-                            <td>{{ entry.title }}</td>
+                        {% for header in headers %}
+                            <th data-priority="{{ count.value }}">{{ header[0] }}</th>
+                            {% set newCount = count.value + 1 %}
+                            {% if count.update({'value': newCount}) %} {% endif %}
                         {% endfor %}
                         </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                        <tr>
+                            {% for i in range(count.value) %}
+                                <td>{{ entry[i] }}</td>
+                            {% endfor %}  
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
