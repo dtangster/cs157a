@@ -56,8 +56,8 @@ class Reservation(db.Model):
 	status = db.Column(db.String(1))
 
 @app.route('/')
-def hello():
-    return 'Hello World!'
+def login():
+    return 'Login Page'
 
 @app.route('/users/', methods=['GET'])
 def users():
