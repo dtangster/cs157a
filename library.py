@@ -158,6 +158,3 @@ def reservations():
 			json_results.append(row)
 
 		return jsonify(items=json_results)
-
-if __name__ == '__main__':
-    app.run()
