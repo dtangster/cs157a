@@ -10,3 +10,8 @@ $(document).ready(function() {
         }
     });
 });
+
+function validateLogin() {
+    var email = document.getElementById('email');
+    var password = document.getElementById('password');
+}
