@@ -40,7 +40,7 @@ class user(flask.views.MethodView):
         return flask.render_template('index2.html',  entries=rows, headers=head)  
 
 def connect_db():
-    con = mdb.connect(host='localhost', user='root', passwd='root', db='kim')
+    con = mdb.connect(host='localhost', user='root', passwd='Kolats23', db='kim')
     return con
 
 
