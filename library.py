@@ -32,8 +32,11 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
-@app.route('/')   
+@app.route('/', methods=['GET', 'POST'])   
 def show_main_page():
+    if request.method == 'POST':
+        return show_entries(request.form['table'])
+
     cur = g.db.cursor()
     cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "book"')
     headers = cur.fetchall()

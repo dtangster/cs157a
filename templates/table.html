@@ -2,7 +2,7 @@
 <thead>
     <tr>
         {% for header in headers %}
-            <th data-priority="{{ count.value }}">{{ header[0] }}</th>
+            <th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
         {% if count.update({'value': count.value + 1}) %} {% endif %}
         {% endfor %}
     </tr>
