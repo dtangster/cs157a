@@ -8,19 +8,20 @@
         <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
         <script src="{{ url_for('static', filename='login.js') }}"></script>
+        <script src="{{ url_for('static', filename='ajax.js') }}"></script>
     </head>
     <body>
         <div data-role="page">
-            <div data-role="header" style="z-index:1000;">
+            <div data-role="header">
                 <h1>Sticky Dogs Library</h1>
                 {% block login %}{% endblock %}
             </div>
             <ul id="tableButtons" data-role="controlgroup" data-type="horizontal">
-                <button data-mini="true" type="submit" value="user">User</button>
-                <button data-mini="true" type="submit" value="book">Book</button>
-                <button data-mini="true" type="submit" value="loan">Loan</button>
-                <button data-mini="true" type="submit" value="review">Review</button>
-                <button data-mini="true" type="submit" value="reservation">Reservation</button>
+                <button id="user" data-mini="true" type="submit">User</button>
+                <button id="book" data-mini="true" type="submit">Book</button>
+                <button id="loan" data-mini="true" type="submit">Loan</button>
+                <button id="review" data-mini="true" type="submit">Review</button>
+                <button id="reservation" data-mini="true" type="submit">Reservation</button>
             </ul>
             <div data-role="content">
                 <table id="tableContent" data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">

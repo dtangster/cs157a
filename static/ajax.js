@@ -1,28 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <script>
-        function loadXMLDoc() {
-            var xmlhttp;
-            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-                xmlhttp = new XMLHttpRequest();
-            }
+$(function() {
+    $("#tableButtons button").click(function() {
+        var id = $(this).attr("id");
+        var xmlhttp;
 
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
-                }
-            }
-
-            xmlhttp.open("GET","ajax_info.txt",true);
-            xmlhttp.send();
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
         }
-    </script>
-</head>
-<body>
 
-    <div id="myDiv"><h2>Let AJAX change this text</h2></div>
-    <button type="button" onclick="loadXMLDoc()">Change Content</button>
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("tableContent").innerHTML = xmlhttp.responseText;
+            }
+        }
 
-</body>
-</html>
+        xmlhttp.open("POST", "/" + id + "/", true);
+        xmlhttp.setRequestHeader("Content-type", "text/html");
+        xmlhttp.send();
+    });
+});
+

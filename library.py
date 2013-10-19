@@ -41,14 +41,14 @@ def show_main_page():
     entries = cur.fetchall()
     return render_template('layout.html', headers=headers, entries=entries)   
 
-@app.route('/<table>/')
+@app.route('/<table>/', methods=['GET', 'POST'])
 def show_entries(table):
     cur = g.db.cursor()
     cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "%s"' % (table))
     headers = cur.fetchall()
     cur.execute('SELECT * FROM %s' % (table))
     entries = cur.fetchall()
-    return render_template('layout.html', headers=headers, entries=entries)
+    return render_template('table.html', headers=headers, entries=entries)
 
 
 if __name__ == '__main__':
