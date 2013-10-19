@@ -9,15 +9,6 @@
         <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
         <script src="static/login.js"></script>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
-$(document).ready(function(){
-    $( "button" ).click(function(){     
-        $("#test").hide();
-    });
-});
-</script>
-
     </head>
     <body>
         <div data-role="page">
@@ -31,35 +22,19 @@ $(document).ready(function(){
                         </div>
                         <div data-role="fieldcontain" class="ui-hide-label">
                             <label for="username">Password</label>
-                            <input type="text" name="email" id="email" placeholder="Password"/>
+                            <input type="password" name="password" id="password" placeholder="Password"/>
                         </div>
                         <button type="submit" id="login" name="login" data-inline="true">Login</button>
                         <button type="submit" id="register" name="register" data-inline="true">Register</button>
                 </form>
             </div>
-            
-
-<div data-role="content">
-
-<button type="submit" id="loan" name="loan" data-inline="true" data-mini="true"
-onclick="location.href='{{url_for('loan')}}';">Loan</button> 
-
-<button type="submit" id="loan" name="loan" data-inline="true" data-mini="true"
-onclick="location.href='{{url_for('book')}}';">Book</button> 
-
-<button type="submit" id="loan" name="loan" data-inline="true" data-mini="true"
-onclick="location.href='{{url_for('user')}}';">User</button> 
-
-
-</div>
-
             <div data-role="content">
                 <table data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
                     {% set count = {'value': 0} %}
                     <thead>
                         <tr>
                         {% for header in headers %}
-                            <th data-priority="{{ count.value }}">{{ header[0] }} </th>
+                            <th data-priority="{{ count.value }}">{{ header[0] }}</th>
                             {% if count.update({'value': count.value + 1}) %} {% endif %}
                         {% endfor %}
                         </tr>
@@ -79,12 +54,5 @@ onclick="location.href='{{url_for('user')}}';">User</button>
                 <button data-inline="true" type="submit">Show All Book Tuples</button>
             </form>
         </div>
-       <div>
-            Navigation:<br />
-            <ul>
-                {% block nav %}{% endblock %}
-            </ul>
-        </div>
-           
     </body>
 </html>

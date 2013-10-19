@@ -9,25 +9,15 @@
         <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
         <script src="static/login.js"></script>
+
     </head>
     <body>
         <div data-role="page">
-            <div data-role="header">
+            <div data-role="header" style="z-index:1000;">
                 <h1>Sticky Dogs Library</h1>
-                <button id="loginButton" type="button" class="ui-btn-right" data-inline="true">Login</button>
-                <form id="loginForm">
-                        <div data-role="fieldcontain" class="ui-hide-label">
-                            <label for="username">Email</label>
-                            <input type="text" name="email" id="email" placeholder="Email"/>
-                        </div>
-                        <div data-role="fieldcontain" class="ui-hide-label">
-                            <label for="username">Password</label>
-                            <input type="password" name="password" id="password" placeholder="Password"/>
-                        </div>
-                        <button type="submit" id="login" name="login" data-inline="true">Login</button>
-                        <button type="submit" id="register" name="register" data-inline="true">Register</button>
-                </form>
+                {% block login %}{% endblock %}
             </div>
+
             <div data-role="content">
                 <table data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
                     {% set count = {'value': 0} %}
@@ -48,11 +38,11 @@
                         </tr>
                         {% endfor %}
                     </tbody>
+
+                {% block menu %}{% endblock %}
+                {% block body %}{% endblock %}
                 </table>
-            </div>
-            <form action="http://127.0.0.1:8051/" name="signupForm" id="signupForm" method="post">
-                <button data-inline="true" type="submit">Show All Book Tuples</button>
-            </form>
+             </div>
         </div>
     </body>
 </html>

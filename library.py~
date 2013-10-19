@@ -32,6 +32,5 @@ def show_entries(table):
     entries = cur.fetchall()
     return render_template('layout.html', headers=headers, entries=entries)
 
-
 if __name__ == '__main__':
     app.run(debug="True")

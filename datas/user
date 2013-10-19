@@ -1,0 +1,71 @@
+uid	name	email	phone	fee	password	salt	accesslevel
+1000    "Tang, David"    "dtangster@yahoo.com"   "4082217617"    0.0   "not telling"   "yes please"    0
+1002    "Zhang, Walker"  "walk88@ymail.com"  "40888888888"   0.0 "geniius"   "salty" 0
+1003    "Calubathing, Ezekiel"  "sqlconfusion@yahoo.com" "4087777777" 0.0 "ezpz" "less sodium"   0
+1004    "Ng,Tin Hon" "tinhon@sjsu.edu"  "4082133232"  10.0  "pass1" "none"  2 
+1005    "Smirnova,Alexandra" "smirnova@sjsu.edu" "4084442134"   0.0 "pass2" "none"  2
+1006    "Lam,Kien Long" "longlam@sjsu.edu"  ""4081232321"    0.0 "pass3" "none" 2
+1007    "Pham,Duc Hong" "hongpham@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1008    "Nguyen,Tan Duc"   "ducnguyen@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2 
+1009    "Tucay Jr,Art Bauzon"   "tucayart@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1010    "Watts,Jordan James"    "jordanwatts@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1011    "Chan,Clifford Peter"   "chanpeter@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1012    "Tran,Kevin Hai"    "haitran@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1013    "Kaur,Jasleen"  "jasleenkaur@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2 
+1014    "Varghese,Sherin Roy"   "vargheseroy@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1015    "Kittirudeekul,Tapakorn"    "tapakornkitti@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1016    "Kang,Virender" "virenderkang@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1017    "Singh, Jeet"   "jeetsingh@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1018    "Dang,Tung Quang"   "quangdang@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1019    "Chiliejiangcun,No" "Nochilie@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1020    "Issaie,Nergal" "nergalshalom@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1021    "Horoufi,Arash" "arashhoruf@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1022    "Portela,Paul"  "portelapol@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1023    "Somers,Matthew Earl"   "somereal@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1024    "Tan,Kevin Michael" "tanmicheal@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1025    "Cheung,Jeffrey Chi-Hang"    "4081232321"    0.0 "pass3" "none" 2
+1026    "Huang,Jing"    "jinghuang@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1027    "Wu,Shuang" "wushu@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1028    "Stonehocker,Clark Russell" "stoneruss@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1029    "Dao,Tho Duc"   "daoduc@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1030    "Wang,Jianqi"   "@wangji@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1031    "Kaur,Sandeep"  "deepkaur@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1032    "Dang,Loc Vu"   "vudang@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1033    "Rashev,Kosta Rashev"   "rashkost@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1034    "Wong,Amber Yuen"   "yuwong@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1035    "Mevada,Dhruv Nilesh"   "nilmeva@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1036    "Lee I,Robert Thomas"   "thombert@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1037    "Vinco,Pamela"  "vinpam@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1038    "Jerusalimsky,Dmitry"   "jerusalem@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1039    "Lee,Peter Yujye"   "leeyu@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1040    "Keykhanzadeh,Mojdeh"   "keymoj@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1041    "Royal,Michael Ryan"    "rorya@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1042    "Kaur,Loveleen" "leenkaur@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1043    "Singh,Lashkar" "lashingh@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1044    "Nguyen,Arjay Malonzo"  "arjayballer@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1045    "Narad,Shivalik"    "shivarad@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1046    "Ha,Luong Kien" "lionkien@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1047    "Fausak,Andrew Raymond" "furaymond@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1048    "Khan,Zohaib Asghar"    "zhoas@sjsu.edu" "kashgar@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1049    "Nguyen,Vinh Tran"  "vintran@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1050    "Nguyen,Thuy Ngoc"  "nogcnguyen@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1051    "Nguyen,Toan Dang"  "dangnguyen@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1052    "Pham,Quang Xuan"   "xuanpham@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1053    "Nguyen,Chris Martin"   "martinnguyen@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1055    "Macias,Erik"   "macerik@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1056    "Ma,Alex Kalong"    "makalong@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1057    "Eicher,Christy S"  "eicherchristy@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1058    "Greenblatt,Cynthia M." "greencythina@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1059    "Gonzalez II,Miguel Angel"  "gonzalezmigz@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1060    "Nguyen,Tieu"   "nguyenti@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1061    "Liao,Steven Moon"  "liaomoon@sjsu.edu"   "4081232321"    0.0 "pass3" "none" 2
+1062    "Powar,Raj Ravindra"    "powarofinda@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1063    "Trinh,Qui Thu" "trithu@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1064    "Nguyen,Diem Ngoc"  "nguyngoc@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1065    "Le,Thinh Minh" "leminh@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1066    "Seto,Nicolas Raymond"  "setoray@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1067    "Doan,Vinh Dang Truong" "doantru@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1068    "Vyas,Parth Mahesh" "vyasmahesh@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1069    "Nakatani,Naoki"    "naknaoki@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1070    "Tam,Chun For"  "tamfor@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
+1071    "Le,Patrick Huy"    "lehuy@sjsu.edu" "4081232321"    0.0 "pass3" "none" 2
