@@ -3,13 +3,11 @@
 <html>
     <head>
         <title>CS157A Project</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css"/>
-        <link rel="stylesheet" href="static/style.css"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
         <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
-        <script src="static/login.js"></script>
-
+        <script src="{{ url_for('static', filename='login.js') }}"></script>
     </head>
     <body>
         <div data-role="page">
@@ -17,9 +15,15 @@
                 <h1>Sticky Dogs Library</h1>
                 {% block login %}{% endblock %}
             </div>
-
+            <ul id="tableButtons" data-role="controlgroup" data-type="horizontal">
+                <button data-mini="true" type="submit">User</button>
+                <button data-mini="true" type="submit">Book</button>
+                <button data-mini="true" type="submit">Loan</button>
+                <button data-mini="true" type="submit">Review</button>
+                <button data-mini="true" type="submit">Reservation</button>
+            </ul>
             <div data-role="content">
-                <table data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
+                <table id="tableContent" data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
                     {% set count = {'value': 0} %}
                     <thead>
                         <tr>
@@ -42,7 +46,7 @@
                 {% block menu %}{% endblock %}
                 {% block body %}{% endblock %}
                 </table>
-             </div>
+            </div>
         </div>
     </body>
 </html>
