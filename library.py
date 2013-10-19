@@ -32,6 +32,15 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+@app.route('/')   
+def show_main_page():
+    cur = g.db.cursor()
+    cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "book"')
+    headers = cur.fetchall()
+    cur.execute('SELECT * FROM book')
+    entries = cur.fetchall()
+    return render_template('layout.html', headers=headers, entries=entries)   
+
 @app.route('/<table>/')
 def show_entries(table):
     cur = g.db.cursor()
