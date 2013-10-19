@@ -13,7 +13,7 @@ $(function() {
             }
         }
 
-        xmlhttp.open("POST", "/" + id + "/", true);
+        xmlhttp.open("POST", "/" + id, true);
         xmlhttp.setRequestHeader("Content-type", "text/html");
         xmlhttp.send();
     });

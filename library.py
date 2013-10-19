@@ -41,7 +41,7 @@ def show_main_page():
     entries = cur.fetchall()
     return render_template('layout.html', headers=headers, entries=entries)   
 
-@app.route('/<table>/', methods=['GET', 'POST'])
+@app.route('/<table>/', methods=['POST'])
 def show_entries(table):
     cur = g.db.cursor()
     cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "%s"' % (table))
