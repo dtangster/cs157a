@@ -3,11 +3,20 @@
 # all the imports
 import MySQLdb
 import MySQLdb.cursors
+from redis import Redis
+from redis_session import RedisSessionInterface
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
+redis = Redis()
 app = Flask(__name__)
+
+# Trying to test sessions with a database-like application called Redis.
+# It overrides the default session behavior of Flask, but I haven't
+# figured out how to use it yet
+
+#app.session_interface = RedisSessionInterface()
 
 def connect_db():
     return MySQLdb.connect(host='us-cdbr-east-04.cleardb.com', user='bebdd7a70588f7',
@@ -26,9 +35,9 @@ def teardown_request(exception):
 @app.route('/<table>')
 def show_entries(table):
     cur = g.db.cursor()
-    cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "%s"' % (table))
+    cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "user"')
     headers = cur.fetchall()
-    cur.execute('SELECT * FROM %s' % (table))
+    cur.execute('SELECT * FROM user')
     entries = cur.fetchall()
     return render_template('layout.html', headers=headers, entries=entries)
 
