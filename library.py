@@ -33,18 +33,19 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
-@app.route('/', methods=['GET', 'POST'])   
+@app.route('/')   
 def show_main_page():
-    # This is the AJAX response
-    if request.method == 'POST':
-        table = get_table(request.form['table'])
-        return render_template('table.html', headers=table[0], entries=table[1])
-
     # This is the page returned normally
     table = get_table('book')
     return render_template('layout.html', headers=table[0], entries=table[1])   
 
-@app.route('/table/<table>/', methods=['POST'])
+@app.route('/ajax/table_request/')
+def ajax_table_request():
+    # This is the AJAX response
+    table = get_table(request.args.get('table'))
+    return render_template('table.html', headers=table[0], entries=table[1])
+
+@app.route('/table/<table>/')
 def get_table(table):
     cur = g.db.cursor()
     cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "%s"' % (table))

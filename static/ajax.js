@@ -1,8 +1,8 @@
 $(function() {
     $("#tableButtons button").click(function() {
         var id = $(this).attr("id");
-        $.post("/", {table: id}, function(result){
+        $.get("/ajax/table_request/", {table: id}, function(result){
             $("#tableContent").html(result).table("refresh");
         });
     });
-});
+}); 
