@@ -11,6 +11,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 
 redis = Redis()
 app = Flask(__name__)
+secret_key = "cs157a"
 
 # Trying to test sessions with a database-like application called Redis.
 # It overrides the default session behavior of Flask, but I haven't
@@ -34,25 +35,23 @@ def teardown_request(exception):
 
 @app.route('/', methods=['GET', 'POST'])   
 def show_main_page():
+    # This is the AJAX response
     if request.method == 'POST':
-        return show_entries(request.form['table'])
+        table = get_table(request.form['table'])
+        return render_template('table.html', headers=table[0], entries=table[1])
 
-    cur = g.db.cursor()
-    cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "book"')
-    headers = cur.fetchall()
-    cur.execute('SELECT * FROM book')
-    entries = cur.fetchall()
-    return render_template('layout.html', headers=headers, entries=entries)   
+    # This is the page returned normally
+    table = get_table('book')
+    return render_template('layout.html', headers=table[0], entries=table[1])   
 
-@app.route('/<table>/', methods=['POST'])
-def show_entries(table):
+@app.route('/table/<table>/', methods=['POST'])
+def get_table(table):
     cur = g.db.cursor()
     cur.execute('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "%s"' % (table))
     headers = cur.fetchall()
     cur.execute('SELECT * FROM %s' % (table))
     entries = cur.fetchall()
-    return render_template('table.html', headers=headers, entries=entries)
-
+    return (headers, entries)
 
 if __name__ == '__main__':
     app.run(debug="True")
