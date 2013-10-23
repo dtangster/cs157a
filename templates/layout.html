@@ -3,15 +3,16 @@
 <html>
     <head>
         <title>CS157A Project</title>
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='jquery.mobile-1.4.0-beta.1.min.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
-        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
+        <script src="{{ url_for('static', filename='jquery-2.0.3.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='jquery.mobile-1.4.0-beta.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='login.js') }}"></script>
-        <script src="{{ url_for('static', filename='ajax.js') }}"></script>
+        <script src="{{ url_for('static', filename='ajax.js') }}"></script>      
     </head>
     <body>
         <div data-role="page">
+            <img id="loadingImage" src="/static/ajax-loader.gif"/>
             <div data-role="header">
                 <h1>Sticky Dogs Library</h1>
                 {% block login %}{% endblock %}

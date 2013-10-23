@@ -11,7 +11,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 
 redis = Redis()
 app = Flask(__name__)
-secret_key = "cs157a"
+app.secret_key = "cs157a"
 
 # Trying to test sessions with a database-like application called Redis.
 # It overrides the default session behavior of Flask, but I haven't
@@ -52,6 +52,8 @@ def get_table(table):
     headers = cur.fetchall()
     cur.execute('SELECT * FROM %s' % (table))
     entries = cur.fetchall()
+
+    # Returns headers as index 0 and entries at index 1
     return (headers, entries)
 
 if __name__ == '__main__':

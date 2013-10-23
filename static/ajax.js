@@ -5,4 +5,12 @@ $(function() {
             $("#tableContent").html(result).table("refresh");
         });
     });
+
+    $(document).ajaxStart(function(){
+        $("#loadingImage").toggle();
+    });
+
+    $(document).ajaxStop(function(){
+        $("#loadingImage").toggle();
+    });
 }); 

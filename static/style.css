@@ -10,3 +10,10 @@
     background: #aaccee;
     display: none;     
 }
+
+#loadingImage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: none;
+}
