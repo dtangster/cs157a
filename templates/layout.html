@@ -3,26 +3,31 @@
 <html>
     <head>
         <title>CS157A Project</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='jquery.mobile-1.4.0-beta.1.min.css') }}"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
-        <script src="{{ url_for('static', filename='jquery-2.0.3.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='jquery.mobile-1.4.0-beta.1.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='login.js') }}"></script>
-        <script src="{{ url_for('static', filename='ajax.js') }}"></script>      
+        <link rel="stylesheet" href="static/css/jquery.mobile-1.4.0-beta.1.min.css"/>
+        <link rel="stylesheet" href="static/css/style.css"/>
+        <script src="static/js/jquery-2.0.3.min.js"></script>
+        <script src="static/js/jquery.mobile-1.4.0-beta.1.min.js"></script>
+        <script src="static/js/reconnecting-websocket.min.js"></script>
+        <script src="static/js/application.js"></script>
     </head>
     <body>
         <div data-role="page">
-            <img id="loadingImage" src="/static/ajax-loader.gif"/>
+            <img id="loadingImage" src="static/img/loading.gif"/>
+
+            <!-- THESE 3 LINES ARE FOR DEBUGGING -->
+            <label>SQL Query: <input id="query" type="text"/></label>
+            <button id="queryButton" data-inline="true">Run Query</button>
+            <div id="response"></div>
             <div data-role="header">
                 <h1>Sticky Dogs Library</h1>
                 {% block login %}{% endblock %}
             </div>
             <ul id="tableButtons" data-role="controlgroup" data-type="horizontal">
-                <button id="user" data-mini="true" type="submit">User</button>
-                <button id="book" data-mini="true" type="submit">Book</button>
-                <button id="loan" data-mini="true" type="submit">Loan</button>
-                <button id="review" data-mini="true" type="submit">Review</button>
-                <button id="reservation" data-mini="true" type="submit">Reservation</button>
+                <button id="user" data-mini="true">User</button>
+                <button id="book" data-mini="true">Book</button>
+                <button id="loan" data-mini="true">Loan</button>
+                <button id="review" data-mini="true">Review</button>
+                <button id="reservation" data-mini="true">Reservation</button>
             </ul>
             <div data-role="content">
                 <table id="tableContent" data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
