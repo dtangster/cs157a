@@ -4,8 +4,6 @@ $(function() {
     var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
     var table = "book";
 
-    //setTimeout(function() { outbox.send(JSON.stringify({ table: table})); }, 5000);
-
     inbox.onmessage = function(message) {
         var data = JSON.parse(message.data);
 
@@ -26,6 +24,9 @@ $(function() {
 
     $("#queryButton").click(function() {
         query = $("#query").val();
+
+        temp = JSON.stringify({ sql: query });
+        console.log("temp = " + temp);
 
         $.post("/query", { sql: query }, function(result) {
             if (result === "True") {

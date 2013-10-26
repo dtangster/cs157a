@@ -18,19 +18,18 @@ app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
 
-REDIS_BROADCASTER = 'broadcaster'
-REDIS_LISTENER = "listener"
+DATABASE_BROADCASTER = 'broadcaster'
 redis = redis.from_url('redis://rediscloud:JgbwHrCYL809ZGYF@pub-redis-14252.us-east-1-3.1.ec2.garantiadata.com:14252')
 
 # Class used to stream database data to client browser when there are any changes
 class DatabaseBroadcaster(object):
     def __init__(self):
         self.clients = list()
-        self.pubsub = redis.pubsub()
-        self.pubsub.subscribe(REDIS_BROADCASTER)
+        self.broadcaster = redis.pubsub()
+        self.broadcaster.subscribe(DATABASE_BROADCASTER)
 
     def __iter_data(self):
-        for message in self.pubsub.listen():
+        for message in self.broadcaster.listen():
             data = message.get('data')
             if message['type'] == 'message':
                 yield data
@@ -56,6 +55,24 @@ class DatabaseBroadcaster(object):
     def start(self):
         # Maintains Redis subscription in the background.
         gevent.spawn(self.run)
+
+@sockets.route('/submit')
+def inbox(ws):
+    # Receives incoming POST requests and inserts them into Redis.
+    while ws.socket is not None:
+        # Sleep to prevent *constant* context-switches.
+        gevent.sleep(0.1)
+        message = ws.receive()
+        redis.publish(DATABASE_BROADCASTER, message)
+
+@sockets.route('/receive')
+def outbox(ws):
+    # Send inserted data to clients via `DatabaseBroadcaster`.
+    broadcaster.register(ws)
+
+    while ws.socket is not None:
+        # Context switch while `DatabaseBroadcaster.start` is running in the background.
+        gevent.sleep()
 
 # Trying to test sessions with a database-like application called Redis.
 # It overrides the default session behavior of Flask, but I haven't
@@ -100,7 +117,6 @@ def get_table(table):
     # Returns headers as index 0 and entries at index 1
     return (headers, entries)
 
-# This is only for debugging
 @app.route('/query', methods=['POST'])
 def query():
     try:
@@ -113,24 +129,6 @@ def query():
     except:
         g.db.rollback()
         return "False"; # Failure
-    
-@sockets.route('/submit')
-def inbox(ws):
-    # Receives incoming POST requests and inserts them into Redis.
-    while ws.socket is not None:
-        # Sleep to prevent *constant* context-switches.
-        gevent.sleep(0.1)
-        message = ws.receive()
-        redis.publish(REDIS_BROADCASTER, message)
-
-@sockets.route('/receive')
-def outbox(ws):
-    # Send inserted data to clients via `DatabaseBroadcaster`.
-    broadcaster.register(ws)
-
-    while ws.socket is not None:
-        # Context switch while `DatabaseBroadcaster.start` is running in the background.
-        gevent.sleep()
 
 broadcaster = DatabaseBroadcaster()
 broadcaster.start()
