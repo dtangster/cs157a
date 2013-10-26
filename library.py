@@ -18,7 +18,8 @@ app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
 
-REDIS_CHAN = 'database'
+REDIS_BROADCASTER = 'broadcaster'
+REDIS_LISTENER = "listener"
 redis = redis.from_url('redis://rediscloud:JgbwHrCYL809ZGYF@pub-redis-14252.us-east-1-3.1.ec2.garantiadata.com:14252')
 
 # Class used to stream database data to client browser when there are any changes
@@ -26,7 +27,7 @@ class DatabaseBroadcaster(object):
     def __init__(self):
         self.clients = list()
         self.pubsub = redis.pubsub()
-        self.pubsub.subscribe(REDIS_CHAN)
+        self.pubsub.subscribe(REDIS_BROADCASTER)
 
     def __iter_data(self):
         for message in self.pubsub.listen():
@@ -120,7 +121,7 @@ def inbox(ws):
         # Sleep to prevent *constant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
-        redis.publish(REDIS_CHAN, message)
+        redis.publish(REDIS_BROADCASTER, message)
 
 @sockets.route('/receive')
 def outbox(ws):
