@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block login %}
+    <button id="loginButton" type="button" class="ui-btn-right" data-inline="true">Login</button>
+    <form id="loginForm">
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="username">Email</label>
+            <input type="text" name="email" id="email" placeholder="Email"/>
+        </div>
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="username">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password"/>
+        </div>
+        <button type="submit" id="login" name="login" data-inline="true">Login</button>
+        <button type="submit" id="register" name="register" data-inline="true">Register</button>
+    </form>
+{% endblock %}
+
+{% block tableButtons %}
+    <ul id="tableButtons" data-role="controlgroup" data-type="horizontal">
+        <button id="user" data-mini="true">User</button>
+        <button id="book" data-mini="true">Book</button>
+        <button id="loan" data-mini="true">Loan</button>
+        <button id="review" data-mini="true">Review</button>
+        <button id="reservation" data-mini="true">Reservation</button>
+    </ul>
+{% endblock %}
+
+{% block table %}
+    {% set count = {'value': 0} %}
+    <thead>
+        <tr>
+            {% for header in headers %}
+                <th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+            {% if count.update({'value': count.value + 1}) %} {% endif %}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            {% for i in range(count.value) %}
+            <td>{{ entry[i] }}</td>
+            {% endfor %}  
+        </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %} 

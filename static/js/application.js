@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
     // Lines below handle websockets to update browser tables when an update is made on the database
     var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
     var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
@@ -25,14 +25,24 @@ $(function() {
     $("#queryButton").click(function() {
         query = $("#query").val();
 
-        temp = JSON.stringify({ sql: query });
-        console.log("temp = " + temp);
-
         $.post("/query", { sql: query }, function(result) {
             if (result === "True") {
                 outbox.send(JSON.stringify({ table: table }));
             }
         });
+    });
+
+    // Lines below handle the login form logic
+    $("#loginButton").click(function() {
+        // Need to implement
+    });
+
+    $("#login").click(function() {
+        // Need to implement
+    });
+
+    $("#register").click(function() {
+        // Need to implement
     });
 
     // Lines below handle AJAX request to request new table.

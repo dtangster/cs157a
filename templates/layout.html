@@ -14,44 +14,19 @@
         <div data-role="page">
             <img id="loadingImage" src="static/img/loading.gif"/>
 
-            <!-- THESE 3 LINES ARE FOR DEBUGGING -->
+            <!-- LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
             <label>SQL Query: <input id="query" type="text"/></label>
             <button id="queryButton" data-inline="true">Run Query</button>
-            <div id="response"></div>
+            <!-- LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
+            
             <div data-role="header">
-                <h1>Sticky Dogs Library</h1>
+                <h1>CS157A Project</h1>
                 {% block login %}{% endblock %}
             </div>
-            <ul id="tableButtons" data-role="controlgroup" data-type="horizontal">
-                <button id="user" data-mini="true">User</button>
-                <button id="book" data-mini="true">Book</button>
-                <button id="loan" data-mini="true">Loan</button>
-                <button id="review" data-mini="true">Review</button>
-                <button id="reservation" data-mini="true">Reservation</button>
-            </ul>
+            {% block tableButtons %}{% endblock %}
             <div data-role="content">
                 <table id="tableContent" data-role="table" data-filter="true" data-mode="columntoggle" class="ui-responsive table-stroke">
-                    {% set count = {'value': 0} %}
-                    <thead>
-                        <tr>
-                        {% for header in headers %}
-                            <th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
-                            {% if count.update({'value': count.value + 1}) %} {% endif %}
-                        {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in entries %}
-                        <tr>
-                            {% for i in range(count.value) %}
-                                <td>{{ entry[i] }}</td>
-                            {% endfor %}  
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-
-                {% block menu %}{% endblock %}
-                {% block body %}{% endblock %}
+                    {% block table %}{% endblock %}    
                 </table>
             </div>
         </div>

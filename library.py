@@ -98,7 +98,7 @@ def teardown_request(exception):
 def show_main_page():
     # This is the page returned normally
     table = get_table('book')
-    return render_template('layout.html', headers=table[0], entries=table[1])   
+    return render_template('index.html', headers=table[0], entries=table[1])   
 
 @app.route('/ajax/table_request')
 def ajax_table_request():
