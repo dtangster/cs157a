@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // Lines below handle websockets to update browser tables when an update is made on the database
-    var inbox = new WebSocket("ws://"+ location.host + "/receive");
-    var outbox = new WebSocket("ws://"+ location.host + "/submit");
+    var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
+    var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
     var table = "book";
 
     inbox.onmessage = function(message) {
@@ -12,6 +12,14 @@ $(document).ready(function() {
                 $("#tableContent").html(result).table("refresh");
             });    
         }
+    };
+
+    inbox.onclose = function() {
+        inbox = new WebSocket(inbox.url);
+    };
+
+    outbox.onclose = function() {
+        outbox = new WebSocket(outbox.url);
     };
 
     $("#queryButton").click(function() {
