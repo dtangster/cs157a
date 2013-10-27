@@ -34,7 +34,7 @@ $(document).ready(function() {
 
     // Lines below handle the login form logic
     $("#loginButton").click(function() {
-        $("#login").toggle();
+        $("#loginForm").toggle();
     });
 
     $("#login").click(function() {
