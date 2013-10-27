@@ -14,14 +14,6 @@ $(document).ready(function() {
         }
     };
 
-    inbox.onclose = function() {
-        inbox = new WebSocket(inbox.url);
-    };
-
-    outbox.onclose = function() {
-        outbox = new WebSocket(outbox.url);
-    };
-
     $("#queryButton").click(function() {
         query = $("#query").val();
 
