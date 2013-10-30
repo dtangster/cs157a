@@ -44,11 +44,10 @@ $(document).ready(function() {
     $("#register").click(function() {
         email = $("#email").val();
         password = $("#password").val();
-        table = "user"
 
         $.post("/register", { email: email, password: password }, function(result) {
             if (result === "True") {
-                outbox.send(JSON.stringify({ table: table }));
+                outbox.send(JSON.stringify({ table: "user" }));
             }
         });
     });
