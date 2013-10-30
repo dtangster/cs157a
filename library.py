@@ -22,7 +22,7 @@ app.debug = 'DEBUG' in os.environ
 sockets = Sockets(app)
 
 DATABASE_BROADCASTER = 'broadcaster'
-redis = redis.from_url('redis://rediscloud:JgbwHrCYL809ZGYF@pub-redis-14252.us-east-1-3.1.ec2.garantiadata.com:14252')
+redis = redis.from_url('redis://rediscloud:AYAzvsfo0DSPYjfx@pub-redis-19594.us-east-1-2.3.ec2.garantiadata.com:19594')
 
 # Class used to stream database data to client browser when there are any changes
 class DatabaseBroadcaster(object):
