@@ -42,23 +42,25 @@ $(document).ready(function() {
     });
 
     $("#register").click(function() {
-        // Need to implement
+        email = $("#email").val();
+        password = $("#password").val();
+        table = "user"
+
+        $.post("/register", { email: email, password: password }, function(result) {
+            if (result === "True") {
+                outbox.send(JSON.stringify({ table: table }));
+            }
+        });
     });
 
     // Lines below handle AJAX request to request new table.
     $("#tableButtons button").click(function() {
+        $("#loadingImage").toggle();
         table = $(this).attr("id");
 
         $.get("/ajax/table_request", { table: table }, function(result) {
+            $("#loadingImage").toggle();
             $("#tableContent").html(result).table("refresh");
         });
-    });
-
-    $(document).ajaxStart(function(){
-        $("#loadingImage").toggle();
-    });
-
-    $(document).ajaxStop(function(){
-        $("#loadingImage").toggle();
     });
 }); 

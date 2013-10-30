@@ -133,6 +133,28 @@ def query():
         g.db.rollback()
         return "False"; # Failure
 
+@app.route('/register', methods=['POST'])
+def register():
+    try:
+        email = request.form['email']
+        password = request.form['password']
+        cur = g.db.cursor()
+       
+        # Stupid hack to get greatest UID
+        # TEMPORARY FOR DEMO
+        cur.execute('SELECT MAX(uid) FROM user')
+        row = cur.fetchone()
+        largestUID = row[0] + 1
+
+        sql = 'INSERT INTO USER (uid, email, password) VALUES (%d, "%s", "%s")' % (largestUID, email, password)
+        cur.execute(sql)
+        g.db.commit()
+        return "True"; # Success
+
+    except:
+        g.db.rollback()
+        return "False"; # Failure
+
 def hash_password(password, salt=None):
     if salt is None:
         salt = uuid.uuid4().hex
