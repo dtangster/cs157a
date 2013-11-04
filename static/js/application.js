@@ -57,8 +57,8 @@ $(document).ready(function() {
             if (result != "False") {
                 $("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
                 $("#loginForm").toggle();
-                $("#email").empty();
-                $("#password").empty(); 
+                $("#email").attr("value", "");
+                $("#password").attr("value", "");
             }
             else {
                 $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
@@ -76,10 +76,10 @@ $(document).ready(function() {
             if (result === "True") {
                 $("#errors").html("*** Your account has been created ***").fadeIn(500).fadeOut(5000);
                 $("#registerForm").toggle();
-                $("#email2").empty();
-                $("#name").empty();
-                $("#phone").empty();
-                $("#password2").empty();  
+                $("#email2").attr("value", "");
+                $("#name").attr("value", "");
+                $("#phone").attr("value", "");
+                $("#password2").attr("value", "");
                 outbox.send(JSON.stringify({ table: "user" }));
             }
             else {
