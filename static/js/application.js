@@ -35,19 +35,48 @@ $(document).ready(function() {
     // Lines below handle the login form logic
     $("#loginButton").click(function() {
         $("#loginForm").toggle();
+
+        if ($("#loginForm").css("display") != "none") {
+            $("#registerForm").css("display", "none");    
+        }
+    });
+
+    $("#registerButton").click(function() {
+        $("#registerForm").toggle();
+
+        if ($("#registerForm").css("display") != "none") {
+            $("#loginForm").css("display", "none");    
+        }
     });
 
     $("#login").click(function() {
-        // Need to implement
+        email = $("#email").val();
+        password = $("#password").val();  
+
+        console.log(email + password);
+
+       $.post("/login", { email: email, password: password }, function(result) {
+            if (result != "False") {
+                $("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(3000);
+            }
+            else {
+                $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(3000);
+            }
+        });
     });
 
     $("#register").click(function() {
-        email = $("#email").val();
-        password = $("#password").val();
+        email = $("#email2").val();
+        name = $("#name").val();
+        phone = $("#phone").val();
+        password = $("#password2").val();  
 
-        $.post("/register", { email: email, password: password }, function(result) {
+        $.post("/register", { name: name, email: email, phone: phone, password: password }, function(result) {
             if (result === "True") {
                 outbox.send(JSON.stringify({ table: "user" }));
+            }
+            else {
+                $("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(3000);
             }
         });
     });

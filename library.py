@@ -138,15 +138,14 @@ def register():
     try:
         email = request.form['email']
         password = request.form['password']
-        cur = g.db.cursor()
-       
-        # Stupid hack to get greatest UID
-        # TEMPORARY FOR DEMO
-        cur.execute('SELECT MAX(uid) FROM user')
-        row = cur.fetchone()
-        largestUID = row[0] + 1
+        name = request.form['name']
+        phone = request.form['phone']
+        password, salt = hash_password(password)
 
-        sql = 'INSERT INTO USER (uid, email, password) VALUES (%d, "%s", "%s")' % (largestUID, email, password)
+        sql = 'INSERT INTO USER (email, name, phone, password, salt, accesslevel) VALUES ("%s", "%s", "%s", "%s", "%s", %d)' \
+            % (email, name, phone, password, salt, 0)
+
+        cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()
         return "True"; # Success
@@ -154,6 +153,33 @@ def register():
     except:
         g.db.rollback()
         return "False"; # Failure
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    password = request.form['password']
+
+    if email is None or password is None:
+        return "False"
+
+    sql = 'SELECT password, salt FROM user WHERE email = "%s"' % (email)
+    cur = g.db.cursor()
+    cur.execute(sql)
+    row = cur.fetchone()
+
+    if row is None:
+        return "False"
+
+    valid = verify_password(password, row[0], row[1])
+
+    if valid:
+        sql = 'SELECT accesslevel FROM user where email = "%s"' % (email)
+        cur.execute(sql)
+        row = cur.fetchone()
+        accesslevel = str(row[0])
+        return accesslevel # Return access level
+
+    return "False"
 
 def hash_password(password, salt=None):
     if salt is None:
@@ -171,3 +197,9 @@ broadcaster.start()
 
 if __name__ == '__main__':
     app.run(debug="True") # Make sure to remove the parameter before deploying to Heroku.
+
+
+#CREATE PROCEDURE show_reserved_books(IN username VARCHAR(50))
+#SELECT bid, title, author, reserve_date, avail_date
+#FROM reservation NATURAL JOIN book where email = username
+#ORDER BY bid, title, author;

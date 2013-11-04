@@ -1,19 +1,35 @@
-#loginForm {
+#loginForm, #registerForm {
     position: absolute;
     width: 300px;
     border: 2px solid #bbbbbb;
-    right: 90px;
+    right: 170px;
     top: 20px;
     z-index: 100;
     border-radius: 5px;
     padding: 15px;
     background: #aaccee;
-    display: none;     
+    display: none;
 }
 
-#loadingImage {
+#loadingImage, #errors {
     position: fixed;
     top: 50%;
     left: 50%;
     display: none;
+}
+
+#tableButtons {
+    margin-left: 10px;
+}
+
+#errors {
+    font-size: 20px;
+    color: #FF0000;
+    background-color: #EEEEEE;
+    z-index: 200;
+    left: 400px;
+    top: 80px;
+    border: 1px solid #bbbbbb;
+    border-radius: 5px;
+    padding: 5px;
 }
