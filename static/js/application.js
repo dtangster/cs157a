@@ -53,14 +53,13 @@ $(document).ready(function() {
         email = $("#email").val();
         password = $("#password").val();  
 
-        console.log(email + password);
-
        $.post("/login", { email: email, password: password }, function(result) {
             if (result != "False") {
-                $("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(3000);
+                $("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
+                $("#loginForm").toggle();
             }
             else {
-                $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(3000);
+                $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
             }
         });
     });
@@ -73,10 +72,12 @@ $(document).ready(function() {
 
         $.post("/register", { name: name, email: email, phone: phone, password: password }, function(result) {
             if (result === "True") {
+                $("#errors").html("*** Your account has been created ***").fadeIn(500).fadeOut(5000);
+                $("#registerForm").toggle();
                 outbox.send(JSON.stringify({ table: "user" }));
             }
             else {
-                $("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(3000);
+                $("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(5000);
             }
         });
     });
