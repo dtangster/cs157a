@@ -3,7 +3,8 @@
 from flask import Flask, request, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://bebdd7a70588f7:a6c7c20c@us-cdbr-east-04.cleardb.com/heroku_59b3847e37c77e1'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://bebdd7a70588f7:a6c7c20c@us-cdbr-east-04.cleardb.com/heroku_59b3847e37c77e1'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qfhvpdzhjcvodq:l8_Nng4uRhGwm9zRN21KEo_nCy@ec2-54-225-255-208.compute-1.amazonaws.com:5432/d1npi6l3th4urq'
 db = SQLAlchemy(app)
 
 class User(db.Model):
