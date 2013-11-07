@@ -144,7 +144,7 @@ def register():
         phone = request.form['phone']
         password, salt = hash_password(password)
 
-        sql = "INSERT INTO USER (email, name, phone, password, salt, accesslevel) VALUES ('%s', '%s', '%s', '%s', '%s', %d)" \
+        sql = "INSERT INTO USER_ (email, name, phone, password, salt, accesslevel) VALUES ('%s', '%s', '%s', '%s', '%s', %d)" \
             % (email, name, phone, password, salt, 0)
 
         cur = g.db.cursor()
@@ -164,7 +164,7 @@ def login():
     if email is None or password is None:
         return "False"
 
-    sql = "SELECT password, salt FROM user WHERE email = '%s'" % (email)
+    sql = "SELECT password, salt FROM user_ WHERE email = '%s'" % (email)
     cur = g.db.cursor()
     cur.execute(sql)
     row = cur.fetchone()
@@ -175,7 +175,7 @@ def login():
     valid = verify_password(password, row[0], row[1])
 
     if valid:
-        sql = "SELECT accesslevel FROM user where email = '%s'" % (email)
+        sql = "SELECT accesslevel FROM user_ where email = '%s'" % (email)
         cur.execute(sql)
         row = cur.fetchone()
         accesslevel = str(row[0])
