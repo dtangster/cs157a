@@ -4,27 +4,27 @@
 
 --POSTRGRES FREE "user" table already in used so renamed to user_inf
 --use DOUBLE PRECISION INTSTEAD OF DOUBLE
-DROP TABLE IF EXISTS user_inf;
+DROP TABLE IF EXISTS user_inf cascade;
 CREATE TABLE user_inf (
 name VARCHAR(50),
 email VARCHAR(50),
 phone VARCHAR(12),
 active_loan INT DEFAULT 0,
 fee DOUBLE PRECISION DEFAULT 0.0,
-password CHAR(32) NOT NULL,
+password CHAR(128) NOT NULL,
 salt CHAR(32) NOT NULL,
 accesslevel INT,
 last_login DATE,
 PRIMARY KEY (email));
 
-DROP TABLE IF EXISTS user_archive;
+DROP TABLE IF EXISTS user_archive cascade;
 CREATE TABLE user_archive (
 name VARCHAR(50),
 email VARCHAR(50),
 phone VARCHAR(12),
 active_loan INT DEFAULT 0,
 fee DOUBLE PRECISION DEFAULT 0.0,
-password CHAR(32) NOT NULL,
+password CHAR(128) NOT NULL,
 salt CHAR(32) NOT NULL,
 accesslevel INT,
 last_login DATE,
@@ -229,8 +229,6 @@ FOR EACH ROW EXECUTE PROCEDURE checkout();
 -- insert into user_inf values('hee', 'eea', '111-111-1111', 0, 0.0, 'abc', 'adfas', 2, '1111-11-02');  
 -- delete from user_inf where email = 'eea';
 -- delete from loan where email = 'eea';
- 
-
 
 -- NOT DONE YET NEED FIX AFTER THIS LINE ----------------------------------
 -- 3) When a return date is set, update book count and reservation
