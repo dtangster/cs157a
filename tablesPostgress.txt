@@ -1,3 +1,9 @@
+
+
+-- NOTE DONT COPY THEN JUST PASTE ALL FOR SOME REASON DOESNT WORK
+-- COPY AND PASTE BY PARTS SO SAY ALL TABLES THEN COPY PASTE AND RUN TO POSTGRES
+-- THEN COPY ALL VIEWS THEN PASTE AND RUN AGAIN...ETC 
+
 --
 -- TABLES
 --
@@ -41,14 +47,14 @@ copies INT DEFAULT 0,
 available INT DEFAULT 0,
 PRIMARY KEY (bid));
 
-DROP TABLE IF EXISTS loan;
+DROP TABLE IF EXISTS loan cascade;
 CREATE TABLE loan (
 bid INT,
 email VARCHAR(50),
 overdue BOOLEAN,
 loan_date DATE,
 due_date DATE,
-return_date DATE DEFAULT '1111-11-11',
+return_date DATE DEFAULT NULL,
 PRIMARY KEY (loan_date, bid, email),
 FOREIGN KEY (bid) REFERENCES book (bid),
 FOREIGN KEY (email) REFERENCES user_inf (email));
@@ -111,7 +117,7 @@ FROM review NATURAL JOIN book
 ORDER BY stars DESC, title, author, edition;
 
 --
--- PROCEDURES (MYSQL) == FUNCTIONS (
+-- PROCEDURES MYSQL == FUNCTIONS 
 --
 
 -- Perform daily maintenance
@@ -179,7 +185,7 @@ LANGUAGE plpgsql;
 -- IDK WHY THE HECK BEFORE INSERT TRIGGER DOESNT WORK T_T
 -- BUT THIS WORKS THE SAME 
 
--- 1) sets current date to new inserted user 
+-- #1 sets current date to new inserted user 
 drop function if exists init_login_date() cascade;
 CREATE OR REPLACE FUNCTION init_login_date()
 RETURNS TRIGGER AS $set_date$
@@ -204,7 +210,7 @@ FOR EACH ROW EXECUTE PROCEDURE init_login_date();
 
 
 
--- 2) When a book is checked out, update book count and due date
+-- #2 When a book is checked out, update book count and due date
 drop function if exists checkout() cascade;
 CREATE OR REPLACE FUNCTION checkout()
 RETURNS TRIGGER AS $checkout$
@@ -225,27 +231,26 @@ FOR EACH ROW EXECUTE PROCEDURE checkout();
 
 -- FOR DEBUGGIN 
 -- insert into book values (100, 'title', 'u', '1111-11-11', 1, 3, 3);
--- insert into loan values (100, 'eea', false, '2222-12-22', '2222-12-13', '2222-12-16');
+-- insert into loan (bid, email, overdue, loan_date, due_date) values (100, 'eea', false, '2222-12-22', '2222-12-13' );
 -- insert into user_inf values('hee', 'eea', '111-111-1111', 0, 0.0, 'abc', 'adfas', 2, '1111-11-02');  
 -- delete from user_inf where email = 'eea';
 -- delete from loan where email = 'eea';
+-- select name, email, active_loan from user_inf;
+-- insert into reservation(bid, email, reserve_date, avail_date, status) values (100, 'eea', '2222-12-22', '2222-12-22', 'N');
 
--- NOT DONE YET NEED FIX AFTER THIS LINE ----------------------------------
+
 -- 3) When a return date is set, update book count and reservation
 drop function if exists return_book();
 CREATE OR REPLACE FUNCTION return_book()
 RETURNS TRIGGER AS $return_book$
 BEGIN
-    IF  OLD.return_date = '1111-11-11' AND NEW.return_date != '1111-11-11' 
+    IF  OLD.return_date is NULL AND NEW.return_date is NOT NULL 
     THEN 
-        SET new.overdue = FALSE; 
+        SET NEW.overdue = FALSE; 
         UPDATE book SET available = available + 1 WHERE bid = new.bid;
-        UPDATE user_inf SET active_loan = active_loan - 1 
-               WHERE email = new.email;
-        UPDATE reservation SET status = 'W', avail_date = CURRENT_DATE
-               WHERE email =  new.email and bid = new.bid 
-                     and status = 'N' 
-                     AND reservation_id = MIN(reservation_id); 
+        UPDATE user_inf SET active_loan = active_loan - 1 WHERE email = NEW.email;
+        UPDATE reservation SET status = 'W', avail_date = (select date from CURRENT_DATE)
+               WHERE email = NEW.email AND bid = NEW.bid AND status = 'N';
     END IF;
     RETURN NEW;
 END;
@@ -257,20 +262,16 @@ CREATE TRIGGER return_book
 AFTER UPDATE ON LOAN
 FOR EACH ROW EXECUTE PROCEDURE return_book();
 
--- insert into loan values (100, 'aa', false, '2222-12-15', '2222-12-14', '2222-12-15');
- 
 
-
-
--- 4) Do checks when a reservation is made
+-- 4# Do checks when a reservation is made
 drop function if exists reserve_book();
 CREATE OR REPLACE FUNCTION reserve_book()
 RETURNS TRIGGER AS $reserve_book$
 BEGIN
-     UPDATE reservation SET new.reserve_date = CURRENT_DATE;
+     UPDATE reservation SET new.reserve_date = (select date from CURRENT_DATE);
      IF new.bid IN (SELECT bid from book WHERE available > 0) 
         THEN
-           UPDATE reservation SET new.avail_date = CURRENT_DATE;
+           UPDATE reservation SET new.avail_date =  (select date from CURRENT_DATE);
            UPDATE reservation SET new.status = 'W';
            UPDATE book SET available = available - 1 WHERE bid = new.bid;
      ELSE
@@ -283,22 +284,21 @@ LANGUAGE plpgsql;
 
 drop trigger if exists reserve_book on reservation;
 CREATE TRIGGER reserve_book
-BEFORE INSERT ON reservation
+AFTER INSERT ON reservation
 FOR EACH ROW EXECUTE PROCEDURE reserve_book();
 
 
-
--- Do checks when a book becomes available
+-- 5# Do checks when a book becomes available
 drop function if exists update_reservation();
 CREATE OR REPLACE FUNCTION update_reservation()
 RETURNS TRIGGER AS $update_reservation$
 BEGIN
-    IF old.status = "N" AND new.status = "W" THEN
-        UPDATE reservation SET new.avail_date = CURRENT_DATE;
+    IF old.status = 'N' AND new.status = 'W' THEN
+        UPDATE reservation SET new.avail_date =  (select date from CURRENT_DATE);
         UPDATE book SET available = available - 1 WHERE bid = new.bid;     
-    ELSEIF (old.status = "W" OR old.status = "N") AND new.status = "C" THEN
+    ELSEIF (old.status = 'W' OR old.status = 'N') AND new.status = 'C' THEN
         UPDATE book SET available = available + 1 WHERE bid = new.bid;
-    ELSEIF old.status != "P" AND new.status = "P" THEN
+    ELSEIF old.status != 'P' AND new.status = 'P' THEN
         UPDATE user_inf SET active_loan = active_loan + 1 WHERE email = new.email;
     END IF;
     RETURN NEW;
