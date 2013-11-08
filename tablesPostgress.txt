@@ -1,26 +1,19 @@
-#
-# TABLES
-#
+--
+-- TABLES
+--
 
--- Access Levels: 0(User), 1(Librarian), 2(DBA)
-DROP TABLE IF EXISTS user_type;
-CREATE TABLE user_type (
-accesslevel INT,
-description VARCHAR(512),
-PRIMARY KEY (accesslevel));
-
---POSTRGRES FREE "user" table already in used so renamed to user_
+--POSTRGRES FREE "user" table already in used so renamed to user_inf
 --use DOUBLE PRECISION INTSTEAD OF DOUBLE
-DROP TABLE IF EXISTS user_;
-CREATE TABLE user_ (
+DROP TABLE IF EXISTS user_inf;
+CREATE TABLE user_inf (
 name VARCHAR(50),
 email VARCHAR(50),
 phone VARCHAR(12),
 active_loan INT DEFAULT 0,
 fee DOUBLE PRECISION DEFAULT 0.0,
-password CHAR(128) NOT NULL,
+password CHAR(32) NOT NULL,
 salt CHAR(32) NOT NULL,
-accesslevel INT REFERENCES user_type(accesslevel),
+accesslevel INT,
 last_login DATE,
 PRIMARY KEY (email));
 
@@ -31,9 +24,9 @@ email VARCHAR(50),
 phone VARCHAR(12),
 active_loan INT DEFAULT 0,
 fee DOUBLE PRECISION DEFAULT 0.0,
-password CHAR(128) NOT NULL,
+password CHAR(32) NOT NULL,
 salt CHAR(32) NOT NULL,
-accesslevel INT REFERENCES user_type(accesslevel),
+accesslevel INT,
 last_login DATE,
 PRIMARY KEY (email));
 
@@ -55,15 +48,15 @@ email VARCHAR(50),
 overdue BOOLEAN,
 loan_date DATE,
 due_date DATE,
-return_date DATE,
-PRIMARY KEY (loan_date),
-FOREIGN KEY (bid) REFERENCES book(bid),
-FOREIGN KEY (email) REFERENCES user_(email));
+return_date DATE DEFAULT '1111-11-11',
+PRIMARY KEY (loan_date, bid, email),
+FOREIGN KEY (bid) REFERENCES book (bid),
+FOREIGN KEY (email) REFERENCES user_inf (email));
 
 DROP TABLE IF EXISTS review;
 CREATE TABLE review (
-bid INT REFERENCES book(bid),
-email VARCHAR(50) REFERENCES user_(email),
+bid INT REFERENCES book (bid),
+email VARCHAR(50) REFERENCES user_inf (email),
 rating_date DATE,
 stars INT DEFAULT 0,
 comment VARCHAR(512) DEFAULT 'No Comment');
@@ -73,12 +66,15 @@ comment VARCHAR(512) DEFAULT 'No Comment');
 DROP TABLE IF EXISTS reservation;
 CREATE TABLE reservation (
 reservation_id SERIAL NOT NULL ,
-bid INT REFERENCES book(bid),
-email VARCHAR(50) REFERENCES user_(email),
+bid INT REFERENCES book (bid),
+email VARCHAR(50) REFERENCES user_inf (email),
 reserve_date DATE,
 avail_date DATE,
 status CHAR(1) DEFAULT 'N',
 PRIMARY KEY (reservation_id));
+
+
+
 
 --
 -- VIEWS
@@ -87,20 +83,20 @@ PRIMARY KEY (reservation_id));
 DROP VIEW IF EXISTS overdue_users;
 CREATE VIEW overdue_users AS
 SELECT name, email, bid, title, overdue, loan_date, due_date 
-FROM user_ NATURAL JOIN loan NATURAL JOIN book
+FROM user_inf NATURAL JOIN loan NATURAL JOIN book
 WHERE overdue = True
-ORDER BY name, email, bid;
+ORDER BY name, email, bid DESC;
 
 DROP VIEW IF EXISTS debtors;
 CREATE VIEW debtors AS
 SELECT name, email, fee 
-FROM user_ WHERE fee > 0 
-ORDER BY name, fee;
+FROM user_inf WHERE fee > 0 
+ORDER BY name, fee DESC;
 
 DROP VIEW IF EXISTS reserved_books;
 CREATE VIEW reserved_books AS
 SELECT name, email, bid, title, author, edition, reserve_date
-FROM reservation NATURAL JOIN user_ NATURAL JOIN book
+FROM reservation NATURAL JOIN user_inf NATURAL JOIN book
 ORDER BY reservation_id;
 
 DROP VIEW IF EXISTS available_books;
@@ -115,19 +111,19 @@ FROM review NATURAL JOIN book
 ORDER BY stars DESC, title, author, edition;
 
 --
---PROCEDURES (MYSQL) == FUNCTIONS (
+-- PROCEDURES (MYSQL) == FUNCTIONS (
 --
 
 -- Perform daily maintenance
-
+drop function if exists perform_maintenance();
 CREATE FUNCTION perform_maintenance() RETURNS void AS $$
 BEGIN
     -- Archive users when they are inactive for 1 year
     INSERT INTO user_archive
-        (SELECT * FROM user_
+        (SELECT * FROM user_inf
          WHERE ADDDATE(last_login, 365) < CURRENT_DATE AND active_loan = 0);
     
-    DELETE FROM user_ WHERE email IN (SELECT email from user_archive);
+    DELETE FROM user_inf WHERE email IN (SELECT email from user_archive);
 
     -- Cancel reservations not picked up after 5 days
     UPDATE reservation SET status = 'C' WHERE ADDDATE(avail_date, 5) < CURRENT_DATE AND status = 'W';
@@ -144,14 +140,14 @@ DROP FUNCTION IF EXISTS login(varchar, varchar);
 CREATE FUNCTION login(IN email VARCHAR(50), IN password VARCHAR(128))
 RETURNS void AS $$
 BEGIN
-    IF (email, password) IN (SELECT email, password FROM user_) THEN
-        UPDATE user_ SET last_login = CURRENT_DATE;
-        SELECT email, accesslevel FROM user_ WHERE user_.email = email;
+    IF (email, password) IN (SELECT email, password FROM user_inf) THEN
+        UPDATE user_inf SET last_login = CURRENT_DATE;
+        SELECT email, accesslevel FROM user_inf WHERE user_inf.email = email;
     ELSEIF (email, password) IN (SELECT email, password FROM user_archive) THEN
-        INSERT INTO user_ (SELECT * FROM user_archive WHERE user_.email = email);
-        DELETE FROM user_archive WHERE user_.email = email;
-        UPDATE user_ SET last_login = CURRENT_DATE;
-        SELECT email, accesslevel FROM user_ WHERE user_.email = email;
+        INSERT INTO user_inf (SELECT * FROM user_archive WHERE user_inf.email = email);
+        DELETE FROM user_archive WHERE user_inf.email = email;
+        UPDATE user_inf SET last_login = CURRENT_DATE;
+        SELECT email, accesslevel FROM user_inf WHERE user_inf.email = email;
     END IF;
 END; $$
 LANGUAGE plpgsql;
@@ -173,113 +169,85 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+
+
 --
 -- TRIGGERS
 --
 
-# Set last login date to current date when creating a user
-DROP TRIGGER IF EXISTS init_login_date;
-CREATE TRIGGER init_login_date BEFORE INSERT ON user_
-FOR EACH ROW
-SET NEW.last_login = CURRENT_DATE;
+-- Set last login date to current date when creating a user
+-- IDK WHY THE HECK BEFORE INSERT TRIGGER DOESNT WORK T_T
+-- BUT THIS WORKS THE SAME 
 
-
---translation to postgres
-drop function if exists init_login_date();
+-- 1) sets current date to new inserted user 
+drop function if exists init_login_date() cascade;
 CREATE OR REPLACE FUNCTION init_login_date()
-RETURNS TRIGGER AS $init_login_date$
-    BEGIN
-        UPDATE user_
-        SET NEW.last_login = CURRENT_DATE;
+RETURNS TRIGGER AS $set_date$
+    BEGIN    
+            UPDATE user_inf 
+            SET last_login = (select date from CURRENT_DATE)
+            WHERE email = new.email;
     RETURN NEW;    
-    END;
-$init_login_date$
-LANGUAGE plpgsql;
+    END; 
+$set_date$ LANGUAGE plpgsql;
 
-drop trigger if exists init_login_date on user_;
+drop trigger if exists init_login_date on user_inf cascade;
 CREATE TRIGGER init_login_date
-BEFORE INSERT ON user_
+AFTER INSERT ON user_inf
 FOR EACH ROW EXECUTE PROCEDURE init_login_date();
 
+--   FOR DEBUGGIN
+--   insert into user_inf values('hee', 'eea', '111-111-1111', 0, 0.0, 'abc', 'adfas', 2, '1111-11-02');  
+--   delete from user_inf where email = 'eea';
+--   select last_login from user_inf;
 
 
 
-# When a book is checked out, update book count and due date
-DROP TRIGGER IF EXISTS checkout;
-DELIMITER $$
-CREATE TRIGGER checkout BEFORE INSERT ON loan
-FOR EACH ROW
-BEGIN
-    SET new.due_date = ADDDATE(CURRENT_DATE, 7);
-    UPDATE book SET available = available - 1 where bid = new.bid;
-    UPDATE user SET active_loan = active_loan + 1 where email = new.email;
-END$$
-DELIMITER ;
 
--- translated to postgres
-drop function if exists addate(date, interval);
-CREATE OR REPLACE FUNCTION ADDDATE(date, interval)
-RETURNS date AS $$
-SELECT ($1 + $2)::date; $$
-LANGUAGE sql;
-
-drop function if exists checkout();
+-- 2) When a book is checked out, update book count and due date
+drop function if exists checkout() cascade;
 CREATE OR REPLACE FUNCTION checkout()
 RETURNS TRIGGER AS $checkout$
     BEGIN
-        UPDATE loan SET new.due_date = ADDDATE(CURRENT_DATE, '7 days');
-        UPDATE book SET available = available - 1 where bid = new.bid;
-        UPDATE user_ SET active_loan = active_loan + 1 where email = new.email;
-    RETURN NEW;    
+            NEW.due_date = (select date + 7 from CURRENT_DATE);          
+            UPDATE book SET available = available - 1 where bid = new.bid;
+            UPDATE user_inf SET active_loan = active_loan + 1 where email = new.email;  
+        RETURN NEW;         
     END;
 $checkout$
 LANGUAGE plpgsql;
 
 drop trigger if exists checkout on loan;
 CREATE TRIGGER checkout 
-BEFORE INSERT ON LOAN
+AFTER INSERT ON LOAN
 FOR EACH ROW EXECUTE PROCEDURE checkout();
 
 
+-- FOR DEBUGGIN 
+-- insert into book values (100, 'title', 'u', '1111-11-11', 1, 3, 3);
+-- insert into loan values (100, 'eea', false, '2222-12-22', '2222-12-13', '2222-12-16');
+-- insert into user_inf values('hee', 'eea', '111-111-1111', 0, 0.0, 'abc', 'adfas', 2, '1111-11-02');  
+-- delete from user_inf where email = 'eea';
+-- delete from loan where email = 'eea';
+ 
 
 
-
-# When a return date is set, update book count and reservation
-DROP TRIGGER IF EXISTS return_book;
-DELIMITER $$
-CREATE TRIGGER return_book BEFORE UPDATE ON loan
-FOR EACH ROW
-BEGIN
-    IF old.return_date = NULL AND new.return_date != NULL THEN
-        SET new.overdue = FALSE;
-        UPDATE book SET available = available + 1 WHERE bid = new.bid;
-        UPDATE user SET active_loan = active_loan - 1 WHERE email = new.email;
-        UPDATE reservation SET status = "W", avail_date = CURRENT_DATE
-            WHERE (email, bid, reserve_date) IN
-            (SELECT email, bid, reserve_date FROM reservation 
-                WHERE bid = new.bid AND status = "N" 
-                AND reservation_id = MIN(reservation_id));
-    END IF;
-END$$
-DELIMITER ;
-
-
---postgres translation
+-- NOT DONE YET NEED FIX AFTER THIS LINE ----------------------------------
+-- 3) When a return date is set, update book count and reservation
 drop function if exists return_book();
 CREATE OR REPLACE FUNCTION return_book()
 RETURNS TRIGGER AS $return_book$
 BEGIN
-    
-    IF  old.return_date = NULL AND new.return_date != NULL 
-       THEN UPDATE LOAN SET new.overdue = FALSE;
-    ELSE  
+    IF  OLD.return_date = '1111-11-11' AND NEW.return_date != '1111-11-11' 
+    THEN 
+        SET new.overdue = FALSE; 
         UPDATE book SET available = available + 1 WHERE bid = new.bid;
-        UPDATE user_ SET active_loan = active_loan - 1 WHERE email = new.email;
+        UPDATE user_inf SET active_loan = active_loan - 1 
+               WHERE email = new.email;
         UPDATE reservation SET status = 'W', avail_date = CURRENT_DATE
-            WHERE (email, bid, reserve_date) IN
-            (SELECT email, bid, reserve_date FROM reservation 
-                WHERE bid = new.bid AND status = "N" 
-                AND reservation_id = MIN(reservation_id));
+               WHERE email =  new.email and bid = new.bid 
+                     and status = 'N' 
+                     AND reservation_id = MIN(reservation_id); 
     END IF;
     RETURN NEW;
 END;
@@ -288,32 +256,15 @@ LANGUAGE plpgsql;
 
 drop trigger if exists return_book on loan;
 CREATE TRIGGER return_book 
-BEFORE UPDATE ON LOAN
+AFTER UPDATE ON LOAN
 FOR EACH ROW EXECUTE PROCEDURE return_book();
 
+-- insert into loan values (100, 'aa', false, '2222-12-15', '2222-12-14', '2222-12-15');
+ 
 
 
 
-
-# Do checks when a reservation is made
-DROP TRIGGER IF EXISTS reserve_book;
-DELIMITER $$
-CREATE TRIGGER reserve_book BEFORE INSERT ON reservation
-FOR EACH ROW
-BEGIN
-    SET new.reserve_date = CURRENT_DATE;
-
-    IF new.bid IN (SELECT bid from book WHERE available > 0) THEN
-        SET new.avail_date = CURRENT_DATE;
-        SET new.status = "W";
-        UPDATE book SET available = available - 1 WHERE bid = new.bid;
-    ELSE
-        SET new.status = "N";
-    END IF;
-END$$
-DELIMITER ;
-
--- postgress translation
+-- 4) Do checks when a reservation is made
 drop function if exists reserve_book();
 CREATE OR REPLACE FUNCTION reserve_book()
 RETURNS TRIGGER AS $reserve_book$
@@ -339,24 +290,7 @@ FOR EACH ROW EXECUTE PROCEDURE reserve_book();
 
 
 
-# Do checks when a book becomes available
-DROP TRIGGER IF EXISTS update_reservation;
-DELIMITER $$
-CREATE TRIGGER update_reservation BEFORE UPDATE ON reservation
-FOR EACH ROW
-BEGIN
-    IF old.status = "N" AND new.status = "W" THEN
-        SET new.avail_date = CURRENT_DATE;
-        UPDATE book SET available = available - 1 WHERE bid = new.bid;     
-    ELSEIF (old.status = "W" OR old.status = "N") AND new.status = "C" THEN
-        UPDATE book SET available = available + 1 WHERE bid = new.bid;
-    ELSEIF old.status != "P" AND new.status = "P" THEN
-        UPDATE user SET active_loan = active_loan + 1 WHERE email = new.email;
-    END IF;
-END$$
-DELIMITER ;
-
--- postgress translation
+-- Do checks when a book becomes available
 drop function if exists update_reservation();
 CREATE OR REPLACE FUNCTION update_reservation()
 RETURNS TRIGGER AS $update_reservation$
@@ -367,7 +301,7 @@ BEGIN
     ELSEIF (old.status = "W" OR old.status = "N") AND new.status = "C" THEN
         UPDATE book SET available = available + 1 WHERE bid = new.bid;
     ELSEIF old.status != "P" AND new.status = "P" THEN
-        UPDATE user_ SET active_loan = active_loan + 1 WHERE email = new.email;
+        UPDATE user_inf SET active_loan = active_loan + 1 WHERE email = new.email;
     END IF;
     RETURN NEW;
 END;
@@ -378,14 +312,3 @@ drop trigger if exists update_reservation on reservation;
 CREATE TRIGGER update_reservation
 BEFORE UPDATE ON reservation
 FOR EACH ROW EXECUTE PROCEDURE update_reservation();
-
-
-
-#
-# INITIALIZATION
-#
-
-# Set up initial access levels
-INSERT INTO user_type values (0, "User");
-INSERT INTO user_type values (1, "Librarian");
-INSERT INTO user_type values (2, "DBA");

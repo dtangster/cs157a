@@ -80,7 +80,7 @@ $(document).ready(function() {
                 $("#name").val("");
                 $("#phone").val("");
                 $("#password2").val("");
-                outbox.send(JSON.stringify({ table: "user" }));
+                outbox.send(JSON.stringify({ table: "user_inf" }));
             }
             else {
                 $("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(5000);
