@@ -86,7 +86,7 @@ def outbox(ws):
 #app.session_interface = RedisSessionInterface()
 
 def connect_db():
-    return db.connect('host=ec2-54-225-255-208.compute-1.amazonaws.com dbname=d1npi6l3th4urq user=qfhvpdzhjcvodq password=l8_Nng4uRhGwm9zRN21KEo_nCy')   
+    return db.connect('host=ec2-54-225-255-208.compute-1.amazonaws.com dbname=d2f7pust9i9q2u user=dfgmdatvkdppay password=dDOdOcyBUU3j4S_5V6NS80N4hf')   
     #return MySQLdb.connect(host='us-cdbr-east-04.cleardb.com', user='bebdd7a70588f7', passwd='a6c7c20c', db='heroku_59b3847e37c77e1')
 
 @app.before_request

@@ -90,7 +90,7 @@ DROP VIEW IF EXISTS overdue_users;
 CREATE VIEW overdue_users AS
 SELECT name, email, bid, title, overdue, loan_date, due_date 
 FROM user_inf NATURAL JOIN loan NATURAL JOIN book
-WHERE overdue = True
+WHERE overdue = TRUE
 ORDER BY name, email, bid DESC;
 
 DROP VIEW IF EXISTS debtors;
