@@ -1,3 +1,57 @@
+body ,td ,div {
+    font-family: 'Open Sans';
+   	font-weight: normal;
+}
+.logo
+{   
+    margin-left: 90px;
+	float: center;
+	position: relative;
+	letter-spacing: 4px;
+}
+p.big
+{
+    font-family: 'SwIS BOLD';
+   	font-weight: normal;
+	letter-spacing: 4px;
+    font-size:100px;
+    margin: 0cm;
+    padding: 0cm;
+}
+p.small
+{   
+    position:relative;
+    top:-36px;
+    font-family: 'Open Sans';
+   	font-weight: normal;
+    font-size:10px;
+	letter-spacing: 4px;
+    margin: 0cm;
+    padding: 0cm;
+    z-index:100;
+}
+.ui-footer {
+    font-family: 'Open Sans';
+   	font-weight: normal;
+    font-size: 60%;
+    text-align:center;
+	letter-spacing: 4px;
+    padding: 5px;
+}
+.logo
+{
+    z:index:900;
+}
+.decorbar
+{
+    position:absolute;
+    left:50px;
+    width:110px;
+    height:100%;
+    background-color:#2b3b4b;
+    z:index:1;
+}
+
 #loginForm, #registerForm {
     position: absolute;
     width: 300px;

@@ -5,23 +5,29 @@
         <title>CS157A Project</title>
         <link rel="stylesheet" href="static/css/jquery.mobile-1.4.0-beta.1.min.css"/>
         <link rel="stylesheet" href="static/css/style.css"/>
-        <script src="static/js/jquery-2.0.3.min.js"></script>
+        <link rel="stylesheet" media="screen" href="http://openfontlibrary.org/face/swis-bold" rel="stylesheet" type="text/css"/>
+ <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>        <script src="static/js/jquery-2.0.3.min.js"></script>
         <script src="static/js/jquery.mobile-1.4.0-beta.1.min.js"></script>
         <script src="static/js/reconnecting-websocket.min.js"></script>
         <script src="static/js/application.js"></script>
+
     </head>
     <body>
         <div data-role="page">
             <div id="errors"></div>
             <img id="loadingImage" src="static/img/loading.gif"/>
 
-            <!-- LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
+            <!-- LINES BETWEEN COMMENTS ARE FOR DEBUGGING 
             <label>SQL Query: <input id="query" type="text"/></label>
             <button id="queryButton" data-inline="true">Run Query</button>
-            <!-- LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
+             LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
             
-            <div data-role="header">
-                <h1>CS157A Project</h1>
+            <div data-role="header" data-theme="b" data-position="fixed">
+                <div class="decorbar"></div>                
+                <div class="logo">
+                    <p class="big">SD
+                    <p class="small">sticky dogs library</p>
+                </div>
                 {% block login %}{% endblock %}
             </div>           
             {% block tableButtons %}{% endblock %}
@@ -30,6 +36,10 @@
                     {% block table %}{% endblock %}    
                 </table>
             </div>
+           
+            <div data-role="footer" data-theme="b" data-position="fixed">
+                CS157A DATABASES SJSU PROJECT FALL 2013      
+            </div>                
         </div>
     </body>
 </html>
