@@ -34,35 +34,55 @@ $(document).ready(function() {
 
     // Lines below handle the login form logic
     $("#loginButton").click(function() {
-        $("#loginForm").toggle();
+        $("#loginForm").show();    
 
-        if ($("#loginForm").css("display") != "none") {
-            $("#registerForm").css("display", "none");    
-        }
+
+        /*if ($("#loginForm").css("display") != "none") {
+           $("#registerForm").css("display", "none");    
+       }*/
     });
 
     $("#registerButton").click(function() {
-        $("#registerForm").toggle();
-
+        $("#registerForm").show();
+        
+        /*
         if ($("#registerForm").css("display") != "none") {
             $("#loginForm").css("display", "none");    
-        }
+        }*/
     });
 
+    
     $("#login").click(function() {
+    
+
         email = $("#email").val();
         password = $("#password").val();  
 
-       $.post("/login", { email: email, password: password }, function(result) {
+        if(document.getElementById('level2').checked) {
+          //level 2 User radio button is checked
+            accesslevel = $("#level2").val();
+        }else if(document.getElementById('level1').checked) {
+          //level 1 Librarian radio button is checked
+            accesslevel = $("#level1").val();
+        }
+        else {
+          //level 0 DBA
+          accesslevel = $("#level0").val();
+        }
+
+       $.post("/login", { email: email, password: password, accesslevel:accesslevel }, function(result) {
             if (result != "False") {
-                $("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
+               //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
+                document.getElementById("insertmsg").innerHTML = "Welcome your logged in!";
+            }
+            else {
+               // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
+                document.getElementById("insertmsg").innerHTML = "Sorry please login again!";
+            }
                 $("#loginForm").toggle();
                 $("#email").val("");
                 $("#password").val("");
-            }
-            else {
-                $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
-            }
+                $("#logForm").popup("close");
         });
     });
 
@@ -74,17 +94,22 @@ $(document).ready(function() {
 
         $.post("/register", { name: name, email: email, phone: phone, password: password }, function(result) {
             if (result === "True") {
-                $("#errors").html("*** Your account has been created ***").fadeIn(500).fadeOut(5000);
+                //$("#errors").html("*** Your account has been created ***").fadeIn(500).fadeOut(5000);
                 $("#registerForm").toggle();
                 $("#email2").val("");
                 $("#name").val("");
                 $("#phone").val("");
-                $("#password2").val("");
+                $("#password2").val(""); 
+                document.getElementById("insertmsg").innerHTML = "Your registered and logged in!";
                 outbox.send(JSON.stringify({ table: 'user_inf' }));
+
             }
             else {
-                $("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(5000);
+                //$("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(5000);
+                document.getElementById("insertmsg").innerHTML = "Please login or register!";
             }
+               
+                $("#regForm").popup("close");
         });
     });
 

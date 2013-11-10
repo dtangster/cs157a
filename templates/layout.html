@@ -6,7 +6,9 @@
         <link rel="stylesheet" href="static/css/jquery.mobile-1.4.0-beta.1.min.css"/>
         <link rel="stylesheet" href="static/css/style.css"/>
         <link rel="stylesheet" media="screen" href="http://openfontlibrary.org/face/swis-bold" rel="stylesheet" type="text/css"/>
- <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>        <script src="static/js/jquery-2.0.3.min.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>   
+        <link href='http://fonts.googleapis.com/css?family=Goudy+Bookletter+1911' rel='stylesheet' type='text/css' />
+        <script src="static/js/jquery-2.0.3.min.js"></script>
         <script src="static/js/jquery.mobile-1.4.0-beta.1.min.js"></script>
         <script src="static/js/reconnecting-websocket.min.js"></script>
         <script src="static/js/application.js"></script>
@@ -23,23 +25,21 @@
              LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
             
             <div data-role="header" data-theme="b" data-position="fixed">
-                <div class="decorbar"></div>                
-                <div class="logo">
-                    <p class="big">SD
-                    <p class="small">sticky dogs library</p>
+                <div class="decorbar"></div>      
+                <p class="big">SD</p>          
+                <p class="small">Sticky Dogs Library</p>
+                <div class="nav">
+                  {% block login %}{% endblock %} 
                 </div>
-                {% block login %}{% endblock %}
+                <div class="msginfo"><p id="insertmsg">Welcome guest!</p></div>
             </div>           
             {% block tableButtons %}{% endblock %}
-            <div data-role="content">
+            <div data-role="content" data-theme="d">
                 <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
                     {% block table %}{% endblock %}    
                 </table>
             </div>
-           
-            <div data-role="footer" data-theme="b" data-position="fixed">
-                CS157A DATABASES SJSU PROJECT FALL 2013      
-            </div>                
+              
         </div>
     </body>
 </html>

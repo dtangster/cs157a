@@ -2,68 +2,90 @@ body ,td ,div {
     font-family: 'Open Sans';
    	font-weight: normal;
 }
-.logo
-{   
-    margin-left: 90px;
-	float: center;
-	position: relative;
-	letter-spacing: 4px;
+table, td, th{
+    border:0px;
+    border-spacing:0px;
+}
+td{
+    padding:1px;
+}
+p{
+    font-family: 'Open Sans';
+   	font-weight: normal;
+    font-size:10px;
+    color:#dcdcdc;
 }
 p.big
 {
     font-family: 'SwIS BOLD';
    	font-weight: normal;
-	letter-spacing: 4px;
-    font-size:100px;
+	position: relative;
+	letter-spacing: -3px;
+    font-size:90px;
+    color:#000;
+    left:30px;
+    top:2px;
     margin: 0cm;
     padding: 0cm;
+    text-shadow: 0.0em 0.0em #fff
 }
 p.small
 {   
-    position:relative;
-    top:-36px;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    position:absolute;
+    top:45px;
+    left:120px;
     font-family: 'Open Sans';
    	font-weight: normal;
     font-size:10px;
-	letter-spacing: 4px;
+    color:#fff;
+	letter-spacing: 0px;
     margin: 0cm;
     padding: 0cm;
-    z-index:100;
-}
-.ui-footer {
-    font-family: 'Open Sans';
-   	font-weight: normal;
-    font-size: 60%;
-    text-align:center;
-	letter-spacing: 4px;
-    padding: 5px;
-}
-.logo
-{
-    z:index:900;
+	display:block;
+    text-shadow: 0.0em 0.0em #fff
 }
 .decorbar
 {
     position:absolute;
-    left:50px;
-    width:110px;
-    height:100%;
-    background-color:#2b3b4b;
-    z:index:1;
+    left:20px;
+    top:0px;
+    width:160px;
+    height:101%;
+    background-color:#1ca8dd;
+    box-shadow: 0px 5px 5px #888888;
+}
+.msginfo
+{
+    position:absolute;
+    width:100%;
+    left:250px;
+    top:75px;
+}
+.nav{
+    position:absolute;
+    width:100%;
+    height:60%;
+    left:230px;
+    top:10px;
+}
+.nav a:link {
+    text-decoration:none;
+    font-family: 'Goudy Bookletter 1911', serif;
+	letter-spacing: 1px;
+    color:#ffffff;
+    font-size:20px;
+}
+.ui-header {
+      width: 100%;
+      max-width: 100%;
+      height: 100px;
 }
 
-#loginForm, #registerForm {
-    position: absolute;
-    width: 300px;
-    border: 2px solid #bbbbbb;
-    right: 170px;
-    top: 20px;
-    z-index: 100;
-    border-radius: 5px;
-    padding: 15px;
-    background: #aaccee;
-    display: none;
-}
 
 #loadingImage, #errors {
     position: fixed;
@@ -72,7 +94,6 @@ p.small
     left: 50%;
     display: none;
 }
-
 #tableButtons {
     margin-left: 10px;
 }
@@ -81,7 +102,7 @@ p.small
     font-size: 20px;
     color: #FF0000;
     background-color: #EEEEEE;
-    z-index: 200;
+    z-index: 900;
     left: 400px;
     top: 80px;
     border: 1px solid #bbbbbb;

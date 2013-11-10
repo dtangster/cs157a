@@ -160,8 +160,9 @@ def register():
 def login():
     email = request.form['email']
     password = request.form['password']
+    accesslevel = request.form['accesslevel']
 
-    if email is None or password is None:
+    if email is None or password is None or accesslevel is None:
         return "False"
 
     sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
@@ -178,8 +179,11 @@ def login():
         sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
         cur.execute(sql)
         row = cur.fetchone()
-        accesslevel = str(row[0])
-        return accesslevel # Return access level
+        if accesslevel == str(row[0]):
+            accesslevel = str(row[0])
+            return accesslevel # Return access level
+        else:
+            return "False"        
 
     return "False"
 
