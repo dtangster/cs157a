@@ -17,9 +17,15 @@
 
 
     <!--pop-ups-->
+    <!-- Registration form -->
     <div data-role="popup" id="regForm" data-overlay-theme="b" data-theme="b">    
         <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
         <form id="registerForm">
+        <div data-role="header"><div style="margin:15px; width:100%;"> 
+             <h3>New Registration</h3>
+             <p>*This registration is for regular users only</p></div>
+        </div>
+        <div data-role="content">
         <div 
             <div data-role="fieldcontain" class="ui-hide-label">
                 <label for="email2">Email</label>
@@ -39,11 +45,13 @@
             </div>
             <button type="button" id="register" name="register" data-inline="true">Register</button>
         </form>
-    </div>
+        </div>
+    </div> <!-- End of registration form -->
 
+    <!-- Login form -->
     <div data-role="popup" id="logForm" data-overlay-theme="b" data-theme="b">    
          <a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-
+         <div data-role="content">
          <form id="loginForm">                            
             <div data-role="fieldcontain">
             <fieldset data-role="controlgroup">
@@ -68,7 +76,9 @@
             </div>
             <button type="button" id="login" name="login" data-inline="true">Login</button>
         </form> 
+        </div>
     </div>
+    <!-- End of login form -->
 {% endblock %}
 
 {% block tableButtons %}

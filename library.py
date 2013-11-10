@@ -145,7 +145,7 @@ def register():
         password, salt = hash_password(password)
 
         sql = "INSERT INTO user_inf (email, name, phone, password, salt, accesslevel) VALUES ('%s', '%s', '%s', '%s', '%s', %d)" \
-             % (email, name, phone, password, salt, 0)
+             % (email, name, phone, password, salt, 2)
 
         cur = g.db.cursor()
         cur.execute(sql)
