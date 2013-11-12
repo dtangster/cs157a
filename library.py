@@ -103,7 +103,9 @@ def teardown_request(exception):
 def show_main_page():
     # This is the page returned normally
     table = get_table('book')
-    return render_template('index.html', headers=table[0], entries=table[1])   
+#only main page
+#return render_template('main.html')	
+    return render_template('index.html', headers=table[0], entries=table[1])
 
 @app.route('/ajax/table_request')
 def ajax_table_request():
@@ -156,6 +158,18 @@ def register():
         g.db.rollback()
         return "False"; # Failure
 
+		
+		
+#Will use later for type of user ~ezki
+def user_type(user):
+	cur = g.db.cursor()
+    cur.execute("SELECT accesslevel FROM USER_INFO WHERE email = '%s'" % (user))
+	level = cur.fetchone()
+	if(level == 1):
+		return true
+	else:
+		return false		
+		
 @app.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
@@ -171,6 +185,10 @@ def login():
     row = cur.fetchone()
 
     if row is None:
+		#if accesslevel == 1 :
+		#	render_template('user.html')
+		#else :
+		#	render_template('dba.html')
         return "False"
 
     valid = verify_password(password, row[0], row[1])
