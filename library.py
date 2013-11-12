@@ -156,19 +156,30 @@ def register():
 
     except:
         g.db.rollback()
-        return "False"; # Failure
+        return "False"; # Failure		
+	
 
+		#if accesslevel == 1 :
+		#	render_template('user.html')
+		#else :
+		#	render_template('dba.html')
+		#if accesslevel == 1 :
+		#	render_template('user.html')
+		#else :
+		#	render_template('dba.html')
+		#if accesslevel == 1 :
+		#	render_template('user.html')
+		#else :
+		#	render_template('dba.html')
+		#if accesslevel == 1 :
+		#	render_template('user.html')
+		#else :
+		#	render_template('dba.html')
+		#if accesslevel == 1 :
+		#	render_template('user.html')
+		#else :
+		#	render_template('dba.html')		
 		
-		
-#Will use later for type of user ~ezki
-def user_type(user):
-	cur = g.db.cursor()
-    cur.execute("SELECT accesslevel FROM USER_INFO WHERE email = '%s'" % (user))
-	level = cur.fetchone()
-	if(level == 1):
-		return true
-	else:
-		return false		
 		
 @app.route('/login', methods=['POST'])
 def login():

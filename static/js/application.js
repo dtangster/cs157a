@@ -34,18 +34,16 @@ $(document).ready(function() {
 
     // Lines below handle the login form logic
     $("#loginButton").click(function() {
-        $("#loginForm").show();    
-
-
-        /*if ($("#loginForm").css("display") != "none") {
+        $("#loginForm").show();   
+        /* PREVIOUS CHANGE
+			if ($("#loginForm").css("display") != "none") {
            $("#registerForm").css("display", "none");    
        }*/
     });
 
     $("#registerButton").click(function() {
         $("#registerForm").show();
-        
-        /*
+        /*PREVIOUS CHANGE
         if ($("#registerForm").css("display") != "none") {
             $("#loginForm").css("display", "none");    
         }*/
