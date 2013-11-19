@@ -157,37 +157,19 @@ def register():
     except:
         g.db.rollback()
         return "False"; # Failure		
-	
+		
 
-		#if accesslevel == 1 :
-		#	render_template('user.html')
-		#else :
-		#	render_template('dba.html')
-		#if accesslevel == 1 :
-		#	render_template('user.html')
-		#else :
-		#	render_template('dba.html')
-		#if accesslevel == 1 :
-		#	render_template('user.html')
-		#else :
-		#	render_template('dba.html')
-		#if accesslevel == 1 :
-		#	render_template('user.html')
-		#else :
-		#	render_template('dba.html')
-		#if accesslevel == 1 :
-		#	render_template('user.html')
-		#else :
-		#	render_template('dba.html')		
+@app.route('/test')
+def test():
+	return render_template('user.html')	
 		
-		
+        
 @app.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
     password = request.form['password']
-    accesslevel = request.form['accesslevel']
 
-    if email is None or password is None or accesslevel is None:
+    if email is None or password is None:
         return "False"
 
     sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
@@ -196,10 +178,6 @@ def login():
     row = cur.fetchone()
 
     if row is None:
-		#if accesslevel == 1 :
-		#	render_template('user.html')
-		#else :
-		#	render_template('dba.html')
         return "False"
 
     valid = verify_password(password, row[0], row[1])
@@ -208,14 +186,18 @@ def login():
         sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
         cur.execute(sql)
         row = cur.fetchone()
-        if accesslevel == str(row[0]):
-            accesslevel = str(row[0])
-            return accesslevel # Return access level
+        accesslevel = str(row[0])
+        if(accesslevel == 2):
+            return render_template('user.html')
+        elif(accesslevel == 1) :
+            return render_template('lib.html')
         else:
-            return "False"        
-
+            return render_template('dba.html')
+            
     return "False"
 
+
+	
 def hash_password(password, salt=None):
     if salt is None:
         salt = uuid.uuid4().hex

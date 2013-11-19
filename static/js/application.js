@@ -52,11 +52,10 @@ $(document).ready(function() {
     
     $("#login").click(function() {
     
-
         email = $("#email").val();
         password = $("#password").val();  
 
-        if(document.getElementById('level2').checked) {
+       /* if(document.getElementById('level2').checked) {
           //level 2 User radio button is checked
             accesslevel = $("#level2").val();
         }else if(document.getElementById('level1').checked) {
@@ -66,12 +65,12 @@ $(document).ready(function() {
         else {
           //level 0 DBA
           accesslevel = $("#level0").val();
-        }
+        }*/
 
-       $.post("/login", { email: email, password: password, accesslevel:accesslevel }, function(result) {
+       $.post("/login", { email: email, password: password}, function(result) {
             if (result != "False") {
                //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
-                document.getElementById("insertmsg").innerHTML = "Welcome your logged in!";
+                document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
             }
             else {
                // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
@@ -98,9 +97,9 @@ $(document).ready(function() {
                 $("#name").val("");
                 $("#phone").val("");
                 $("#password2").val(""); 
-                document.getElementById("insertmsg").innerHTML = "Your registered and logged in!";
+                document.getElementById("insertmsg").innerHTML = "You are registered and logged in!";
                 outbox.send(JSON.stringify({ table: 'user_inf' }));
-
+                $("#regForm").popup("close");
             }
             else {
                 //$("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(5000);

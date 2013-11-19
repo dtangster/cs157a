@@ -19,27 +19,108 @@
             <div id="errors"></div>
             <img id="loadingImage" src="static/img/loading.gif"/>
 
-            <!--LINES BETWEEN COMMENTS ARE FOR DEBUGGING  -->
+            <!--LINES BETWEEN COMMENTS ARE FOR DEBUGGING >
             <label>SQL Query: <input id="query" type="text"/></label>
             <button id="queryButton" data-inline="true">Run Query</button>
-             <!--LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
+             <LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
             
             <div data-role="header" data-theme="b" data-position="fixed">
                 <div class="decorbar"></div>      
                 <p class="big">SD</p>          
                 <p class="small">Sticky Dogs Library</p>
-                <div class="nav">
-                  {% block login %}{% endblock %} 
+           
+				
+				<div class="nav">
+				<!---Nav--->
+			    <table>
+				<tr><td><table><tr>
+				<!--buttons-->
+				<td><img src="/static/img/icons/72-pin.png"/><td width="5">
+				<td><a href="#regForm" id="registerButton" data-rel="popup" data-position-to="window"  data-transition="fade">Register new user</a>
+				</td></tr></table></td></tr>
+				<tr><td><table><tr>
+				<td><img src="/static/img/icons/72-pin.png"/><td width="5">
+				<td><a href="#logForm" id="loginButton" data-rel="popup" data-position-to="window"  data-transition="fade">Login</a>
+				</td></tr></table> 
+				<!--endbuttons-->
+				</td></tr></table> <!--too lazy to put all /td LOOOL works anyways-->
+				
+				    <!--pop-ups-->
+				<!-- Registration form -->
+				<div data-role="popup" id="regForm" data-overlay-theme="b" data-theme="b">    
+					<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+					<form id="registerForm">
+					<div data-role="header"><div style="margin:15px; width:100%;"> 
+						 <h3>New Registration</h3>
+						 <p>*This registration is for regular users only</p></div>
+					</div>
+					<div data-role="content">
+					<div 
+						<div data-role="fieldcontain" class="ui-hide-label">
+							<label for="email2">Email</label>
+							<input type="text" name="email2" id="email2" placeholder="Email"/>
+						</div>
+						<div data-role="fieldcontain" class="ui-hide-label">
+							<label for="name">Name</label>
+							<input type="text" name="name" id="name" placeholder="Name"/>
+						</div>
+						<div data-role="fieldcontain" class="ui-hide-label">
+							<label for="phone">Phone</label>
+							<input type="text" name="phone" id="phone" placeholder="Phone ###-###-####"/>
+						</div>
+						<div data-role="fieldcontain" class="ui-hide-label">
+							<label for="password2">Password</label>
+							<input type="password" name="password2" id="password2" placeholder="Password"/>
+						</div>
+						<button type="button" id="register" name="register" data-inline="true">Register</button>
+					</form>
+					</div>
+				</div> <!-- End of registration form -->
+				
+				<!-- Login form -->
+				<div data-role="popup" id="logForm" data-overlay-theme="b" data-theme="b">    
+					 <a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+					 <div data-role="content">
+					 <form id="loginForm">                            
+						<!--div data-role="fieldcontain">
+						<fieldset data-role="controlgroup">
+							<legend>Choose type of user:</legend>
+								<input type="radio" name="accesslevel" id="level2" value="2" checked="checked" />
+								<label for="level2">User</label>
+
+								<input type="radio" name="accesslevel" id="level1" value="1"  />
+								<label for="level1">Librarian</label>
+
+								<input type="radio" name="accesslevel" id="level0" value="0"  />
+								<label for="level0">DBA</label>
+						</fieldset>
+						</div-->
+						<div role="header">Please Login Below:</div>
+						<div data-role="fieldcontain" class="ui-hide-label">
+							<label for="email">Email</label>
+							<input type="text" name="email" id="email" placeholder="Email"/>
+						</div>
+						<div data-role="fieldcontain" class="ui-hide-label">
+							<label for="password">Password</label>
+							<input type="password" name="password" id="password" placeholder="Password"/>
+						</div>
+						<button type="button" id="login" name="login" data-inline="true">Login</button>
+					</form> 
+					</div>
+				</div>
+				<!-- End of login form -->
+				<!--endNav!-->
+		
+                 
                 </div>
+<!--a href="/test" type="button">SSSS</a-->
                 <div class="msginfo"><p id="insertmsg">Welcome guest!</p></div>
             </div>           
-            {% block tableButtons %}{% endblock %}
-            <div data-role="content" data-theme="d">
-                <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
-                    {% block table %}{% endblock %}    
-                </table>
-            </div>
-              
+            
+			<div data-role="content">
+			{% block bodytable %}{%endblock%}
+			</div>
+			
         </div>
     </body>
 </html>
