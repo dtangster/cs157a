@@ -181,12 +181,13 @@ def login():
         return "False"
 
     valid = verify_password(password, row[0], row[1])
-
+	
     if valid:
         sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
         cur.execute(sql)
         row = cur.fetchone()
-        accesslevel = str(row[0])
+        accesslevel = row[0]
+	
         if(accesslevel == 2):
             return render_template('user.html')
         elif(accesslevel == 1) :

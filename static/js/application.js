@@ -71,6 +71,7 @@ $(document).ready(function() {
             if (result != "False") {
                //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
                 document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
+				$('#body').html(result).trigger("create").show();	
             }
             else {
                // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
