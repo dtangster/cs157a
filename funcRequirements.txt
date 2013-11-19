@@ -1,0 +1,24 @@
+USER
+
+register
+login
+see available books
+see highest rated books
+see reserved books
+reserve book
+cancel reserved book
+leave comment
+
+LIBRARIAN
+
+waive fees
+extend due date
+reset password
+view users
+view loans books
+view overdue books
+view users with outstanding balance
+
+DBA
+
+run sql query
