@@ -47,7 +47,7 @@
 				
 				    <!--pop-ups-->
 				<!-- Registration form -->
-				<div data-role="popup" id="regForm" data-overlay-theme="b" data-theme="b">    
+				<div data-role="popup" id="regForm" data-overlay-theme="b" data-theme="b" data-history="false">    
 					<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 					<form id="registerForm">
 					<div data-role="header"><div style="margin:15px; width:100%;"> 
@@ -78,23 +78,10 @@
 				</div> <!-- End of registration form -->
 				
 				<!-- Login form -->
-				<div data-role="popup" id="logForm" data-overlay-theme="b" data-theme="b">    
+				<div data-role="popup" id="logForm" data-overlay-theme="b" data-theme="b" data-history="false">    
 					 <a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 					 <div data-role="content">
-					 <form id="loginForm">                            
-						<!--div data-role="fieldcontain">
-						<fieldset data-role="controlgroup">
-							<legend>Choose type of user:</legend>
-								<input type="radio" name="accesslevel" id="level2" value="2" checked="checked" />
-								<label for="level2">User</label>
-
-								<input type="radio" name="accesslevel" id="level1" value="1"  />
-								<label for="level1">Librarian</label>
-
-								<input type="radio" name="accesslevel" id="level0" value="0"  />
-								<label for="level0">DBA</label>
-						</fieldset>
-						</div-->
+					 <form id="loginForm" method="post" action="{{ url_for('login') }}"">                        
 						<div role="header">Please Login Below:</div>
 						<div data-role="fieldcontain" class="ui-hide-label">
 							<label for="email">Email</label>
@@ -104,8 +91,8 @@
 							<label for="password">Password</label>
 							<input type="password" name="password" id="password" placeholder="Password"/>
 						</div>
-						<button type="button" id="login" name="login" data-inline="true">Login</button>
-					</form> 
+						<button id="login" name="login" data-inline="true">Login</button>
+					</form> 			
 					</div>
 				</div>
 				<!-- End of login form -->

@@ -54,24 +54,13 @@ $(document).ready(function() {
     
         email = $("#email").val();
         password = $("#password").val();  
-
-       /* if(document.getElementById('level2').checked) {
-          //level 2 User radio button is checked
-            accesslevel = $("#level2").val();
-        }else if(document.getElementById('level1').checked) {
-          //level 1 Librarian radio button is checked
-            accesslevel = $("#level1").val();
-        }
-        else {
-          //level 0 DBA
-          accesslevel = $("#level0").val();
-        }*/
-
+		
        $.post("/login", { email: email, password: password}, function(result) {
             if (result != "False") {
                //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
                 document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
-				$('#body').html(result).trigger("create").show();	
+				$.mobile.changePage(result).trigger("create").show();
+				//$('#body').html(result).trigger("create").show();	
             }
             else {
                // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
@@ -84,6 +73,7 @@ $(document).ready(function() {
         });
     });
 
+	
     $("#register").click(function() {
         email = $("#email2").val();
         name = $("#name").val();

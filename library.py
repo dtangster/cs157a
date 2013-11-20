@@ -10,8 +10,6 @@ import gevent
 import base64
 import uuid
 import hashlib
-import MySQLdb
-import MySQLdb.cursors
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
@@ -101,12 +99,13 @@ def teardown_request(exception):
 
 @app.route('/')   
 def show_main_page():
-    # This is the page returned normally
+# This is the page returned normally
     table = get_table('book')
 #only main page
 #return render_template('main.html')	
     return render_template('index.html', headers=table[0], entries=table[1])
-
+#	return render_template('user.html')	
+	
 @app.route('/ajax/table_request')
 def ajax_table_request():
     # This is the AJAX response
@@ -157,47 +156,47 @@ def register():
     except:
         g.db.rollback()
         return "False"; # Failure		
-		
 
-@app.route('/test')
-def test():
-	return render_template('user.html')	
-		
+@app.route('/test')		
+def failret():
+	return render_template('user.html')
         
-@app.route('/login', methods=['POST'])
+@app.route('/login/', methods=['POST', 'GET'])
 def login():
-    email = request.form['email']
-    password = request.form['password']
-
-    if email is None or password is None:
-        return "False"
-
-    sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
-    cur = g.db.cursor()
-    cur.execute(sql)
-    row = cur.fetchone()
-
-    if row is None:
-        return "False"
-
-    valid = verify_password(password, row[0], row[1])
 	
-    if valid:
-        sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
-        cur.execute(sql)
-        row = cur.fetchone()
-        accesslevel = row[0]
-	
-        if(accesslevel == 2):
-            return render_template('user.html')
-        elif(accesslevel == 1) :
-            return render_template('lib.html')
-        else:
-            return render_template('dba.html')
-            
-    return "False"
+	if request.method == 'POST':
+		email = request.form['email']
+		password = request.form['password']
 
+		if email is None or password is None:
+			return failret()
 
+		sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
+		cur = g.db.cursor()
+		cur.execute(sql)
+		row = cur.fetchone()
+
+		if row is None:
+			return failret()
+
+		valid = verify_password(password, row[0], row[1])
+		
+		if valid:
+			sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
+			cur.execute(sql)
+			row = cur.fetchone()
+			accesslevel = row[0]
+			
+			if(accesslevel == 2):
+				return render_template('user.html')
+			elif(accesslevel == 1) :
+				return render_template('lib.html')
+			else:
+				return render_template('dba.html')
+		return failret()
+		
+	elif request.method == 'GET':
+		return	failret();
 	
 def hash_password(password, salt=None):
     if salt is None:

@@ -29,6 +29,19 @@ p.big
     padding: 0cm;
     text-shadow: 0.0em 0.0em #fff
 }
+p.head
+{
+    font-family: 'Open Sans';
+   	font-weight: normal;
+	position: relative;
+	letter-spacing: -1px;
+    font-size:20px;
+    color:#000;
+    left:0px;
+    top:0px;
+    margin: 0cm;
+    padding: 0cm;
+  }
 p.small
 {   
     -webkit-transform: rotate(-90deg);
@@ -49,7 +62,6 @@ p.small
 	display:block;
     text-shadow: 0.0em 0.0em #fff
 }
-
 .decorbar
 {
     position:absolute;
@@ -57,8 +69,45 @@ p.small
     top:0px;
     width:160px;
     height:101%;
-    background-color:#1ca8dd;
+    background-color:#72EE9E;
     box-shadow: 0px 5px 5px #888888;
+}
+.decornav
+{
+    position:absolute;
+    left:20px;
+    top:0px;
+    width:160px;
+    height:100%;
+    background-color:#72EE9E;
+    box-shadow: 0px 5px 5px #888888;
+	z-index:0;
+}
+.user_nav
+{
+	height:100%;
+	position: relative;
+    width:150px;
+	left:10px;
+    text-shadow: 0.0em 0.0em #fff
+    z-index: 100;
+}
+.user_nav a:link, a:visited, a:active {
+    text-decoration:none;
+    font-family: 'SwIS BOLD';
+	letter-spacing: 1px;
+    color:#000;
+    font-size:18px;
+    text-shadow: 0.01em 0.01em #fff
+}
+.related_body
+{	
+    position:absolute;
+    left:190px;
+    top:120px;
+    width:100%;
+    height:100%;
+	z-index:200;
 }
 
 .msginfo
@@ -86,6 +135,7 @@ p.small
       width: 100%;
       max-width: 100%;
       height: 100px;
+	  background-color:#13101E;
 }
 
 
