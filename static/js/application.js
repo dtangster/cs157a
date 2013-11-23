@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$('document').bind('pageinit', function(){
     // Lines below handle websockets to update browser tables when an update is made on the database
     var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
     var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
@@ -50,7 +50,7 @@ $(document).ready(function() {
     });
 
     
-    $("#login").click(function() {
+    $("#login").live.click( 'pageinit', (function() {
     
         email = $("#email").val();
         password = $("#password").val();  
@@ -58,13 +58,13 @@ $(document).ready(function() {
        $.post("/login", { email: email, password: password}, function(result) {
             if (result != "False") {
                //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
-                document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
-				$.mobile.changePage(result).trigger("create").show();
-				//$('#body').html(result).trigger("create").show();	
+               // document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
+				$('#body').html(result).trigger("create").show();	
+				
             }
             else {
                // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
-                document.getElementById("insertmsg").innerHTML = "Sorry please login again!";
+               // document.getElementById("insertmsg").innerHTML = "Sorry please login again!";
             }
                 $("#loginForm").toggle();
                 $("#email").val("");
@@ -111,4 +111,56 @@ $(document).ready(function() {
             $("#tableContent").html(result).table("refresh");
         });
     });
+
+	
+	
+	//dont know how to make it dynamic for links as the button do above so i do individually
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	$("#available_books").click(function() {
+        $("#loadingImage").toggle();
+        table = $(this).attr("id");
+
+        $.get("/ajax/table_request", { table: table }, function(result) {
+            $("#loadingImage").toggle();
+            $("#tableContent").html(result).table("refresh");
+        });
+    });
+	
+	$("#highest_rated_books").click(function() {
+        $("#loadingImage").toggle();
+        table = $(this).attr("id");
+
+        $.get("/ajax/table_request", { table: table }, function(result) {
+            $("#loadingImage").toggle();
+            $("#tableContent").html(result).table("refresh");
+        });
+    });
+	
+	
+	$("#reserved_books").click(function() {
+        $("#loadingImage").toggle();
+        table = $(this).attr("id");
+
+        $.get("/ajax/table_request", { table: table }, function(result) {
+            $("#loadingImage").toggle();
+            $("#tableContent").html(result).table("refresh");
+        });
+    });
+	
+	
+	$("#loan").click(function() {
+        $("#loadingImage").toggle();
+        table = $(this).attr("id");
+
+        $.get("/ajax/table_request", { table: table }, function(result) {
+            $("#loadingImage").toggle();
+            $("#tableContent").html(result).table("refresh");
+        });
+    });
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+    
+
+		
 }); 

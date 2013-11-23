@@ -136,7 +136,7 @@ def query():
         g.db.rollback()
         return "False"; # Failure
 
-@app.route('/register', methods=['POST'])
+@app.route('/register/', methods=['POST'])
 def register():
     try:
         email = request.form['email']
@@ -157,19 +157,32 @@ def register():
         g.db.rollback()
         return "False"; # Failure		
 
-@app.route('/test')		
-def failret():
-	return render_template('user.html')
+#user page
+@app.route('/user/')		
+def user():
+	table = get_table('book')
+	return render_template('user.html',  headers=table[0], entries=table[1])
+	
+#librarian page
+@app.route('/lib/')		
+def lib():
+	table = get_table('user')
+	return render_template('lib.html',  headers=table[0], entries=table[1])
+#dba page
+@app.route('/dba/')		
+def dba():
+	table = get_table('user')
+	return render_template('dba.html',  headers=table[0], entries=table[1])
         
 @app.route('/login/', methods=['POST', 'GET'])
 def login():
-	
+
 	if request.method == 'POST':
 		email = request.form['email']
 		password = request.form['password']
 
 		if email is None or password is None:
-			return failret()
+			return 
 
 		sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
 		cur = g.db.cursor()
@@ -177,7 +190,7 @@ def login():
 		row = cur.fetchone()
 
 		if row is None:
-			return failret()
+			return redirect(url_for('show_main_page'))
 
 		valid = verify_password(password, row[0], row[1])
 		
@@ -188,16 +201,20 @@ def login():
 			accesslevel = row[0]
 			
 			if(accesslevel == 2):
-				return render_template('user.html')
+				#return render_template('user.html')
+				return  redirect(url_for('user'))
 			elif(accesslevel == 1) :
-				return render_template('lib.html')
+				return redirect(url_for('lib'))
+			elif(accesslevel == 0):
+				return redirect(url_for('dba'))
 			else:
-				return render_template('dba.html')
-		return failret()
-		
-	elif request.method == 'GET':
-		return	failret();
+				return redirect(url_for('show_main_page'))
+		return redirect(url_for('show_main_page'))
 	
+	elif request.method == 'GET':
+		return redirect(url_for('show_main_page'))
+
+
 def hash_password(password, salt=None):
     if salt is None:
         salt = uuid.uuid4().hex

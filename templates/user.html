@@ -2,17 +2,44 @@
 
 {% block bodytable %}
 
+<!--NAVIGATION FOR USER-->
 <div class="decornav"></div>
-<div class="user_nav">
+<div class="user_nav"  id="tableLink">
 <br/>
-<a href="#t">Available</a><br/>
-<a href="#t">Highest Rated</a><br/>
-<a href="#t">Reserve a Book</a><br/>
-<a href="#t">Current Loaned</a><br/>
+<a id="available_books" href="#t"  >Available</a><br/>
+<a id="highest_rated_books" href="#t">Highest Rated</a><br/>
+<a id="reserved_books" href="#t">Reserve a Book</a><br/>
+<a id="loan" href="#t">Current Loaned</a><br/>
 <a href="#t">Comment</a><br/>
 </div>			
+
+<!--TABLES-->
 <div class="related_body">
-Type stuff here
+            <div data-role="content" data-theme="d">
+                <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
+
+					{% set count = {'value': 0} %}
+					<thead>
+						<tr>
+							{% for header in headers %}
+								<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+							{% if count.update({'value': count.value + 1}) %} {% endif %}
+							{% endfor %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for entry in entries %}
+						<tr>
+							{% for i in range(count.value) %}
+							<td>{{ entry[i] }}</td>
+							{% endfor %}  
+						</tr>
+						{% endfor %}
+					</tbody>
+				
+                </table>
+            </div>
+
 </div>
 
 {%endblock%}
