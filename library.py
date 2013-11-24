@@ -88,7 +88,7 @@ def outbox(ws):
 #app.session_interface = RedisSessionInterface()
 
 # Class used for session management
-class User():
+class User:
     def __init__(self, email, accesslevel=2):
         self.email = email
         self.accesslevel = accesslevel
@@ -220,41 +220,44 @@ def dba():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-		email = request.form['email']
-		password = request.form['password']
+        email = request.form['email']
+        password = request.form['password']
 
-		if email is None or password is None:
-			return 
+        if email is None or password is None:
+            return 
 
-		sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
-		cur = g.db.cursor()
-		cur.execute(sql)
-		row = cur.fetchone()
+        sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
+        cur = g.db.cursor()
+        cur.execute(sql)
+        row = cur.fetchone()
 
-		if row is None:
-			return redirect(url_for('show_main_page'))
+        if row is None:
+            return redirect(url_for('show_main_page'))
 
-		valid = verify_password(password, row[0], row[1])
+        valid = verify_password(password, row[0], row[1])
 		
-		if valid:
-			sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
-			cur.execute(sql)
-			row = cur.fetchone()
-			accesslevel = row[0]
+        if valid:
+            sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
+            cur.execute(sql)
+            row = cur.fetchone()
+            accesslevel = row[0]
+
+            # This line is for logging in the user through Flask-Login 
+            login_user(User(email, accesslevel))
 			
-			if(accesslevel == 2):
-				#return render_template('user.html')
-				return  redirect(url_for('user'))
-			elif(accesslevel == 1) :
-				return redirect(url_for('lib'))
-			elif(accesslevel == 0):
-				return redirect(url_for('dba'))
-			else:
-				return redirect(url_for('show_main_page'))
-		return redirect(url_for('show_main_page'))
+            if(accesslevel == 2):
+            	#return render_template('user.html')
+            	return  redirect(url_for('user'))
+            elif(accesslevel == 1) :
+            	return redirect(url_for('lib'))
+            elif(accesslevel == 0):
+            	return redirect(url_for('dba'))
+            else:
+            	return redirect(url_for('show_main_page'))
+        return redirect(url_for('show_main_page'))
 	
     elif request.method == 'GET':
-		return redirect(url_for('show_main_page'))
+        return redirect(url_for('show_main_page'))
 
 
 def hash_password(password, salt=None):
