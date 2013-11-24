@@ -10,6 +10,7 @@ import gevent
 import base64
 import uuid
 import hashlib
+import flask.ext.login
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
