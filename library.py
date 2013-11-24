@@ -10,7 +10,7 @@ import gevent
 import base64
 import uuid
 import hashlib
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, login_user, logout_user, current_user
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
@@ -132,9 +132,14 @@ def teardown_request(exception):
 @app.route('/') 
 @app.route('/index')
 def show_main_page():
-# This is the page returned normally
+    if current_user.is_authenticated():
+        # Testing session
+        return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
+
+    # This is the page returned normally
     table = get_table('available_books')
-    return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
+    #return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
+    return render_template('indexOLD.html', headers=table[0], entries=table[1], name=table[2])
 
 
 @app.route('/ajax/table_request')
@@ -143,7 +148,7 @@ def ajax_table_request():
     table = get_table(request.args.get('table'))
     return render_template('table.html', headers=table[0], entries=table[1], name=table[2])
 
-@app.route('/table/<table>')
+@app.route('/table')
 def get_table(table):
     name = str(table)
     cur = g.db.cursor()
@@ -245,12 +250,11 @@ def login():
             # This line is for logging in the user through Flask-Login 
             login_user(User(email, accesslevel))
 			
-            if(accesslevel == 2):
-            	#return render_template('user.html')
-            	return  redirect(url_for('user'))
-            elif(accesslevel == 1) :
+            if accesslevel == 2:
+            	return redirect(url_for('user'))
+            elif accesslevel == 1:
             	return redirect(url_for('lib'))
-            elif(accesslevel == 0):
+            elif accesslevel == 0:
             	return redirect(url_for('dba'))
             else:
             	return redirect(url_for('show_main_page'))

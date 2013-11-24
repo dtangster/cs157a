@@ -128,12 +128,6 @@ $('document').bind('pageinit', function(){
     */	
 }); 
 
-
-
-
-
-	
-
 function loadTable(table) {
     $("#loadingImage").toggle();
     table = table.attr("id");
