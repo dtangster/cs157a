@@ -152,7 +152,7 @@ p.small
 
 #loadingImage, #errors {
     position: fixed;
-    z-index: 300;
+    z-index: 99999;
     top: 50%;
     left: 50%;
     display: none;

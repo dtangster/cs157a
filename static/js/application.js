@@ -138,22 +138,20 @@ function loadTable(table) {
     $("#loadingImage").toggle();
     table = table.attr("id");
 
-
     $.get("/ajax/table_request", { table: table }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh").trigger("create").show()	;
+        $("#tableContent").html(result).table("refresh").trigger("create").show();
 		//$( "#divTable table" ).html( result ).table("refresh");
-    });    
-	
-	if(table === "available_books")
-			document.getElementById("table_welcome").innerHTML="<h3>Viewing All Available Books</h3>";
-	else if(table=== "highest_rated_books")
-			document.getElementById("table_welcome").innerHTML="<h3>Viewing Highest Rated Books</h3>";
-	else if(table=== "reserved_books")
-			document.getElementById("table_welcome").innerHTML="<h3>Viewing Reserved Books</h3>";
-	else if(table=== "loan")
-			document.getElementById("table_welcome").innerHTML="<h3>Viewing Your Loaned Books</h3>";
-	else if(table=== "comments")
-			document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";
-	
+
+        if (table === "available_books")
+            document.getElementById("table_welcome").innerHTML="<h3>Viewing All Available Books</h3>";
+        else if (table === "highest_rated_books")
+            document.getElementById("table_welcome").innerHTML="<h3>Viewing Highest Rated Books</h3>";
+        else if (table === "reserved_books")
+            document.getElementById("table_welcome").innerHTML="<h3>Viewing Reserved Books</h3>";
+        else if (table === "loan")
+            document.getElementById("table_welcome").innerHTML="<h3>Viewing Your Loaned Books</h3>";
+        else if (table === "comments")
+            document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";
+    });    	
 }
