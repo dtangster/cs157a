@@ -20,6 +20,9 @@ app = Flask(__name__)
 app.secret_key = "cs157a"
 app.debug = 'DEBUG' in os.environ
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 sockets = Sockets(app)
 
 DATABASE_BROADCASTER = 'broadcaster'
@@ -83,6 +86,22 @@ def outbox(ws):
 # figured out how to use it yet
 
 #app.session_interface = RedisSessionInterface()
+
+class User(data):
+    # email = data[0], accesslevel = data[1]
+    email, accesslevel = data
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(email)
 
 def connect_db():
     return db.connect('host=ec2-54-225-255-208.compute-1.amazonaws.com dbname=d2f7pust9i9q2u user=dfgmdatvkdppay password=dDOdOcyBUU3j4S_5V6NS80N4hf')   
