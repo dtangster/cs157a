@@ -138,6 +138,17 @@ p.small
 	  background-color:#13101E;
 }
 
+.ui-btn {
+	background-color : black;
+	background:black;
+}
+.ui-btn-text {
+	color : white;
+}
+.ui-btn-down-c {
+	font-style : italic;
+}
+
 
 #loadingImage, #errors {
     position: fixed;

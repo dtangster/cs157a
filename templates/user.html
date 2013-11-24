@@ -24,7 +24,7 @@
 			<table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
 						
 			{% if name == "available_books" %}	
-			<form  id="borrow_form" method="post" action="{{ url_for('borrow_book') }}"">
+			<form  id="borrow_form" method="post" action="{{ url_for('borrow_book') }}">
 			{% endif %}
 			
 					{% set count = {'value': 0} %}					
@@ -42,8 +42,8 @@
 							{% for i in range(count.value) %}
 							<td>
 							
-							{% if i == 0 and  name == "available_books" %}							
-							<input type="button"" data-mini="true" value="{{ entry[i] }}"/>													
+							{% if i == 0 and  name == "available_books" %}								
+							<button data-mini="true"  id="book_id">{{ entry[i] }}</button>													
 							{% else %}
 							{{ entry[i] }} 
 							{% endif %}

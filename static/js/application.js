@@ -49,7 +49,7 @@ $('document').bind('pageinit', function(){
         }*/
     });
 
-    $("#login").live.click('pageinit', function() {
+    $("#login").click(function() {
     
         email = $("#email").val();
         password = $("#password").val();  
@@ -72,6 +72,20 @@ $('document').bind('pageinit', function(){
         });
     });
 	
+	 
+	 $("#borrow_book").click(function() {
+        bid_borrow = $("#borrow_book").val();
+		
+       $.post("/borrow_book", { bid_borrow: borrow_book }, function(result) {
+            if (result != "False") {
+				document.getElementById("table_welcome").innerHTML="<h3>ANUBAYAN</h3>";
+            }
+            else {
+               // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
+               // document.getElementById("insertmsg").innerHTML = "Sorry please login again!";
+            }
+        });
+    });
 	
     $("#register").live.click('pageinit', function() {
         email = $("#email2").val();
@@ -114,6 +128,10 @@ $('document').bind('pageinit', function(){
     */	
 }); 
 
+
+
+
+
 	
 
 function loadTable(table) {
@@ -123,7 +141,7 @@ function loadTable(table) {
 
     $.get("/ajax/table_request", { table: table }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh").trigger("create").show();
+        $("#tableContent").html(result).table("refresh").trigger("create").show()	;
 		//$( "#divTable table" ).html( result ).table("refresh");
     });    
 	

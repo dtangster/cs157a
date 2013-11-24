@@ -158,16 +158,21 @@ def register():
 
 
 #borrow_page
-@app.route('/borrow_book', methods=['POST'])    
+@app.route('/borrow_book', methods=['POST', 'GET'])    
 def borrow_book():
-    print "CLICKED BORROW"
-    return "True"
+    if request.method == 'POST':
+        bid = request.form['book_id']
+        sql = ""
+        cur = g.db.cursor()
+        cur.execute(sql)
+        row = cur.fetchone()
+        return "True"
 		
 #user page
 @app.route('/user')		
 def user():
-	table = get_table('available_books')
-	return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
+    table = get_table('available_books')
+    return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
 
 #librarian page
 @app.route('/lib')		
@@ -182,8 +187,7 @@ def dba():
         
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-
-	if request.method == 'POST':
+    if request.method == 'POST':
 		email = request.form['email']
 		password = request.form['password']
 
@@ -217,7 +221,7 @@ def login():
 				return redirect(url_for('show_main_page'))
 		return redirect(url_for('show_main_page'))
 	
-	elif request.method == 'GET':
+    elif request.method == 'GET':
 		return redirect(url_for('show_main_page'))
 
 
