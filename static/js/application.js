@@ -49,13 +49,12 @@ $('document').bind('pageinit', function(){
         }*/
     });
 
-    
-    $("#login").live.click( 'pageinit', (function() {
+    $("#login").live.click('pageinit', function() {
     
         email = $("#email").val();
         password = $("#password").val();  
 		
-       $.post("/login", { email: email, password: password}, function(result) {
+       $.post("/login", { email: email, password: password }, function(result) {
             if (result != "False") {
                //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
                // document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
@@ -72,7 +71,6 @@ $('document').bind('pageinit', function(){
                 $("#logForm").popup("close");
         });
     });
-
 	
     $("#register").click(function() {
         email = $("#email2").val();
@@ -101,8 +99,9 @@ $('document').bind('pageinit', function(){
         });
     });
 
+    /*
     // Lines below handle AJAX request to request new table.
-    $("#tableButtons button").click(function() {
+    $("#tableLink a").click(function() {
         $("#loadingImage").toggle();
         table = $(this).attr("id");
 
@@ -111,56 +110,15 @@ $('document').bind('pageinit', function(){
             $("#tableContent").html(result).table("refresh");
         });
     });
-
-	
-	
-	//dont know how to make it dynamic for links as the button do above so i do individually
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	$("#available_books").click(function() {
-        $("#loadingImage").toggle();
-        table = $(this).attr("id");
-
-        $.get("/ajax/table_request", { table: table }, function(result) {
-            $("#loadingImage").toggle();
-            $("#tableContent").html(result).table("refresh");
-        });
-    });
-	
-	$("#highest_rated_books").click(function() {
-        $("#loadingImage").toggle();
-        table = $(this).attr("id");
-
-        $.get("/ajax/table_request", { table: table }, function(result) {
-            $("#loadingImage").toggle();
-            $("#tableContent").html(result).table("refresh");
-        });
-    });
-	
-	
-	$("#reserved_books").click(function() {
-        $("#loadingImage").toggle();
-        table = $(this).attr("id");
-
-        $.get("/ajax/table_request", { table: table }, function(result) {
-            $("#loadingImage").toggle();
-            $("#tableContent").html(result).table("refresh");
-        });
-    });
-	
-	
-	$("#loan").click(function() {
-        $("#loadingImage").toggle();
-        table = $(this).attr("id");
-
-        $.get("/ajax/table_request", { table: table }, function(result) {
-            $("#loadingImage").toggle();
-            $("#tableContent").html(result).table("refresh");
-        });
-    });
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	
-    
-
-		
+    */	
 }); 
+
+function loadTable(table) {
+    $("#loadingImage").toggle();
+    table = table.attr("id");
+
+    $.get("/ajax/table_request", { table: table }, function(result) {
+        $("#loadingImage").toggle();
+        $("#tableContent").html(result).table("refresh");
+    });    
+}
