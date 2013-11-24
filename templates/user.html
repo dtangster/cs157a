@@ -11,14 +11,23 @@
 <a id="reserved_books" href="#t" onClick="loadTable($(this));">Reserve a Book</a><br/>
 <a id="loan" href="#t" onClick="loadTable($(this));">Current Loaned</a><br/>
 <a id="comments" href="#t" onClick="loadTable($(this));">Comment</a><br/>
+<a id="user_inf" href="#t" onClick="loadTable($(this));">USer</a><br/>
 </div>			
 
 <!--TABLES-->
 <div class="related_body">
-            <div data-role="content" data-theme="d">
-                <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
 
-					{% set count = {'value': 0} %}
+            <div data-role="content" data-theme="d" id="divTable">
+			
+			<div id="table_welcome"><h3>Viewing All Available Books</h3></div>
+
+			<table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
+						
+			{% if name == "available_books" %}	
+			<form  id="borrow_form" method="post" action="{{ url_for('borrow_book') }}"">
+			{% endif %}
+			
+					{% set count = {'value': 0} %}					
 					<thead>
 						<tr>
 							{% for header in headers %}
@@ -31,13 +40,29 @@
 						{% for entry in entries %}
 						<tr>
 							{% for i in range(count.value) %}
-							<td>{{ entry[i] }}</td>
+							<td>
+							
+							{% if i == 0 and  name == "available_books" %}							
+							<input type="button"" data-mini="true" value="{{ entry[i] }}"/>													
+							{% else %}
+							{{ entry[i] }} 
+							{% endif %}
+							
+							</td>
 							{% endfor %}  
 						</tr>
 						{% endfor %}
-					</tbody>
+					</tbody>	
+					
+			{% if name == "available_books" %}	
+			</form>
+			{% endif %}	
+				
 				
                 </table>
+
+
+		
             </div>
 
 </div>

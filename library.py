@@ -97,31 +97,30 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
-@app.route('/')   
+@app.route('/') 
+@app.route('/index')
 def show_main_page():
 # This is the page returned normally
-    table = get_table('book')
-#only main page
-#return render_template('main.html')	
-    return render_template('index.html', headers=table[0], entries=table[1])
-#	return render_template('user.html')	
-	
+    table = get_table('available_books')
+    return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
+
+
 @app.route('/ajax/table_request')
 def ajax_table_request():
     # This is the AJAX response
     table = get_table(request.args.get('table'))
-    return render_template('table.html', headers=table[0], entries=table[1])
+    return render_template('table.html', headers=table[0], entries=table[1], name=table[2])
 
 @app.route('/table/<table>')
 def get_table(table):
+    name = str(table)
     cur = g.db.cursor()
     cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '%s'" % (table))
     headers = cur.fetchall()
     cur.execute("SELECT * FROM %s" % (table))
     entries = cur.fetchall()
-
     # Returns headers as index 0 and entries at index 1
-    return (headers, entries)
+    return (headers, entries, name)
 
 @app.route('/query', methods=['POST'])
 def query():
@@ -136,7 +135,7 @@ def query():
         g.db.rollback()
         return "False"; # Failure
 
-@app.route('/register/', methods=['POST'])
+@app.route('/register', methods=['POST'])
 def register():
     try:
         email = request.form['email']
@@ -157,24 +156,31 @@ def register():
         g.db.rollback()
         return "False"; # Failure		
 
+
+#borrow_page
+@app.route('/borrow_book', methods=['POST'])    
+def borrow_book():
+    print "CLICKED BORROW"
+    return "True"
+		
 #user page
-@app.route('/user/')		
+@app.route('/user')		
 def user():
-	table = get_table('book')
-	return render_template('user.html',  headers=table[0], entries=table[1])
-	
+	table = get_table('available_books')
+	return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
+
 #librarian page
-@app.route('/lib/')		
+@app.route('/lib')		
 def lib():
 	table = get_table('user')
-	return render_template('lib.html',  headers=table[0], entries=table[1])
+	return render_template('lib.html',  headers=table[0], entries=table[1], name=table[2])
 #dba page
-@app.route('/dba/')		
+@app.route('/dba')		
 def dba():
 	table = get_table('user')
-	return render_template('dba.html',  headers=table[0], entries=table[1])
+	return render_template('dba.html',  headers=table[0], entries=table[1], name=table[2])
         
-@app.route('/login/', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
 
 	if request.method == 'POST':

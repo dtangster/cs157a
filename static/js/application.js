@@ -2,7 +2,7 @@ $('document').bind('pageinit', function(){
     // Lines below handle websockets to update browser tables when an update is made on the database
     var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
     var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
-    var table = "book";
+    //var table = "book";
 
     inbox.onmessage = function(message) {
         var data = JSON.parse(message.data);
@@ -72,7 +72,8 @@ $('document').bind('pageinit', function(){
         });
     });
 	
-    $("#register").click(function() {
+	
+    $("#register").live.click('pageinit', function() {
         email = $("#email2").val();
         name = $("#name").val();
         phone = $("#phone").val();
@@ -113,12 +114,28 @@ $('document').bind('pageinit', function(){
     */	
 }); 
 
+	
+
 function loadTable(table) {
     $("#loadingImage").toggle();
     table = table.attr("id");
 
+
     $.get("/ajax/table_request", { table: table }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh");
+        $("#tableContent").html(result).table("refresh").trigger("create").show();
+		//$( "#divTable table" ).html( result ).table("refresh");
     });    
+	
+	if(table === "available_books")
+			document.getElementById("table_welcome").innerHTML="<h3>Viewing All Available Books</h3>";
+	else if(table=== "highest_rated_books")
+			document.getElementById("table_welcome").innerHTML="<h3>Viewing Highest Rated Books</h3>";
+	else if(table=== "reserved_books")
+			document.getElementById("table_welcome").innerHTML="<h3>Viewing Reserved Books</h3>";
+	else if(table=== "loan")
+			document.getElementById("table_welcome").innerHTML="<h3>Viewing Your Loaned Books</h3>";
+	else if(table=== "comments")
+			document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";
+	
 }

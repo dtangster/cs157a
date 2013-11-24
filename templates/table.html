@@ -1,18 +1,38 @@
-{% set count = {'value': 0} %}
-<thead>
-    <tr>
-        {% for header in headers %}
-            <th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
-        {% if count.update({'value': count.value + 1}) %} {% endif %}
-        {% endfor %}
-    </tr>
-</thead>
-<tbody>
-    {% for entry in entries %}
-    <tr>
-        {% for i in range(count.value) %}
-        <td>{{ entry[i] }}</td>
-        {% endfor %}  
-    </tr>
-    {% endfor %}
-</tbody>
+			
+{% if name == "available_books" %}	
+<form  id="borrow_form" method="post" action="{{ url_for('borrow_book') }}"">
+{% endif %}
+
+
+		{% set count = {'value': 0} %}					
+		<thead>
+			<tr>
+				{% for header in headers %}
+					<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+				{% if count.update({'value': count.value + 1}) %} {% endif %}
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for entry in entries %}
+			<tr>
+				{% for i in range(count.value) %}
+				<td>
+				
+				{% if i == 0 and  name == "available_books" %}							
+				<input type="button"" data-mini="true" value="{{ entry[i] }}"/>													
+				{% else %}
+				{{ entry[i] }} 
+				{% endif %}
+				
+				</td>
+				{% endfor %}  
+			</tr>
+			{% endfor %}
+		</tbody>	
+		
+{% if name == "available_books" %}	
+</form>
+{% endif %}	
+	
+	
