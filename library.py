@@ -10,7 +10,7 @@ import gevent
 import base64
 import uuid
 import hashlib
-import flask.ext.login
+from flask.ext.login import LoginManager
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
@@ -87,9 +87,11 @@ def outbox(ws):
 
 #app.session_interface = RedisSessionInterface()
 
-class User(data):
-    # email = data[0], accesslevel = data[1]
-    email, accesslevel = data
+# Class used for session management
+class User():
+    def __init__(self, email, accesslevel=2):
+        self.email = email
+        self.accesslevel = accesslevel
 
     def is_authenticated(self):
         return True
@@ -102,6 +104,16 @@ class User(data):
 
     def get_id(self):
         return unicode(email)
+
+@login_manager.user_loader
+def load_user(email):
+    sql = "SELECT accesslevel FROM user_inf WHERE email = '%s'" % (email)
+    cur = g.db.cursor()
+    cur.execute(sql)
+    row = cur.fetchone()
+    accesslevel = row[0]
+
+    return User(email, accesslevel)
 
 def connect_db():
     return db.connect('host=ec2-54-225-255-208.compute-1.amazonaws.com dbname=d2f7pust9i9q2u user=dfgmdatvkdppay password=dDOdOcyBUU3j4S_5V6NS80N4hf')   
