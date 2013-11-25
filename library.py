@@ -155,8 +155,17 @@ def show_main_page():
 @app.route('/ajax/table_request')
 def ajax_table_request():
     # This is the AJAX response
-    table = get_table(request.args.get('table'))
-    return render_template('table.html', headers=table[0], entries=table[1], name=table[2])
+    email =  current_user.email    
+    accesslevel =  current_user.accesslevel
+    tablename = request.args.get('table')
+    
+    #calls user specified table for loan 
+    if accesslevel == 2 and tablename == 'loan':
+        table = get_table_user(tablename, email)
+    else:
+        table = get_table(tablename)
+    return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
+    
 
 @app.route('/table/<table>')
 def get_table(table):
@@ -168,6 +177,21 @@ def get_table(table):
     entries = cur.fetchall()
     # Returns headers as index 0 and entries at index 1
     return (headers, entries, name)
+
+#user specified table loan
+def get_table_user(table, email):
+    name = str(table)
+    cur = g.db.cursor()
+    cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '%s'" % (table))
+    headers = cur.fetchall()
+    cur.execute("SELECT * FROM %s where email = '%s'" % (table,email))
+    entries = cur.fetchall()
+    # Returns headers as index 0 and entries at index 1
+    return (headers, entries, name)
+
+
+
+
 
 @app.route('/query', methods=['POST'])
 def query():
@@ -245,8 +269,15 @@ def un_borrow_book():
 #user page
 @app.route('/user')		
 def user():
+    email =  current_user.email
+    accesslevel =  current_user.accesslevel
+    
     table = get_table('available_books')
-    return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
+    if accesslevel == 2:
+        return render_template('user.html', headers=table[0], entries=table[1], name=table[2], email=email)
+    else:
+        return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
+    
 
 #librarian page
 @app.route('/lib')		

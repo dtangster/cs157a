@@ -160,5 +160,13 @@ function loadTable(table) {
             document.getElementById("table_welcome").innerHTML="<h3>Viewing Your Loaned Books</h3>";
         else if (table === "comments")
             document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";
+			
     });    	
 }
+
+
+
+
+
+
+

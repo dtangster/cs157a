@@ -215,7 +215,9 @@ drop function if exists checkout() cascade;
 CREATE OR REPLACE FUNCTION checkout()
 RETURNS TRIGGER AS $checkout$
     BEGIN
-            NEW.due_date = (select date + 7 from CURRENT_DATE);          
+            NEW.due_date = (select date from CURRENT_DATE);
+	    UPDATE loan set due_date = NEW.due_date + 7 where email = new.email; 
+	    UPDATE loan set loan_date = NEW.due_date where email = new.email;    
             UPDATE book SET available = available - 1 where bid = new.bid;
             UPDATE user_inf SET active_loan = active_loan + 1 where email = new.email;  
         RETURN NEW;         
