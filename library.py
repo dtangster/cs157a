@@ -15,6 +15,7 @@ from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
 from flask_sockets import Sockets
+from time import gmtime, strftime
 
 app = Flask(__name__)
 app.secret_key = "cs157a"
@@ -166,12 +167,12 @@ def ajax_table_request():
     tablename = request.args.get('table')
     
     #calls user specified table for loan 
-    if accesslevel == 2 and tablename == 'loan':
+    if accesslevel == 2 and (tablename == 'loan' or tablename == 'reservation'):
         table = get_table_user(tablename, email)
     else:
         table = get_table(tablename)
     return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
-    
+        
 
 @app.route('/table')
 def get_table(table):
@@ -183,6 +184,7 @@ def get_table(table):
     entries = cur.fetchall()
     # Returns headers as index 0 and entries at index 1
     return (headers, entries, name)
+
 
 #user specified table loan
 def get_table_user(table, email):
@@ -263,6 +265,34 @@ def un_borrow_book():
     # This line should be a view. We need to make another function to get a specific view based on email address
     #table = get_table("loan")
     #return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
+
+#add reservation for a book
+@app.route('/reserve_book', methods=['POST'])    
+def reserve_book():  
+    if request.method == 'POST':     
+        bid = int(request.form['bid'])
+        email = current_user.email
+        date = strftime("%Y-%m-%d")
+        
+        sql = "INSERT INTO reservation (bid, email, reserve_date) VALUES \
+               (%d, '%s', '%s')" % (bid, email, date)
+
+
+#remove reservation for a book
+@app.route('/un_reserve_book', methods=['POST'])    
+def un_reserve_book():  
+    if request.method == 'POST':     
+        bid = int(request.form['bid'])
+        email = current_user.email
+        
+        sql = "DELETE FROM reservation (bid, email) VALUES \
+               (%d, '%s', '%s')" % (bid, email)
+        
+
+
+
+
+
 	
 #user page
 @app.route('/user')		

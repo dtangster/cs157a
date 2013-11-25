@@ -6,12 +6,22 @@
 <div class="decornav"></div>
 <div class="user_nav"  id="tableLink">
 <br/>
+<font color=#fff>
 <a id="available_books" href="#t" onClick="loadTable($(this));">Available</a><br/>
+---------------------------<br/>
+<a id="reservable_books" href="#t" onClick="loadTable($(this));">Reservable Books</a><br/>
+---------------------------<br/>
 <a id="highest_rated_books" href="#t" onClick="loadTable($(this));">Highest Rated</a><br/>
-<a id="reserved_books" href="#t" onClick="loadTable($(this));">Reserve a Book</a><br/>
+---------------------------<br/>
+<a id="reservation" href="#t" onClick="loadTable($(this));">Current Reserved Books</a><br/>
+---------------------------<br/>
 <a id="loan" href="#t" onClick="loadTable($(this));">Current Loaned</a><br/>
+---------------------------<br/>
 <a id="comments" href="#t" onClick="loadTable($(this));">Comment</a><br/>
-<a id="logout" href="#t" onClick="logout();" style="font-color:black">Logout</a>
+---------------------------<br/>
+<a href="/logout" style="font-color:black">Logout</a><br />
+---------------------------<br/>
+</font>
 </div>			
 
 <!--TABLES-->
@@ -31,6 +41,10 @@
 			{% if name == "loan" %}	
 			<form  id="de_borrow_form" method="post"  action="{{ url_for('un_borrow_book') }}"> 
 			{% endif %}
+			{% if name == "loan" %}	
+			<form  id="reserve_form" method="post"  action="{{ url_for('reserve_book') }}"> 
+			{% endif %}
+
 
 			
 					{% set count = {'value': 0} %}					
@@ -51,8 +65,12 @@
 							{% if i == 0 and name == "available_books" %}								
 							<button data-mini="true"  id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>																									
 							{% elif i == 0 and name== "loan"%}								
-							<button data-mini="true"  id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>													
+							<button data-mini="true"  id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>
+							{% elif i == 0 and name== "reservable_books"%}								
+							<button data-mini="true"  id={{ entry[i] }} onClick="goToReserve($(this));">{{ entry[i] }}</button>							
 							{% else %}
+							
+							
 							{{ entry[i] }} 
 							{% endif %}
 							
@@ -64,7 +82,7 @@
 					
 					
 					
-			{% if name == "available_books"  or name== "loan" %}	
+			{% if name == "available_books"  or name== "loan" or  name == "reserve_book"%}	
 			</form>
 			{% endif %}	
 				

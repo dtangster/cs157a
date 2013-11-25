@@ -140,6 +140,35 @@ function goUnBorrow(button) {
         }
     });		
 }
+
+function goToReserve(button) {
+        bid = button.attr("id");
+		table = button.attr
+		
+       $.post("/reserve_book", { bid: bid }, function(result) {
+            if (result != "False") {
+					//$('#message').append("FADSFASDFAS");
+            }
+            else {
+            }
+        });
+}
+
+function goUnReserve(button) {
+        bid = button.attr("id");
+		table = button.attr
+		
+       $.post("/un_reserve_book", { bid: bid }, function(result) {
+            if (result != "False") {
+					//$('#message').append("FADSFASDFAS");
+            }
+            else {
+            }
+        });
+}
+	
+	
+
 	
 function loadTable(table) {
     $("#loadingImage").toggle();
