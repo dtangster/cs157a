@@ -284,9 +284,8 @@ def un_reserve_book():
     if request.method == 'POST':     
         bid = int(request.form['bid'])
         email = current_user.email
-        
-        sql = "DELETE FROM reservation (bid, email) VALUES \
-               (%d, '%s', '%s')" % (bid, email)
+        #procedure u wrote lol in db
+        sql = "select create_reservation('$s', %s)" % (email, bid)
         
 
 
