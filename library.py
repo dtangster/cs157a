@@ -103,16 +103,23 @@ class User:
         return False
 
     def get_id(self):
-        return unicode(email)
+        return unicode(self.email)
 
 @login_manager.user_loader
 def load_user(email):
+    email = str(email)
     sql = "SELECT accesslevel FROM user_inf WHERE email = '%s'" % (email)
-    cur = g.db.cursor()
+    db = connect_db()
+    cur = db.cursor()
     cur.execute(sql)
     row = cur.fetchone()
-    accesslevel = row[0]
 
+    if row is None:
+        db.close()
+        return None
+
+    accesslevel = row[0]
+    db.close()
     return User(email, accesslevel)
 
 def connect_db():
@@ -132,15 +139,18 @@ def teardown_request(exception):
 @app.route('/') 
 @app.route('/index')
 def show_main_page():
-    if current_user.is_authenticated():
-        # Testing session
-        return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
-
     # This is the page returned normally
     table = get_table('available_books')
-    #return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
-    return render_template('indexOLD.html', headers=table[0], entries=table[1], name=table[2])
 
+    if current_user.is_authenticated():
+        if current_user.accesslevel == 2:
+            return redirect(url_for('user'))
+        elif current_user.accesslevel == 1:
+            return redirect(url_for('lib'))
+        elif current_user.accesslevel == 0:
+            return redirect(url_for('dba'))
+
+    return render_template('indexOLD.html', headers=table[0], entries=table[1], name=table[2])
 
 @app.route('/ajax/table_request')
 def ajax_table_request():
@@ -216,6 +226,7 @@ def user():
 def lib():
 	table = get_table('user')
 	return render_template('lib.html',  headers=table[0], entries=table[1], name=table[2])
+
 #dba page
 @app.route('/dba')		
 def dba():
@@ -229,7 +240,7 @@ def login():
         password = request.form['password']
 
         if email is None or password is None:
-            return 
+            return "False"
 
         sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
         cur = g.db.cursor()
@@ -258,11 +269,11 @@ def login():
             	return redirect(url_for('dba'))
             else:
             	return redirect(url_for('show_main_page'))
+
         return redirect(url_for('show_main_page'))
 	
     elif request.method == 'GET':
         return redirect(url_for('show_main_page'))
-
 
 def hash_password(password, salt=None):
     if salt is None:
