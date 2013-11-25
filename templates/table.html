@@ -1,6 +1,10 @@
 			
 {% if name == "available_books" %}	
-<form  id="borrow_form" method="post"  action="{{ url_for('borrow_book') }}">
+<form  id="borrow_form" method="post"  action="{{ url_for('borrow_book') }}"> 
+{% endif %}
+
+{% if name == "loan" %}	
+<form  id="de_borrow_form" method="post"  action="{{ url_for('un_borrow_book') }}"> 
 {% endif %}
 
 
@@ -19,11 +23,14 @@
 				{% for i in range(count.value) %}
 				<td>
 				
-				{% if i == 0 and  name == "available_books" %}							
-				<button data-mini="true"  id="book_id">{{ entry[i] }}</button>												
-				{% else %}
-				{{ entry[i] }} 
-				{% endif %}
+							
+					{% if i == 0 and name == "available_books" %}								
+					<button data-mini="true"  id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>																									
+					{% elif i == 0 and name == "loan"%}								
+					<button data-mini="true"  id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>													
+					{% else %}
+					{{ entry[i] }} 
+					{% endif %}
 				
 				</td>
 				{% endfor %}  
@@ -31,7 +38,7 @@
 			{% endfor %}
 		</tbody>	
 		
-{% if name == "available_books" %}	
+{% if name == "available_books"  or name== "loan" %}	
 </form>
 {% endif %}	
 	

@@ -158,7 +158,7 @@ def ajax_table_request():
     table = get_table(request.args.get('table'))
     return render_template('table.html', headers=table[0], entries=table[1], name=table[2])
 
-@app.route('/table')
+@app.route('/table/<table>')
 def get_table(table):
     name = str(table)
     cur = g.db.cursor()
@@ -205,15 +205,42 @@ def register():
 
 
 #borrow_page
-@app.route('/borrow_book', methods=['POST', 'GET'])    
-def borrow_book():
-    if request.method == 'POST':
-        bid = request.form['book_id']
-        sql = ""
+@app.route('/borrow_book', methods=['POST'])    
+def borrow_book():  
+    if request.method == 'POST':     
+        bid = int(request.form['bid'])
+        email = 'test'
+        date = '1111-11-11'
+        
+        print bid   #for debuggin
+        sql = "INSERT INTO loan (bid, email, loan_date) VALUES \
+               (%d, '%s', '%s')" % (bid, email, date)
+        
         cur = g.db.cursor()
         cur.execute(sql)
-        row = cur.fetchone()
-        return "True"
+        g.db.commit()
+        return redirect(url_for('user'))
+    else:
+        return redirect(url_for('user'))
+
+#remove current loan
+@app.route('/un_borrow_book', methods=['POST'])    
+def un_borrow_book():  
+    if request.method == 'POST':     
+        bid = int(request.form['bid'])
+        email = 'test'
+        
+        print bid   #for debuggin
+        sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
+        
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        table = get_table('loan')
+        return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
+    else:
+        return redirect(url_for('user'))
+
 		
 #user page
 @app.route('/user')		
@@ -235,6 +262,7 @@ def dba():
         
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']

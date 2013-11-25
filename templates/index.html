@@ -4,4 +4,9 @@
 <a href="/user">user</a>
 <a href="/lib">lib</a>
 <a href="/dba">dba</a>
+{% for message in get_flashed_messages()%}
+<div class="flash">
+	{{message}}
+</div>
+{%endfor%}
 {% endblock%}
