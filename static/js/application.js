@@ -1,4 +1,6 @@
-$('document').bind('pageinit', function(){
+$(document).ready(function(){
+    // DISABLING WEBSOCKETS FOR NOW
+    /*
     // Lines below handle websockets to update browser tables when an update is made on the database
     var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
     var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
@@ -21,6 +23,7 @@ $('document').bind('pageinit', function(){
     outbox.onclose = function() {
         outbox = new WebSocket(outbox.url);
     };
+    */
 
     $("#queryButton").click(function() {
         query = $("#query").val();
@@ -56,23 +59,23 @@ $('document').bind('pageinit', function(){
 		
        $.post("/login", { email: email, password: password }, function(result) {
             if (result != "False") {
-               //$("#errors").html("*** Authentication Successful ***").fadeIn(500).fadeOut(5000);
-               // document.getElementById("insertmsg").innerHTML = "Welcome you are logged in!";
-				
+                location.replace("localhost:5000");	
+                location.reload();	
             }
             else {
                // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
                // document.getElementById("insertmsg").innerHTML = "Sorry please login again!";
             }
-                $("#loginForm").toggle();
-                $("#email").val("");
-                $("#password").val("");
-                $("#logForm").popup("close");
+
+            $("#loginForm").toggle();
+            $("#email").val("");
+            $("#password").val("");
+            $("#logForm").popup("close");
         });
     });
 	
 	
-    $("#register").live.click('pageinit', function() {
+    $("#register").click(function() {
         email = $("#email2").val();
         name = $("#name").val();
         phone = $("#phone").val();
@@ -114,33 +117,30 @@ $('document').bind('pageinit', function(){
 }); 
 
 function goToBorrow(button) {
-        bid = button.attr("id");
-		table = button.attr
-		
-       $.post("/borrow_book", { bid: bid }, function(result) {
-            if (result != "False") {
-					//$('#message').append("FADSFASDFAS");
-            }
-            else {
-            }
-        });
+    bid = button.attr("id");
+	table = button.attr
 	
+    $.post("/borrow_book", { bid: bid }, function(result) {
+        if (result != "False") {
+				//$('#message').append("FADSFASDFAS");
+        }
+        else {
+        }
+    });
 }
 
 function goUnBorrow(button) {
-        bid = button.attr("id");
-		
-       $.post("/un_borrow_book", { bid: bid }, function(result) {
-            if (result != "False") {
-					//$('#message').append("FADSFASDFAS");
-            }
-            else {
-            }
-        });
-		
+    bid = button.attr("id");
+	
+    $.post("/un_borrow_book", { bid: bid }, function(result) {
+        if (result != "False") {
+				//$('#message').append("FADSFASDFAS");
+        }
+        else {
+        }
+    });		
 }
 	
-
 function loadTable(table) {
     $("#loadingImage").toggle();
     table = table.attr("id");
@@ -159,9 +159,15 @@ function loadTable(table) {
         else if (table === "loan")
             document.getElementById("table_welcome").innerHTML="<h3>Viewing Your Loaned Books</h3>";
         else if (table === "comments")
-            document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";
-			
+            document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";		
     });    	
+}
+
+function logout() {
+    $.get("/logout", function(result) {
+        location.replace("localhost:5000"); 
+        location.reload();  
+    });   
 }
 
 

@@ -10,7 +10,7 @@ import gevent
 import base64
 import uuid
 import hashlib
-from flask.ext.login import LoginManager, login_user, logout_user, current_user
+from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
@@ -122,6 +122,12 @@ def load_user(email):
     db.close()
     return User(email, accesslevel)
 
+@app.route("/logout", methods=['POST', 'GET'])
+@login_required
+def logout():
+    logout_user()
+    return show_main_page()
+
 def connect_db():
     return db.connect('host=ec2-54-225-255-208.compute-1.amazonaws.com dbname=d2f7pust9i9q2u user=dfgmdatvkdppay password=dDOdOcyBUU3j4S_5V6NS80N4hf')   
     #return MySQLdb.connect(host='us-cdbr-east-04.cleardb.com', user='bebdd7a70588f7', passwd='a6c7c20c', db='heroku_59b3847e37c77e1')
@@ -144,11 +150,11 @@ def show_main_page():
 
     if current_user.is_authenticated():
         if current_user.accesslevel == 2:
-            return redirect(url_for('user'))
+            return user()
         elif current_user.accesslevel == 1:
-            return redirect(url_for('lib'))
+            return lib()
         elif current_user.accesslevel == 0:
-            return redirect(url_for('dba'))
+            return dba()
         
     return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
 
@@ -167,7 +173,7 @@ def ajax_table_request():
     return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
     
 
-@app.route('/table/<table>')
+@app.route('/table')
 def get_table(table):
     name = str(table)
     cur = g.db.cursor()
@@ -188,10 +194,6 @@ def get_table_user(table, email):
     entries = cur.fetchall()
     # Returns headers as index 0 and entries at index 1
     return (headers, entries, name)
-
-
-
-
 
 @app.route('/query', methods=['POST'])
 def query():
@@ -230,42 +232,38 @@ def register():
 
 #borrow_page
 @app.route('/borrow_book', methods=['POST'])    
-def borrow_book():  
-    if request.method == 'POST':     
-        bid = int(request.form['bid'])
-        email = current_user.email
-        date = '1111-11-11'
-        
-        print bid   #for debuggin
-        sql = "INSERT INTO loan (bid, email, loan_date) VALUES \
-               (%d, '%s', '%s')" % (bid, email, date)
-        
-        cur = g.db.cursor()
-        cur.execute(sql)
-        g.db.commit()
-        return redirect(url_for('user'))
-    else:
-        return redirect(url_for('user'))
+def borrow_book():      
+    bid = int(request.form['bid'])
+    email = current_user.email
+    date = '1111-11-11'
+    
+    print bid   #for debuggin
+    sql = "INSERT INTO loan (bid, email, loan_date) VALUES \
+           (%d, '%s', '%s')" % (bid, email, date)
+    
+    cur = g.db.cursor()
+    cur.execute(sql)
+    g.db.commit()
+
+    # Need to rerender a view for the table they are looking at
 
 #remove current loan
 @app.route('/un_borrow_book', methods=['POST'])    
-def un_borrow_book():  
-    if request.method == 'POST':     
-        bid = int(request.form['bid'])
-        email = current_user.email
-        
-        print bid   #for debuggin
-        sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
-        
-        cur = g.db.cursor()
-        cur.execute(sql)
-        g.db.commit()
-        table = get_table('loan')
-        return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
-    else:
-        return redirect(url_for('user'))
+def un_borrow_book():    
+    bid = int(request.form['bid'])
+    email = current_user.email
+    
+    print bid   #for debuggin
+    sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
+    
+    cur = g.db.cursor()
+    cur.execute(sql)
+    g.db.commit()
 
-		
+    # This line should be a view. We need to make another function to get a specific view based on email address
+    #table = get_table("loan")
+    #return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
+	
 #user page
 @app.route('/user')		
 def user():
@@ -276,8 +274,7 @@ def user():
     if accesslevel == 2:
         return render_template('user.html', headers=table[0], entries=table[1], name=table[2], email=email)
     else:
-        return render_template('user.html', headers=table[0], entries=table[1], name=table[2])
-    
+        return render_template('user.html', headers=table[0], entries=table[1], name=table[2])   
 
 #librarian page
 @app.route('/lib')		
@@ -293,7 +290,6 @@ def dba():
         
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -319,26 +315,9 @@ def login():
 
             # This line is for logging in the user through Flask-Login 
             login_user(User(email, accesslevel))
-			
-            if accesslevel == 2:
-            	return redirect(url_for('user'))
-            elif accesslevel == 1:
-            	return redirect(url_for('lib'))
-            elif accesslevel == 0:
-            	return redirect(url_for('dba'))
-            else:
-            	return redirect(url_for('show_main_page'))
+            return "True"
 
-        return redirect(url_for('show_main_page'))
-	
-    elif request.method == 'GET':
-        return redirect(url_for('show_main_page'))
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    table = get_table('available_books')
-    return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
+        return "False"
 
 def hash_password(password, salt=None):
     if salt is None:
