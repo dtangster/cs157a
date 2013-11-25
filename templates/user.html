@@ -5,94 +5,64 @@
 <!--NAVIGATION FOR USER-->
 <div class="decornav"></div>
 <div class="user_nav"  id="tableLink">
-<br/>
-<font color=#fff>
-<a id="available_books" href="#t" onClick="loadTable($(this));">Available</a><br/>
----------------------------<br/>
-<a id="reservable_books" href="#t" onClick="loadTable($(this));">Reservable Books</a><br/>
----------------------------<br/>
-<a id="highest_rated_books" href="#t" onClick="loadTable($(this));">Highest Rated</a><br/>
----------------------------<br/>
-<a id="reservation" href="#t" onClick="loadTable($(this));">Current Reserved Books</a><br/>
----------------------------<br/>
-<a id="loan" href="#t" onClick="loadTable($(this));">Current Loaned</a><br/>
----------------------------<br/>
-<a id="comments" href="#t" onClick="loadTable($(this));">Comment</a><br/>
----------------------------<br/>
-<a href="/logout" style="font-color:black">Logout</a><br />
----------------------------<br/>
-</font>
+	<br/>
+	<font color=#fff>
+	<a id="available_books" href="#t" onClick="loadTable($(this));">Available</a><br/>
+	---------------------------<br/>
+	<a id="reservable_books" href="#t" onClick="loadTable($(this));">Reservable Books</a><br/>
+	---------------------------<br/>
+	<a id="highest_rated_books" href="#t" onClick="loadTable($(this));">Highest Rated</a><br/>
+	---------------------------<br/>
+	<a id="reservation" href="#t" onClick="loadTable($(this));">Current Reserved Books</a><br/>
+	---------------------------<br/>
+	<a id="loan" href="#t" onClick="loadTable($(this));">Current Loaned</a><br/>
+	---------------------------<br/>
+	<a id="comments" href="#t" onClick="loadTable($(this));">Comment</a><br/>
+	---------------------------<br/>
+	<a id="logout" href="#t" onClick="logout();" style="font-color:black">Logout</a><br />
+	---------------------------<br/>
+	</font>
 </div>			
 
 <!--TABLES-->
 <div class="related_body">
+	<div data-role="content" data-theme="d" id="divTable">
+		<div id="table_welcome"><h3>Viewing All Available Books</h3></div>
+		<div class="message"></div>	
 
-            <div data-role="content" data-theme="d" id="divTable">
-			
-			<div id="table_welcome"><h3>Viewing All Available Books</h3></div>
-
-			<div class="message"> {{email}} </div>
-			
-			<table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
-									
-			{% if name == "available_books" %}	
-			<form  id="borrow_form" method="post"  action="{{ url_for('borrow_book') }}"> 
-			{% endif %}
-			{% if name == "loan" %}	
-			<form  id="de_borrow_form" method="post"  action="{{ url_for('un_borrow_book') }}"> 
-			{% endif %}
-			{% if name == "loan" %}	
-			<form  id="reserve_form" method="post"  action="{{ url_for('reserve_book') }}"> 
-			{% endif %}
-
-
-			
-					{% set count = {'value': 0} %}					
-					<thead>
-						<tr>
-							{% for header in headers %}
-								<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
-							{% if count.update({'value': count.value + 1}) %} {% endif %}
-							{% endfor %}
-						</tr>
-					</thead>
-					<tbody>
-						{% for entry in entries %}
-						<tr>
-							{% for i in range(count.value) %}
-							<td>
-
-							{% if i == 0 and name == "available_books" %}								
-							<button data-mini="true"  id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>																									
-							{% elif i == 0 and name== "loan"%}								
-							<button data-mini="true"  id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>
-							{% elif i == 0 and name== "reservable_books"%}								
-							<button data-mini="true"  id={{ entry[i] }} onClick="goToReserve($(this));">{{ entry[i] }}</button>							
-							{% else %}
-							
-							
-							{{ entry[i] }} 
-							{% endif %}
-							
-							</td>
-							{% endfor %}  
-						</tr>
-						{% endfor %}
-					</tbody>	
-					
-					
-					
-			{% if name == "available_books"  or name== "loan" or  name == "reserve_book"%}	
-			</form>
-			{% endif %}	
-				
-				
-                </table>
-
-
-		
-            </div>
-
+		<table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">			
+			{% set count = {'value': 0} %}					
+			<thead>
+				<tr>
+					{% for header in headers %}
+						<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+						{% if count.update({'value': count.value + 1}) %} {% endif %}
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for entry in entries %}
+				<tr>
+					{% for i in range(count.value) %}
+					<td>
+						{% if i == 0 and name == "available_books" %}        
+				       		<button data-mini="true" id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>
+				       	{% elif i == 0 and name == "loan"%}        
+				       		<button data-mini="true" id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>
+				       	{% elif i == 0 and name == "reservable_books"%}        
+				       		<button data-mini="true" id={{ entry[i] }} onClick="goToReserve($(this));">{{ entry[i] }}</button>
+				       	{% elif i == 0 and name == "reservation"%} 
+				       		<button data-mini="true" id={{ entry[i] }} onClick="goUnReserve($(this));">{{ entry[i] }}</button> 
+				       	{% else %}
+				       		{{ entry[i] }}
+				       	{% endif %}
+					</td>
+					{% endfor %}  
+				</tr>
+				{% endfor %}
+			</tbody>	
+		</table>		
+	</div>
 </div>
 
 {%endblock%}

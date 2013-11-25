@@ -286,13 +286,7 @@ def un_reserve_book():
         email = current_user.email
         #procedure u wrote lol in db
         sql = "select create_reservation('$s', %s)" % (email, bid)
-        
-
-
-
-
-
-	
+        	
 #user page
 @app.route('/user')		
 def user():
@@ -300,10 +294,7 @@ def user():
     accesslevel =  current_user.accesslevel
     
     table = get_table('available_books')
-    if accesslevel == 2:
-        return render_template('user.html', headers=table[0], entries=table[1], name=table[2], email=email)
-    else:
-        return render_template('user.html', headers=table[0], entries=table[1], name=table[2])   
+    return render_template('user.html', headers=table[0], entries=table[1], name=table[2])   
 
 #librarian page
 @app.route('/lib')		
