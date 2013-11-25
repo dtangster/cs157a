@@ -28,7 +28,13 @@
 				{% for entry in entries %}
 				<tr>
 					{% for i in range(count.value) %}
-					<td>{{ entry[i] }}</td>
+					<td>
+						{% if i == 0 %}        
+				       		<button data-mini="true" id={{ entry[i] }} onClick="librarianAction($(this));">{{ entry[i] }}</button>
+				       	{% else %}
+				       		{{ entry[i] }}
+				       	{% endif %}
+				     </td>
 					{% endfor %}  
 				</tr>
 				{% endfor %}

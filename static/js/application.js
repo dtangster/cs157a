@@ -102,18 +102,6 @@ $(document).ready(function(){
         });
     });
 }); 
-
-function goUnBorrow(button) {
-    bid = button.attr("id");
-	
-    $.post("/un_borrow_book", { bid: bid }, function(result) {
-        if (result != "False") {
-				//$('#message').append("FADSFASDFAS");
-        }
-        else {
-        }
-    });		
-}
 	
 function userAction(button) {
     bid = button.attr("id");
