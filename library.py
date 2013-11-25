@@ -146,9 +146,6 @@ def teardown_request(exception):
 @app.route('/') 
 @app.route('/index')
 def show_main_page():
-    # This is the page returned normally
-    table = get_table('available_books')
-
     if current_user.is_authenticated():
         if current_user.accesslevel == 2:
             return user()
@@ -156,48 +153,43 @@ def show_main_page():
             return lib()
         elif current_user.accesslevel == 0:
             return dba()
-        
-    return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
+    
+    table = get_table('available_books')    
+    return render_template('anonymous.html', headers=table[0], entries=table[1])
 
 @app.route('/ajax/table_request')
 def ajax_table_request():
-    # This is the AJAX response
-    email =  current_user.email    
-    accesslevel =  current_user.accesslevel
     tablename = request.args.get('table')
-    
-    #calls user specified table for loan 
-    if accesslevel == 2 and (tablename == 'loan' or tablename == 'reservation'):
-        table = get_table_user(tablename, email)
-    else:
-        table = get_table(tablename)
-    return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
-        
 
+    if request.args.get('userSpecific') is None:
+        table = get_table(tablename)
+    else:   
+        table = get_table_user(tablename, current_user.email) # Run this version if userSpecific is set from client
+
+    return render_template('table.html', headers=table[0], entries=table[1])
+        
 @app.route('/table')
 def get_table(table):
-    name = str(table)
     cur = g.db.cursor()
     cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '%s'" % (table))
     headers = cur.fetchall()
     cur.execute("SELECT * FROM %s" % (table))
     entries = cur.fetchall()
-    # Returns headers as index 0 and entries at index 1
-    return (headers, entries, name)
-
+    return (headers, entries)
 
 #user specified table loan
-def get_table_user(table, email):
-    name = str(table)
+@app.route('/table_user')
+@login_required
+def get_table_user(table):
     cur = g.db.cursor()
     cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '%s'" % (table))
     headers = cur.fetchall()
-    cur.execute("SELECT * FROM %s where email = '%s'" % (table,email))
+    cur.execute("SELECT * FROM %s where email = '%s'" % (table, current_user.email))
     entries = cur.fetchall()
-    # Returns headers as index 0 and entries at index 1
-    return (headers, entries, name)
+    return (headers, entries)
 
 @app.route('/query', methods=['POST'])
+@login_required
 def query():
     try:
         sql = request.form['sql']
@@ -231,9 +223,9 @@ def register():
         g.db.rollback()
         return "False"; # Failure		
 
-
 #borrow_page
-@app.route('/borrow_book', methods=['POST'])    
+@app.route('/borrow_book', methods=['POST']) 
+@login_required
 def borrow_book():      
     bid = int(request.form['bid'])
     email = current_user.email
@@ -250,7 +242,8 @@ def borrow_book():
     # Need to rerender a view for the table they are looking at
 
 #remove current loan
-@app.route('/un_borrow_book', methods=['POST'])    
+@app.route('/un_borrow_book', methods=['POST'])   
+@login_required
 def un_borrow_book():    
     bid = int(request.form['bid'])
     email = current_user.email
@@ -267,7 +260,8 @@ def un_borrow_book():
     #return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
 
 #add reservation for a book
-@app.route('/reserve_book', methods=['POST'])    
+@app.route('/reserve_book', methods=['POST'])  
+@login_required
 def reserve_book():  
     if request.method == 'POST':     
         bid = int(request.form['bid'])
@@ -277,36 +271,34 @@ def reserve_book():
         sql = "INSERT INTO reservation (bid, email, reserve_date) VALUES \
                (%d, '%s', '%s')" % (bid, email, date)
 
-
 #remove reservation for a book
-@app.route('/un_reserve_book', methods=['POST'])    
+@app.route('/un_reserve_book', methods=['POST']) 
+@login_required
 def un_reserve_book():  
     if request.method == 'POST':     
         bid = int(request.form['bid'])
-        email = current_user.email
         #procedure u wrote lol in db
-        sql = "select create_reservation('$s', %s)" % (email, bid)
+        sql = "select create_reservation('$s', %s)" % (current_user.email, bid)
         	
 #user page
 @app.route('/user')		
-def user():
-    email =  current_user.email
-    accesslevel =  current_user.accesslevel
-    
-    table = get_table('available_books')
-    return render_template('user.html', headers=table[0], entries=table[1], name=table[2])   
+def user(): 
+    table = get_table('available_books') 
+    return render_template('user.html', headers=table[0], entries=table[1])   
 
 #librarian page
-@app.route('/lib')		
+@app.route('/lib')	
+@login_required
 def lib():
-	table = get_table('user')
-	return render_template('lib.html',  headers=table[0], entries=table[1], name=table[2])
+	table = get_table('available_books')
+	return render_template('lib.html',  headers=table[0], entries=table[1])
 
 #dba page
-@app.route('/dba')		
+@app.route('/dba')	
+@login_required	
 def dba():
-	table = get_table('user')
-	return render_template('dba.html',  headers=table[0], entries=table[1], name=table[2])
+	table = get_table('available_books')
+	return render_template('dba.html',  headers=table[0], entries=table[1])
         
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -323,7 +315,7 @@ def login():
         row = cur.fetchone()
 
         if row is None:
-            return redirect(url_for('show_main_page'))
+            return "False"
 
         valid = verify_password(password, row[0], row[1])
 		
@@ -335,9 +327,10 @@ def login():
 
             # This line is for logging in the user through Flask-Login 
             login_user(User(email, accesslevel))
+
             return "True"
 
-        return "False"
+    return "False"
 
 def hash_password(password, salt=None):
     if salt is None:
@@ -355,9 +348,3 @@ broadcaster.start()
 
 if __name__ == '__main__':
     app.run(debug="True") # Make sure to remove the parameter before deploying to Heroku.
-
-
-#CREATE PROCEDURE show_reserved_books(IN username VARCHAR(50))
-#SELECT bid, title, author, reserve_date, avail_date
-#FROM reservation NATURAL JOIN book where email = username
-#ORDER BY bid, title, author;

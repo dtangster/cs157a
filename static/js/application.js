@@ -1,11 +1,12 @@
+var table = "available_books";
+
 $(document).ready(function(){
     // DISABLING WEBSOCKETS FOR NOW
     /*
     // Lines below handle websockets to update browser tables when an update is made on the database
     var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
     var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
-    //var table = "book";
-
+    
     inbox.onmessage = function(message) {
         var data = JSON.parse(message.data);
 
@@ -38,33 +39,24 @@ $(document).ready(function(){
     // Lines below handle the login form logic
     $("#loginButton").click(function() {
         $("#loginForm").show();   
-        /* PREVIOUS CHANGE
-			if ($("#loginForm").css("display") != "none") {
-           $("#registerForm").css("display", "none");    
-       }*/
     });
 
     $("#registerButton").click(function() {
         $("#registerForm").show();
-        /*PREVIOUS CHANGE
-        if ($("#registerForm").css("display") != "none") {
-            $("#loginForm").css("display", "none");    
-        }*/
     });
 
     $("#login").click(function() {
-    
         email = $("#email").val();
         password = $("#password").val();  
 		
        $.post("/login", { email: email, password: password }, function(result) {
             if (result != "False") {
+                console.log(result);
                 location.replace("localhost:5000");	
                 location.reload();	
             }
             else {
-               // $("#errors").html("*** Username or password incorrect ***").fadeIn(500).fadeOut(5000);
-               // document.getElementById("insertmsg").innerHTML = "Sorry please login again!";
+                document.getElementById("insertmsg").html("Incorrect username or password");
             }
 
             $("#loginForm").toggle();
@@ -72,8 +64,7 @@ $(document).ready(function(){
             $("#password").val("");
             $("#logForm").popup("close");
         });
-    });
-	
+    });	
 	
     $("#register").click(function() {
         email = $("#email2").val();
@@ -83,7 +74,6 @@ $(document).ready(function(){
 
         $.post("/register", { name: name, email: email, phone: phone, password: password }, function(result) {
             if (result === "True") {
-                //$("#errors").html("*** Your account has been created ***").fadeIn(500).fadeOut(5000);
                 $("#registerForm").toggle();
                 $("#email2").val("");
                 $("#name").val("");
@@ -94,17 +84,15 @@ $(document).ready(function(){
                 $("#regForm").popup("close");
             }
             else {
-                //$("#errors").html("*** There was a problem registering ***").fadeIn(500).fadeOut(5000);
-                document.getElementById("insertmsg").innerHTML = "Please login or register!";
+                document.getElementById("insertmsg").html("Account already exists!");
             }
                
-                $("#regForm").popup("close");
+            $("#regForm").popup("close");
         });
     });
 
-    /*
     // Lines below handle AJAX request to request new table.
-    $("#tableLink a").click(function() {
+    $("#tableButtons button").click(function() {
         $("#loadingImage").toggle();
         table = $(this).attr("id");
 
@@ -113,21 +101,7 @@ $(document).ready(function(){
             $("#tableContent").html(result).table("refresh");
         });
     });
-    */	
 }); 
-
-function goToBorrow(button) {
-    bid = button.attr("id");
-	table = button.attr
-	
-    $.post("/borrow_book", { bid: bid }, function(result) {
-        if (result != "False") {
-				//$('#message').append("FADSFASDFAS");
-        }
-        else {
-        }
-    });
-}
 
 function goUnBorrow(button) {
     bid = button.attr("id");
@@ -140,56 +114,77 @@ function goUnBorrow(button) {
         }
     });		
 }
+	
+function userAction(button) {
+    bid = button.attr("id");
 
-function goToReserve(button) {
-        bid = button.attr("id");
-		table = button.attr
-		
-       $.post("/reserve_book", { bid: bid }, function(result) {
+    if (table == "available_books") {
+        $.post("/borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-					//$('#message').append("FADSFASDFAS");
+                loadTableUser(table);    
             }
             else {
             }
         });
-}
-
-function goUnReserve(button) {
-        bid = button.attr("id");
-		table = button.attr
-		
-       $.post("/un_reserve_book", { bid: bid }, function(result) {
+    }
+    else if (table == "reservable_books") {
+        $.post("/reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-					//$('#message').append("FADSFASDFAS");
+                loadTableUser(table);    
             }
             else {
             }
         });
+    }
+    else if (table == "reservation") {
+        $.post("/un_reserve_book", { bid: bid }, function(result) {
+            if (result != "False") {
+                loadTableUser(table);    
+            }
+            else {
+            }
+        });
+    }
+    else if (table == "loan") {
+        $.post("/un_borrow_book", { bid: bid }, function(result) {
+            if (result != "False") {
+                loadTableUser(table);    
+            }
+            else {
+            }
+        });
+    }
 }
-	
-	
 
-	
-function loadTable(table) {
+function librarianAction(button) {
+    bid = button.attr("id"); 
+
+    if (table == "something") {
+
+    }
+    else {
+
+    }
+}
+
+function loadTable(tableToLoad) {
     $("#loadingImage").toggle();
-    table = table.attr("id");
+    table = tableToLoad.attr("id");
 
     $.get("/ajax/table_request", { table: table }, function(result) {
         $("#loadingImage").toggle();
         $("#tableContent").html(result).table("refresh").trigger("create").show();
-		//$( "#divTable table" ).html( result ).table("refresh");
-
-        if (table === "available_books")
-            document.getElementById("table_welcome").innerHTML="<h3>Viewing All Available Books</h3>";
-        else if (table === "highest_rated_books")
-            document.getElementById("table_welcome").innerHTML="<h3>Viewing Highest Rated Books</h3>";
-        else if (table === "reserved_books")
-            document.getElementById("table_welcome").innerHTML="<h3>Viewing Reserved Books</h3>";
-        else if (table === "loan")
-            document.getElementById("table_welcome").innerHTML="<h3>Viewing Your Loaned Books</h3>";
-        else if (table === "comments")
-            document.getElementById("table_welcome").innerHTML="<h3>Viewing Comments Books</h3>";		
     });    	
+}
+
+function loadTableUser(tableToLoad) {
+    $("#loadingImage").toggle();
+    table = tableToLoad.attr("id");
+
+    $.get("/ajax/table_request", { table: table, userSpecific: "True" }, function(result) {
+        $("#loadingImage").toggle();
+        $("#tableContent").html(result).table("refresh").trigger("create").show();      
+    });    
 }
 
 function logout() {

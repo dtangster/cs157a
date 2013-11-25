@@ -1,42 +1,51 @@
 {% extends "layout.html" %}
 
+{% block debug %}
+
+<br/><br/>
+<label>SQL Query: <input id="query" type="text"/></label>
+<button id="queryButton" data-inline="true">Run Query</button>
+
+{% endblock %}
+
 {% block bodytable %}
 
-<div class="decornav"></div>
-<div class="user_nav">
-<br/>
-<a href="#">Delete User</a><br/>
-<a href="#">Run Query</a><br/>
-</div>			
+<ul id="tableButtons" data-role="controlgroup" data-type="horizontal">
+    <button id="user_inf" data-mini="true">User</button>        
+    <button id="user_archive" data-mini="true">User Archive</button>
+    <button id="book" data-mini="true">Book</button>
+    <button id="loan" data-mini="true">Loan</button>
+    <button id="review" data-mini="true">Review</button>
+    <button id="reservation" data-mini="true">Reservation</button>
+    <button id="overdue_users" data-mini="true">Overdue Books</button>
+    <button id="debtors" data-mini="true">Debtors</button>
+    <button id="reserved_books" data-mini="true">Reserved Books</button>
+    <button id="available_books" data-mini="true">Available Books</button>
+    <button id="highest_rated_books" data-mini="true">Highest Rated Books</button>
+</ul>
 
-
-<!--TABLES-->
-<div class="related_body">
-			<div data-role="content" data-theme="d">
-                <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
-					{% set count = {'value': 0} %}
-					<thead>
-						<tr>
-							{% for header in headers %}
-								<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
-							{% if count.update({'value': count.value + 1}) %} {% endif %}
-							{% endfor %}
-						</tr>
-					</thead>
-					<tbody>
-						{% for entry in entries %}
-						<tr>
-							{% for i in range(count.value) %}
-							<td>{{ entry[i] }}</td>
-							{% endfor %}  
-						</tr>
-						{% endfor %}
-					</tbody>
-				
-                </table>
-            </div>
-
+<div data-role="content" data-theme="d">
+    <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
+		{% set count = {'value': 0} %}
+		<thead>
+			<tr>
+				{% for header in headers %}
+					<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+				{% if count.update({'value': count.value + 1}) %} {% endif %}
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for entry in entries %}
+			<tr>
+				{% for i in range(count.value) %}
+				<td>{{ entry[i] }}</td>
+				{% endfor %}  
+			</tr>
+			{% endfor %}
+		</tbody>
+	
+    </table>
 </div>
 
-{%endblock%}
-			
+{% endblock %}

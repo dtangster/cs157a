@@ -19,10 +19,7 @@
             <div id="errors"></div>
             <img id="loadingImage" src="static/img/loading.gif"/>
 
-            <!--LINES BETWEEN COMMENTS ARE FOR DEBUGGING >
-            <label>SQL Query: <input id="query" type="text"/></label>
-            <button id="queryButton" data-inline="true">Run Query</button>
-             <LINES BETWEEN COMMENTS ARE FOR DEBUGGING -->
+            {% block debug %} {% endblock %}
             
             <div data-role="header" data-theme="b" data-position="fixed">
                 <div class="decorbar"></div>      
@@ -106,7 +103,7 @@
             </div>           
             
 			<div data-role="content" id="body">
-			{% block bodytable %}{%endblock%}
+		    {% block bodytable %}{% endblock %}
 			</div>
 			
         </div>
