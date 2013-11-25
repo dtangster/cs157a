@@ -124,12 +124,7 @@ function goToBorrow(button) {
             else {
             }
         });
-		
-	   $.get("/ajax/table_request", { table: bid }, function(result) {
-        $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh").trigger("create").show()	;
-		//$( "#divTable table" ).html( result ).table("refresh");
-    }); 
+	
 }
 
 function goUnBorrow(button) {
@@ -143,11 +138,6 @@ function goUnBorrow(button) {
             }
         });
 		
-	 $.get("/ajax/table_request", { table: table }, function(result) {
-        $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh").trigger("create").show()	;
-		//$( "#divTable table" ).html( result ).table("refresh");
-    }); 
 }
 	
 
