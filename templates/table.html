@@ -1,47 +1,31 @@
-{% if name == "available_books" %}	
-		<form  id="borrow_form" method="post"  action="{{ url_for('borrow_book') }}"> 
-		{% endif %}
-		{% if name == "loan" %}	
-		<form  id="de_borrow_form" method="post"  action="{{ url_for('un_borrow_book') }}"> 
-		{% endif %}
-		{% if name == "loan" %}	
-		<form  id="reserve_form" method="post"  action="{{ url_for('reserve_book') }}"> 
-		{% endif %}
 
-				{% set count = {'value': 0} %}					
-				<thead>
-					<tr>
-						{% for header in headers %}
-							<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
-						{% if count.update({'value': count.value + 1}) %} {% endif %}
-						{% endfor %}
-					</tr>
-				</thead>
-				<tbody>
-					{% for entry in entries %}
-					<tr>
-						{% for i in range(count.value) %}
-						<td>
-
-						{% if i == 0 and name == "available_books" %}								
-						<button data-mini="true"  id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>																									
-						{% elif i == 0 and name== "loan"%}								
-						<button data-mini="true"  id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>
-						{% elif i == 0 and name== "reservable_books"%}								
-						<button data-mini="true"  id={{ entry[i] }} onClick="goToReserve($(this));">{{ entry[i] }}</button>							
-						{% else %}
-						
-						
-						{{ entry[i] }} 
-						{% endif %}
-						
-						</td>
-						{% endfor %}  
-					</tr>
-					{% endfor %}
-				</tbody>	
-
-		{% if name == "available_books"  or name== "loan" or  name == "reserve_book"%}	
-		</form>
-{% endif %}	
-			
+{% set count = {'value': 0} %}					
+<thead>
+	<tr>
+		{% for header in headers %}
+			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+		{% if count.update({'value': count.value + 1}) %} {% endif %}
+		{% endfor %}
+	</tr>
+</thead>
+<tbody>
+	{% for entry in entries %}
+	<tr>
+		{% for i in range(count.value) %}
+		<td>
+		{% if i == 0 and name == "available_books" %}        
+       		<button data-mini="true" id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>
+       	{% elif i == 0 and name == "loan"%}        
+       		<button data-mini="true" id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>
+       	{% elif i == 0 and name == "reservable_books"%}        
+       		<button data-mini="true" id={{ entry[i] }} onClick="goToReserve($(this));">{{ entry[i] }}</button>
+       	{% elif i == 0 and name == "reservation"%} 
+       		<button data-mini="true" id={{ entry[i] }} onClick="goUnReserve($(this));">{{ entry[i] }}</button> 
+       	{% else %}
+       		{{ entry[i] }}
+       	{% endif %}
+		</td>
+		{% endfor %}  
+	</tr>
+	{% endfor %}
+</tbody>	

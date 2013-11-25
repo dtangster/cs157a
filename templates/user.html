@@ -47,11 +47,11 @@
 					<td>
 						{% if i == 0 and name == "available_books" %}        
 				       		<button data-mini="true" id={{ entry[i] }} onClick="goToBorrow($(this));">{{ entry[i] }}</button>
-				       	{% elif i == 0 and name == "loan"%}        
+				       	{% elif i == 0 and name == "loan" %}        
 				       		<button data-mini="true" id={{ entry[i] }} onClick="goUnBorrow($(this));">{{ entry[i] }}</button>
-				       	{% elif i == 0 and name == "reservable_books"%}        
+				       	{% elif i == 0 and name == "reservable_books" %}        
 				       		<button data-mini="true" id={{ entry[i] }} onClick="goToReserve($(this));">{{ entry[i] }}</button>
-				       	{% elif i == 0 and name == "reservation"%} 
+				       	{% elif i == 0 and name == "reservation" %} 
 				       		<button data-mini="true" id={{ entry[i] }} onClick="goUnReserve($(this));">{{ entry[i] }}</button> 
 				       	{% else %}
 				       		{{ entry[i] }}
