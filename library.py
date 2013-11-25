@@ -149,8 +149,8 @@ def show_main_page():
             return redirect(url_for('lib'))
         elif current_user.accesslevel == 0:
             return redirect(url_for('dba'))
-
-    return render_template('indexOLD.html', headers=table[0], entries=table[1], name=table[2])
+        
+    return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
 
 @app.route('/ajax/table_request')
 def ajax_table_request():
@@ -209,7 +209,7 @@ def register():
 def borrow_book():  
     if request.method == 'POST':     
         bid = int(request.form['bid'])
-        email = 'test'
+        email = current_user.email
         date = '1111-11-11'
         
         print bid   #for debuggin
@@ -228,7 +228,7 @@ def borrow_book():
 def un_borrow_book():  
     if request.method == 'POST':     
         bid = int(request.form['bid'])
-        email = 'test'
+        email = current_user.email
         
         print bid   #for debuggin
         sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
@@ -302,6 +302,12 @@ def login():
 	
     elif request.method == 'GET':
         return redirect(url_for('show_main_page'))
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    table = get_table('available_books')
+    return render_template('index.html', headers=table[0], entries=table[1], name=table[2])
 
 def hash_password(password, salt=None):
     if salt is None:
