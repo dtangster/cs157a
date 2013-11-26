@@ -1,23 +1,39 @@
-
-{% set count = {'value': 0} %}					
+{% set count = {'value': 0} %}	
+{% set headerTitle = [] %}	<!--flag -->
 <thead>
 	<tr>
 		{% for header in headers %}
-			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}
+		{%if header[0] == 'title' %}
+			{% do headerTitle.append(1) %} 
+		{%endif%}
+			</th>
 		{% if count.update({'value': count.value + 1}) %} {% endif %}
 		{% endfor %}
 	</tr>
 </thead>
 <tbody>
+</td></tr>
 	{% for entry in entries %}
 	<tr>
 		{% for i in range(count.value) %}
 		<td>
 			{% if i == 0 %}        
-	       		<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
-	       	{% else %}
-	       		{{ entry[i] }}
-	       	{% endif %}
+				<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
+			{% elif i == 1%}
+				 <table>
+				 <tr><td>{{ entry[i] }}</td></tr>
+				 {% if headerTitle %}
+				 <tr><td>
+					 <a href="" class="small" id={{ entry[i-1] }} onClick="showReview($(this));">Show Comments</a> | 
+					 <a href="#commentPopUp" class="small" id={{ entry[i-1] }}  data-rel="popup" 
+						  data-position-to="window"  data-transition="fade">Add Comments</a>
+				 </td></tr>
+				 {% endif %}
+				 </table>											       
+		   {% else %}
+				{{ entry[i] }}
+			{% endif %}
 		</td>
 		{% endfor %}  
 	</tr>

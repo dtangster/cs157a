@@ -11,13 +11,13 @@
 	---------------------------<br/>
 	<a id="reservable_books" href="#t" onClick="loadTable($(this));">Reservable Books</a><br/>
 	---------------------------<br/>
-	<a id="highest_rated_books" href="#t" onClick="loadTable($(this));">Books by Highest Rating</a><br/>
+	<a id="highest_rated_books" href="#t" onClick="loadTable($(this));">Highest Rated</a><br/>
 	---------------------------<br/>
-	<a id="reservation" href="#t" onClick="loadTableUser($(this).attr('id'));">Reserved Books</a><br/>
+	<a id="reservation" href="#t" onClick="loadTableUser($(this).attr('id'));">Current Reserved Books</a><br/>
 	---------------------------<br/>
-	<a id="loan" href="#t" onClick="loadTableUser($(this).attr('id'));">Loaned Books</a><br/>
+	<a id="loan" href="#t" onClick="loadTableUser($(this).attr('id'));">Current Loaned</a><br/>
 	---------------------------<br/>
-	<a id="comments" href="#t" onClick="loadTable($(this).attr('id'));">Comment</a><br/>
+	<a id="review" href="#t" onClick="loadTable($(this).attr('id'));">Comment</a><br/>
 	---------------------------<br/>
 	<a id="logout" href="#t" onClick="logout();" style="font-color:black">Logout</a><br />
 	---------------------------<br/>
@@ -30,33 +30,75 @@
 		<div class="message"></div>	
 
 		<table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">			
-			{% set count = {'value': 0} %}					
-			<thead>
-				<tr>
-					{% for header in headers %}
-						<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+
+				{% set count = {'value': 0} %}	
+				{% set headerTitle = [] %}	<!--flag -->
+				<thead>
+					<tr>
+						{% for header in headers %}
+							<th data-priority="{{ count.value + 1 }}">{{ header[0] }}
+						{%if header[0] == 'title' %}
+							{% do headerTitle.append(1) %} 
+						{%endif%}
+							</th>
 						{% if count.update({'value': count.value + 1}) %} {% endif %}
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+				</td></tr>
+					{% for entry in entries %}
+					<tr>
+						{% for i in range(count.value) %}
+						<td>
+							{% if i == 0 %}        
+								<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
+							{% elif i == 1%}
+								 <table>
+								 <tr><td>{{ entry[i] }}</td></tr>
+								 {% if headerTitle %}
+								 <tr><td>
+									 <a href="" class="small" id={{ entry[i-1] }} onClick="showReview($(this));">Show Comments</a> | 
+									 <a href="#commForm" class="small" id={{ entry[i-1] }}  data-rel="popup" 
+									      data-position-to="window"  data-transition="fade">Add Comments</a>
+								 </td></tr>
+								 {% endif %}
+								 </table>											       
+						   {% else %}
+								{{ entry[i] }}
+							{% endif %}
+						</td>
+						{% endfor %}  
+					</tr>
 					{% endfor %}
-				</tr>
-			</thead>
-			<tbody>
-				{% for entry in entries %}
-				<tr>
-					{% for i in range(count.value) %}
-					<td>
-						{% if i == 0 %}        
-				       		<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
-				       	{% else %}
-				       		{{ entry[i] }}
-				       	{% endif %}
-					</td>
-					{% endfor %}  
-				</tr>
-				{% endfor %}
-			</tbody>	
+				</tbody>	
+	
 		</table>		
 	</div>
 </div>
+
+
+<!--Comment form PopUp-->
+			<div data-role="popup" id="commForm" data-overlay-theme="b" data-theme="b" data-history="false">    
+				<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+				<form id="commentForm">
+					 <div data-role="header">
+							<div style="margin:15px; width:400px;height:20px;"><h2>COMMENT SECTION</h2></div>
+					 </div>
+					 <div data-role="content">
+							<div id="bidnum"></div>
+							<input type="hidden" id="bidpop" value="bid"></input>
+							<textarea type="text" id="usr_comment" cols="20" rows="40"></textarea>
+							<br/>
+							<label for="usr_star">Rating Stars</label>
+							<p>rate book from 1 to 10</p>
+							<input type="range" id="usr_star" value="5" min="0" max="10" />	
+					</div>
+							<button type="button" id="add_reviewButton" name="add_reviewButton" data-inline="true" >Register</button>
+				</form>
+				</div>
+			</div> 
+<!-- Comment form -->
 
 {% endblock %}
 			

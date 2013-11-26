@@ -21,6 +21,7 @@ from time import gmtime, strftime
 app = Flask(__name__)
 app.secret_key = "cs157a"
 app.debug = 'DEBUG' in os.environ
+app.jinja_env.add_extension('jinja2.ext.do')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -295,6 +296,34 @@ def un_reserve_book():
         g.db.rollback()
         return "False";
         	
+              
+            
+#add review/comments to book
+@app.route('/add_review', methods=['POST']) 
+@login_required
+def add_review():  
+    try:    
+        bid = int(request.form['bid'])
+        comment = request.form['comment']
+        star = int(request.form['star'])
+        date = strftime("%Y-%m-%d")
+        email = current_user.email
+        
+        sql = "insert into review values(%d, '%s', '%s', %d, '%s')" \
+               % (bid, email, date, star, comment)
+        
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False";
+              
+
+            
 #user page
 @app.route('/user')		
 def user(): 

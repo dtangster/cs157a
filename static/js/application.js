@@ -97,6 +97,47 @@ $(document).ready(function(){
     $("#tableButtons button").click(function() {
         loadTable($(this));
     });
+	
+	
+	
+	
+	//Comment form logic
+	$("#add_reviewButton").click(function() {
+        $("#commentForm").show();
+    });
+	
+	$("#add_reviewButton").click(function() {
+        bid = $("#bidpop").val();
+        comment = $("#usr_comment").val();
+        star = $("#usr_star").val();  
+
+        $.post("/add_review", { bid: bid, comment: comment, star: star }, function(result) {
+            if (result === "True") {
+                $("#commentForm").toggle();
+                $("#usr_comment").val("");
+                $("#usr_star").val("");
+                document.getElementById("insertmsg").innerHTML = "You Successfully Commented on Book ID: " + bid;
+                outbox.send(JSON.stringify({ table: 'user_inf' }));
+                $("#commForm").popup("close");
+            }
+            else {
+                 document.getElementById("insertmsg").html("Fail to comment on book!");
+            }
+             
+            $("#commForm").popup("close");
+        });
+    });
+	
+	
+	//adds bid to popup by replacing input value to selected bid
+	$('a[data-rel="popup"]').click(function () {
+		var link = $(this);
+		var bid = link.attr('id')
+	    $('#bidnum').text("Enter Comments for book id: " + bid);
+		$('#bidpop').val(bid);
+		
+	});
+	
 }); 
 	
 function userAction(button) {
@@ -179,8 +220,6 @@ function logout() {
         location.reload();  
     });   
 }
-
-
 
 
 
