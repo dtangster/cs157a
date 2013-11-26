@@ -1,17 +1,19 @@
 var table = "available_books";
+var inbox;
+var outbox;
 
 $(document).ready(function(){
-    // DISABLING WEBSOCKETS FOR NOW
-    /*
     // Lines below handle websockets to update browser tables when an update is made on the database
-    var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
-    var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
+    inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
+    outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
     
     inbox.onmessage = function(message) {
         var data = JSON.parse(message.data);
+        var lookingAt = table;
+        var userSpecific = data.userSpecific;
 
         if (data.table == table) {
-            $.get("/ajax/table_request", { table: table }, function(result) {
+            $.get("/ajax/table_request", { table: table, userSpecific: userSpecific }, function(result) {
                 $("#tableContent").html(result).table("refresh");
             });    
         }
@@ -24,7 +26,8 @@ $(document).ready(function(){
     outbox.onclose = function() {
         outbox = new WebSocket(outbox.url);
     };
-    */
+
+    // Used only by DBA
     $("#queryButton").click(function() {
         query = $("#query").val();
 
@@ -92,13 +95,7 @@ $(document).ready(function(){
 
     // Lines below handle AJAX request to request new table.
     $("#tableButtons button").click(function() {
-        $("#loadingImage").toggle();
-        table = $(this).attr("id");
-
-        $.get("/ajax/table_request", { table: table }, function(result) {
-            $("#loadingImage").toggle();
-            $("#tableContent").html(result).table("refresh");
-        });
+        loadTable($(this));
     });
 }); 
 	
@@ -108,7 +105,7 @@ function userAction(button) {
     if (table == "available_books") {
         $.post("/borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-                loadTable(button);    
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));  
             }
             else {
             }
@@ -117,7 +114,7 @@ function userAction(button) {
     else if (table == "reservable_books") {
         $.post("/reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                loadTable(button);    
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));  
             }
             else {
             }
@@ -126,7 +123,7 @@ function userAction(button) {
     else if (table == "reservation") {
         $.post("/un_reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                loadTableUser(table);    
+                outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));   
             }
             else {
             }
@@ -135,7 +132,7 @@ function userAction(button) {
     else if (table == "loan") {
         $.post("/un_borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-                loadTableUser(table);    
+                outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));     
             }
             else {
             }
@@ -159,20 +156,20 @@ function loadTable(tableToLoad) {
     $("#loadingImage").toggle();
     table = tableToLoad.attr("id");
 
-    $.get("/ajax/table_request", { table: table }, function(result) {
+    $.get("/ajax/table_request", { table: table, userSpecific: "False" }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh").trigger("create").show();
+        $("#tableContent").html(result).table("refresh");
     });    	
 }
 
 // This function expects a string that represents a table name as the parameter
 function loadTableUser(tableToLoad) {
     $("#loadingImage").toggle();
-    table = tableToLoad
+    table = tableToLoad;
 
     $.get("/ajax/table_request", { table: table, userSpecific: "True" }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh").trigger("create").show();      
+        $("#tableContent").html(result).table("refresh");      
     });    
 }
 

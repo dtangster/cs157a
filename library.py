@@ -10,6 +10,7 @@ import gevent
 import base64
 import uuid
 import hashlib
+from datetime import date
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from cgi import parse_qs, escape
 from flask import Flask, request, session, g, redirect, url_for, \
@@ -161,7 +162,7 @@ def show_main_page():
 def ajax_table_request():
     tablename = request.args.get('table')
 
-    if request.args.get('userSpecific') is None:
+    if request.args.get('userSpecific') == "False":
         table = get_table(tablename)
     else:   
         table = get_table_user(tablename) # Run this version if userSpecific is set from client
@@ -177,7 +178,7 @@ def get_table(table):
     entries = cur.fetchall()
     return (headers, entries)
 
-#user specified table loan
+# User specific table. We have to make sure this is not called on a table that doesn't have an email field
 @app.route('/table_user')
 @login_required
 def get_table_user(table):
@@ -250,7 +251,9 @@ def un_borrow_book():
     try: 
         bid = int(request.form['bid'])
         email = current_user.email
-        sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
+        current_date = date.today().isoformat()
+        sql = "UPDATE loan SET return_date = '%s' WHERE bid = '%s' \
+            and email = '%s'" % (current_date, bid, email)
         
         cur = g.db.cursor()
         cur.execute(sql)
