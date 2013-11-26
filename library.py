@@ -246,7 +246,7 @@ def borrow_book():
         return "False"
 
 #remove current loan
-@app.route('/un_borrow_book', methods=['POST'])   
+@app.route('/return_book', methods=['POST'])   
 @login_required
 def un_borrow_book():
     try: 
@@ -276,6 +276,10 @@ def reserve_book():
         
         sql = "INSERT INTO reservation (bid, email, reserve_date) VALUES \
                (%d, '%s', '%s')" % (bid, email, date)
+
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
         return "True"
 
     except:
@@ -287,9 +291,11 @@ def reserve_book():
 @login_required
 def un_reserve_book():  
     try:    
-        bid = int(request.form['bid'])
-        #procedure u wrote lol in db
-        sql = "select create_reservation('$s', %s)" % (current_user.email, bid)
+        reservation_id = int(request.form['bid'])
+        sql = "UPDATE reservation SET status = '%s' WHERE reservation_id = %d" % ("C", reservation_id)
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
         return "True"
 
     except:
