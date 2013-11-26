@@ -14,7 +14,7 @@ $(document).ready(function(){
 
         if (data.table == table) {
             $.get("/ajax/table_request", { table: table, userSpecific: userSpecific }, function(result) {
-                $("#tableContent").html(result).table("refresh");
+                $("#tableContent").html(result).table("refresh").trigger("create").show();
             });    
         }
     };
@@ -117,7 +117,7 @@ $(document).ready(function(){
                 $("#usr_comment").val("");
                 $("#usr_star").val("");
                 document.getElementById("insertmsg").innerHTML = "You Successfully Commented on Book ID: " + bid;
-                outbox.send(JSON.stringify({ table: 'user_inf' }));
+                outbox.send(JSON.stringify({ table: 'user_inf' })).trigger("create").show();;
                 $("#commForm").popup("close");
             }
             else {
@@ -146,7 +146,7 @@ function userAction(button) {
     if (table == "available_books") {
         $.post("/borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));  
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })).trigger("create").show(); 
             }
             else {
             }
@@ -155,7 +155,7 @@ function userAction(button) {
     else if (table == "reservable_books") {
         $.post("/reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));  
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })).trigger("create").show();  
             }
             else {
             }
@@ -164,7 +164,7 @@ function userAction(button) {
     else if (table == "reservation") {
         $.post("/un_reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));   
+                outbox.send(JSON.stringify({ table: table, userSpecific: "True" })).trigger("create").show();   
             }
             else {
             }
@@ -173,7 +173,7 @@ function userAction(button) {
     else if (table == "loan") {
         $.post("/un_borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));     
+                outbox.send(JSON.stringify({ table: table, userSpecific: "True" })).trigger("create").show();     
             }
             else {
             }
@@ -199,7 +199,7 @@ function loadTable(tableToLoad) {
 
     $.get("/ajax/table_request", { table: table, userSpecific: "False" }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh");
+        $("#tableContent").html(result).table("refresh").trigger("create").show();;
     });    	
 }
 
@@ -210,7 +210,7 @@ function loadTableUser(tableToLoad) {
 
     $.get("/ajax/table_request", { table: table, userSpecific: "True" }, function(result) {
         $("#loadingImage").toggle();
-        $("#tableContent").html(result).table("refresh");      
+        $("#tableContent").html(result).table("refresh").trigger("create").show();;      
     });    
 }
 
