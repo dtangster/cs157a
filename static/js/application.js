@@ -25,7 +25,6 @@ $(document).ready(function(){
         outbox = new WebSocket(outbox.url);
     };
     */
-
     $("#queryButton").click(function() {
         query = $("#query").val();
 
@@ -109,7 +108,7 @@ function userAction(button) {
     if (table == "available_books") {
         $.post("/borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-                loadTableUser(table);    
+                loadTable(button);    
             }
             else {
             }
@@ -118,7 +117,7 @@ function userAction(button) {
     else if (table == "reservable_books") {
         $.post("/reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                loadTableUser(table);    
+                loadTable(button);    
             }
             else {
             }
@@ -155,6 +154,7 @@ function librarianAction(button) {
     }
 }
 
+// This function expects an HTML object as a parameter
 function loadTable(tableToLoad) {
     $("#loadingImage").toggle();
     table = tableToLoad.attr("id");
@@ -165,9 +165,10 @@ function loadTable(tableToLoad) {
     });    	
 }
 
+// This function expects a string that represents a table name as the parameter
 function loadTableUser(tableToLoad) {
     $("#loadingImage").toggle();
-    table = tableToLoad.attr("id");
+    table = tableToLoad
 
     $.get("/ajax/table_request", { table: table, userSpecific: "True" }, function(result) {
         $("#loadingImage").toggle();

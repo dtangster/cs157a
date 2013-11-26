@@ -164,7 +164,7 @@ def ajax_table_request():
     if request.args.get('userSpecific') is None:
         table = get_table(tablename)
     else:   
-        table = get_table_user(tablename, current_user.email) # Run this version if userSpecific is set from client
+        table = get_table_user(tablename) # Run this version if userSpecific is set from client
 
     return render_template('table.html', headers=table[0], entries=table[1])
         
@@ -196,11 +196,11 @@ def query():
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()
-        return "True"; # Success
+        return "True" # Success
 
     except:
         g.db.rollback()
-        return "False"; # Failure
+        return "False" # Failure
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -217,68 +217,80 @@ def register():
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()
-        return "True"; # Success
+        return "True" # Success
 
     except:
         g.db.rollback()
-        return "False"; # Failure		
+        return "False" # Failure		
 
 #borrow_page
 @app.route('/borrow_book', methods=['POST']) 
 @login_required
-def borrow_book():      
-    bid = int(request.form['bid'])
-    email = current_user.email
-    date = '1111-11-11'
-    
-    print bid   #for debuggin
-    sql = "INSERT INTO loan (bid, email, loan_date) VALUES \
-           (%d, '%s', '%s')" % (bid, email, date)
-    
-    cur = g.db.cursor()
-    cur.execute(sql)
-    g.db.commit()
+def borrow_book():
+    try:   
+        bid = int(request.form['bid'])
+        email = current_user.email
+        date = '1111-11-11'   
+        sql = "INSERT INTO loan (bid, email, loan_date) VALUES \
+               (%d, '%s', '%s')" % (bid, email, date)
+        
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        return "True"
 
-    # Need to rerender a view for the table they are looking at
+    except:
+        g.db.rollback()
+        return "False"
 
 #remove current loan
 @app.route('/un_borrow_book', methods=['POST'])   
 @login_required
-def un_borrow_book():    
-    bid = int(request.form['bid'])
-    email = current_user.email
-    
-    print bid   #for debuggin
-    sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
-    
-    cur = g.db.cursor()
-    cur.execute(sql)
-    g.db.commit()
+def un_borrow_book():
+    try: 
+        bid = int(request.form['bid'])
+        email = current_user.email
+        sql = "DELETE FROM loan WHERE bid = '%s' and email = '%s'" % (bid, email)
+        
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        return "True"
 
-    # This line should be a view. We need to make another function to get a specific view based on email address
-    #table = get_table("loan")
-    #return render_template('table.html', headers=table[0], entries=table[1], name=table[2], email=email)
+    except:
+        g.db.rollback()
+        return "False"
 
 #add reservation for a book
 @app.route('/reserve_book', methods=['POST'])  
 @login_required
-def reserve_book():  
-    if request.method == 'POST':     
+def reserve_book():
+    try:
         bid = int(request.form['bid'])
         email = current_user.email
         date = strftime("%Y-%m-%d")
         
         sql = "INSERT INTO reservation (bid, email, reserve_date) VALUES \
                (%d, '%s', '%s')" % (bid, email, date)
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False";
 
 #remove reservation for a book
 @app.route('/un_reserve_book', methods=['POST']) 
 @login_required
 def un_reserve_book():  
-    if request.method == 'POST':     
+    try:    
         bid = int(request.form['bid'])
         #procedure u wrote lol in db
         sql = "select create_reservation('$s', %s)" % (current_user.email, bid)
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False";
         	
 #user page
 @app.route('/user')		
@@ -300,35 +312,33 @@ def dba():
 	table = get_table('available_books')
 	return render_template('dba.html',  headers=table[0], entries=table[1])
         
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+    email = request.form['email']
+    password = request.form['password']
 
-        if email is None or password is None:
-            return "False"
+    if email is None or password is None:
+        return "False"
 
-        sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
-        cur = g.db.cursor()
+    sql = "SELECT password, salt FROM user_inf WHERE email = '%s'" % (email)
+    cur = g.db.cursor()
+    cur.execute(sql)
+    row = cur.fetchone()
+
+    if row is None:
+        return "False"
+
+    valid = verify_password(password, row[0], row[1])
+	
+    if valid:
+        sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
         cur.execute(sql)
         row = cur.fetchone()
+        accesslevel = row[0]
 
-        if row is None:
-            return "False"
-
-        valid = verify_password(password, row[0], row[1])
-		
-        if valid:
-            sql = "SELECT accesslevel FROM user_inf where email = '%s'" % (email)
-            cur.execute(sql)
-            row = cur.fetchone()
-            accesslevel = row[0]
-
-            # This line is for logging in the user through Flask-Login 
-            login_user(User(email, accesslevel))
-
-            return "True"
+        # This line is for logging in the user through Flask-Login 
+        login_user(User(email, accesslevel))
+        return "True"
 
     return "False"
 
