@@ -171,7 +171,10 @@ def ajax_table_request():
     else:   
         table = get_table_user(tablename) # Run this version if userSpecific is set from client
 
-    return render_template('table.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
+    if current_user.accesslevel == 1 and tablename == "book":
+        return render_template('libbooktable.html', headers=table[0], entries=table[1])
+    else:
+        return render_template('table.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
         
 @app.route('/table')
 def get_table(table):
@@ -434,23 +437,19 @@ def user():
 @app.route('/lib')	
 @login_required
 def lib():
-    table = get_table("available_books")
-
     if current_user.is_authenticated():
-        return render_template('lib.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
+        return render_template('lib.html', email=current_user.email, accesslevel=current_user.accesslevel)
     else:
-        return render_template('lib.html', headers=table[0], entries=table[1])  
+        return render_template('lib.html')  
 
 #dba page
 @app.route('/dba')	
 @login_required	
 def dba():
-    table = get_table("available_books")
-
     if current_user.is_authenticated():
-        return render_template('dba.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
+        return render_template('dba.html', email=current_user.email, accesslevel=current_user.accesslevel)
     else:
-        return render_template('dba.html', headers=table[0], entries=table[1])  
+        return render_template('dba.html')  
         
 @app.route('/login', methods=['POST'])
 def login():
