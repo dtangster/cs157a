@@ -244,14 +244,14 @@ def register():
 @app.route('/profile', methods=['POST'])
 @login_required
 def get_profile():
-    sql = "SELECT name, phone FROM user_inf WHERE email = '%s'" % (current_user.email)
+    sql = "SELECT name, phone, password FROM user_inf WHERE email = '%s'" % (current_user.email)
     cur = g.db.cursor()
     cur.execute(sql)
     row = cur.fetchone()
     name = row[0]
     phone = row[1]
-    return "hello"
-    return flask.jsonify(name, phone)
+    password = row[2]
+    return jsonify({ "name": name, "phone": phone, "password": password })
 
 #borrow_page
 @app.route('/borrow_book', methods=['POST']) 

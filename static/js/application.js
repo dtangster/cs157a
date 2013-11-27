@@ -41,9 +41,9 @@ $(document).ready(function(){
     $("#profileButton").click(function() {
         $.post("/profile", function(result) {
             if (result != "False") {
-                $("#profName").val("HELLO");
-                $("#profPhone").val("HELLO");
-                $("#profPassword").val("HELLO");
+                $("#profName").val(result.name);
+                $("#profPhone").val(result.phone);
+                $("#profPassword").val(result.password);
             }
         });
     });
