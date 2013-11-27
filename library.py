@@ -332,23 +332,35 @@ def add_review():
             
 #user page
 @app.route('/user')		
-def user(): 
-    table = get_table('available_books') 
-    return render_template('user.html', headers=table[0], entries=table[1])   
+def user():
+    table = get_table("available_books")
+
+    if current_user.is_authenticated():
+        return render_template('user.html', headers=table[0], entries=table[1], email=current_user.email)
+    else:
+        return render_template('user.html', headers=table[0], entries=table[1])   
 
 #librarian page
 @app.route('/lib')	
 @login_required
 def lib():
-	table = get_table('available_books')
-	return render_template('lib.html',  headers=table[0], entries=table[1])
+    table = get_table("available_books")
+
+    if current_user.is_authenticated():
+        return render_template('lib.html', headers=table[0], entries=table[1], email=current_user.email)
+    else:
+        return render_template('lib.html', headers=table[0], entries=table[1])  
 
 #dba page
 @app.route('/dba')	
 @login_required	
 def dba():
-	table = get_table('available_books')
-	return render_template('dba.html',  headers=table[0], entries=table[1])
+    table = get_table("available_books")
+
+    if current_user.is_authenticated():
+        return render_template('dba.html', headers=table[0], entries=table[1], email=current_user.email)
+    else:
+        return render_template('dba.html', headers=table[0], entries=table[1])  
         
 @app.route('/login', methods=['POST'])
 def login():

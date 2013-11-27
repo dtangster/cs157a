@@ -15,7 +15,7 @@
 	---------------------------<br/>
 	<a id="reservation" href="#t" onClick="loadTableUser($(this).attr('id'));">Reservation History</a><br/>
 	---------------------------<br/>
-	<a id="loan" href="#t" onClick="loadTableUser($(this).attr('id'));">Loan Historyx</a><br/>
+	<a id="loan" href="#t" onClick="loadTableUser($(this).attr('id'));">Loan History</a><br/>
 	---------------------------<br/>
 	<a id="review" href="#t" onClick="loadTable($(this).attr('id'));">Comment</a><br/>
 	---------------------------<br/>
@@ -64,7 +64,7 @@
 								 </td></tr>
 								 {% endif %}
 								 </table>											       
-						   {% else %}
+						    {% else %}
 								{{ entry[i] }}
 							{% endif %}
 						</td>
@@ -93,11 +93,20 @@
 							<p>rate book from 1 to 10</p>
 							<input type="range" id="usr_star" value="5" min="0" max="10" />	
 					</div>
-							<button type="button" id="add_reviewButton" name="add_reviewButton" data-inline="true" >Submit</button>
+							<button type="button" id="add_reviewButton" name="add_reviewButton" data-inline="true">Submit</button>
 				</form>
 				</div>
 			</div> 
 <!-- Comment form -->
 
 {% endblock %}
-			
+
+{% block loginMessage %}
+
+	{% if email is defined %}
+		<div class="msginfo"><p id="insertmsg">Welcome {{ email }}! <a id="profile">Edit Profile<a></p></div>	
+	{% else %}
+		<div class="msginfo"><p id="insertmsg">Welcome guest!</p></div>		
+	{% endif %}
+
+{% endblock %}

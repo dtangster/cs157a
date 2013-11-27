@@ -49,3 +49,13 @@
 </div>
 
 {% endblock %}
+
+{% block loginMessage %}
+
+    {% if email is defined %}
+        <div class="msginfo"><p id="insertmsg">Welcome {{ email }}! <a id="profile">Edit Profile<a></p></div>   
+    {% else %}
+        <div class="msginfo"><p id="insertmsg">Welcome guest!</p></div>     
+    {% endif %}
+
+{% endblock %}
