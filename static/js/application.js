@@ -194,6 +194,19 @@ function librarianAction(button) {
     }
 }
 
+
+//function loads comments for specific book
+function load_bookComment(link) {
+    bid = link.attr("id");
+	
+      $.get("/ajax/table_request", { table: "review", bookSpecific: "True", userSpecific:"False",  bid:bid }, function(result) {
+        $("#loadingImage").toggle();
+        $("#tableContent").html(result).table("refresh").trigger("create").show();;      
+    });    
+}
+
+
+
 // This function expects an HTML object as a parameter
 function loadTable(tableToLoad) {
     $("#loadingImage").toggle();
