@@ -383,6 +383,7 @@ def add_review():
         return "False";
             
      
+   
 #waive fee update
 @app.route('/waive_fee', methods=['POST']) 
 @login_required
@@ -420,6 +421,7 @@ def extend_dueDate():
     except:
         g.db.rollback()
         return "False";            
+
 
 
 
