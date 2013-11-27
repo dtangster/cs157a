@@ -253,6 +253,27 @@ def get_profile():
     password = row[2]
     return jsonify({ "name": name, "phone": phone, "password": password })
 
+@app.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    try:
+        name = request.form['name']
+        phone = request.form['phone']
+        password = request.form['password']
+        password, salt = hash_password(password)
+
+        sql = "UPDATE user_inf SET name = '%s', phone = '%s', password = '%s', salt = '%s' \
+            WHERE email = '%s'" % (name, phone, password, salt, current_user.email)
+
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False"
+
 #borrow_page
 @app.route('/borrow_book', methods=['POST']) 
 @login_required

@@ -1,8 +1,6 @@
-var table = "available_books";
-var inbox;
-var outbox;
-
 $(document).ready(function(){
+    table = "available_books";
+
     // Lines below handle websockets to update browser tables when an update is made on the database
     inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
     outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
@@ -29,7 +27,7 @@ $(document).ready(function(){
 
     // Used only by DBA
     $("#queryButton").click(function() {
-        query = $("#query").val();
+        var query = $("#query").val();
 
         $.post("/query", { sql: query }, function(result) {
             if (result === "True") {
@@ -48,13 +46,27 @@ $(document).ready(function(){
         });
     });
 
+    $("#updateButton").click(function() {
+        var name = $("#profName").val();
+        var phone = $("#profPhone").val();
+        var password = $("#profPassword").val(); 
+        
+        $.post("/update_profile", { email: email, phone: phone, password: password }, function(result) {
+            if (result != "False") {
+                document.getElementById("insertmsg").html("Profile updated");    
+            }
+            else {
+                document.getElementById("insertmsg").html("Failed to update your profile");
+            }
+        });
+    });
+
     $("#login").click(function() {
-        email = $("#email").val();
-        password = $("#password").val();  
+        var email = $("#email").val();
+        var password = $("#password").val();  
 		
        $.post("/login", { email: email, password: password }, function(result) {
             if (result != "False") {
-                console.log(result);
                 location.replace("localhost:5000");	
                 location.reload();	
             }
@@ -70,10 +82,10 @@ $(document).ready(function(){
     });	
 	
     $("#register").click(function() {
-        email = $("#email2").val();
-        name = $("#name").val();
-        phone = $("#phone").val();
-        password = $("#password2").val();  
+        var email = $("#email2").val();
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var password = $("#password2").val();  
 
         $.post("/register", { name: name, email: email, phone: phone, password: password }, function(result) {
             if (result === "True") {
@@ -113,9 +125,9 @@ $(document).ready(function(){
     });
 	
 	$("#add_reviewButton").click(function() {
-        bid = $("#bidpop").val();
-        comment = $("#usr_comment").val();
-        star = $("#usr_star").val();  
+        var bid = $("#bidpop").val();
+        var comment = $("#usr_comment").val();
+        var star = $("#usr_star").val();  
 
         $.post("/add_review", { bid: bid, comment: comment, star: star }, function(result) {
             if (result === "True") {
@@ -148,7 +160,7 @@ $(document).ready(function(){
 }); 
 	
 function userAction(button) {
-    bid = button.attr("id");
+    var bid = button.attr("id");
 
     if (table == "available_books") {
         $.post("/borrow_book", { bid: bid }, function(result) {
@@ -189,7 +201,7 @@ function userAction(button) {
 }
 
 function librarianAction(button) {
-    bid = button.attr("id"); 
+    var bid = button.attr("id"); 
 
     if (table == "something") {
 
@@ -202,7 +214,7 @@ function librarianAction(button) {
 
 //function loads comments for specific book
 function load_bookComment(link) {
-    bid = link.attr("id");
+    var bid = link.attr("id");
 	
       $.get("/ajax/table_request", { table: "review", bookSpecific: "True", userSpecific:"False",  bid:bid }, function(result) {
         $("#loadingImage").toggle();
