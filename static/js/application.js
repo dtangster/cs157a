@@ -258,6 +258,18 @@ function waiveFee(link) {
         });	
 }
 
+//waives fee
+function maintenance(link) {
+	  email = 'lib'
+     $.post("/perform_maintenance", { email: email }, function(result) {
+            if (result != "False") {
+				}
+            else {
+            }
+        });	
+}
+
+
 // AJAX call to retrieve book data
 function loadBookData(button) {
     bid = button.attr("id");
@@ -330,6 +342,9 @@ function loadTableUser(tableToLoad) {
         $("#tableContent").html(result).table("refresh").trigger("create").show();;      
     });    
 }
+
+
+
 
 function logout() {
     $.get("/logout", function(result) {
