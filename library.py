@@ -171,8 +171,7 @@ def ajax_table_request():
     else:   
         table = get_table_user(tablename) # Run this version if userSpecific is set from client
 
-
-    return render_template('table.html', headers=table[0], entries=table[1])
+    return render_template('table.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
         
 @app.route('/table')
 def get_table(table):

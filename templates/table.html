@@ -23,7 +23,7 @@
 	<tr>
 		{% for i in range(count.value) %}
 		<td>
-	
+				 
 			{% if i == 0 %}        
 				<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
 			{% elif i == 1%}
@@ -34,11 +34,9 @@
 					 <a href="" class="small" id="{{ entry[i-1] }}" onClick="load_bookComment($(this));">Show Comments</a> | 
 					 <a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
 						      data-position-to="window"  data-transition="fade">Add Comments</a>
-				 </td></tr>
-				 
-				 
+				 </td></tr>				 
 				 <!--NEEED TO HAVE ACCESS LEVEL-->
-				 {% elif i == headerEmail[0] %}
+				 {% elif i == headerEmail[0]  and accesslevel == 1%}
 				 <tr><td>
 					 <a href="" class="small" id="{{ entry[i] }}" onClick="waiveFee($(this));">Waive Fee</a> 
 				 </td></tr>
