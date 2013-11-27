@@ -35,7 +35,7 @@
 					 <a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
 						      data-position-to="window"  data-transition="fade">Add Comments</a>
 				 </td></tr>				 
-				 <!--NEEED TO HAVE ACCESS LEVEL-->
+
 				 {% elif i == headerEmail[0]  and accesslevel == 1%}
 				 <tr><td>
 					 <a href="" class="small" id="{{ entry[i] }}" onClick="waiveFee($(this));">Waive Fee</a> 
@@ -44,8 +44,6 @@
 				 {%else%}
 				 {% endif %}
 				 </table>
-				 
-
 				 
 		   {% else %}
 				{{ entry[i] }}

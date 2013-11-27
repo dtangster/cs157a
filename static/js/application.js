@@ -226,6 +226,17 @@ function load_bookComment(link) {
     });    
 }
 
+//waives fee
+function waiveFee(link) {
+    var email = link.attr("id");
+     $.post("/waive_fee", { email: email }, function(result) {
+            if (result != "False") {
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })).trigger("create").show();     
+            }
+            else {
+            }
+        });	
+}
 
 
 // This function expects an HTML object as a parameter
@@ -258,11 +269,5 @@ function logout() {
 }
 
 
-function waiveFee() {
-    $.get("/logout", function(result) {
-        location.replace("localhost:5000"); 
-        location.reload();  
-    });   	
-}
 
 

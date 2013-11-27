@@ -387,19 +387,14 @@ def add_review():
 @app.route('/waive_fee', methods=['POST']) 
 @login_required
 def waive_fee():  
+    print request.form['email']
     try:    
-        bid = int(request.form['bid'])
-        comment = request.form['comment']
-        star = int(request.form['star'])
-        date = strftime("%Y-%m-%d")
-        email = current_user.email
-        
-        sql = "insert into review values(%d, '%s', '%s', %d, '%s')" \
-               % (bid, email, date, star, comment)
+        email = str(request.form['email'])
+   
+        sql = "update user_inf set fee = 0 where email='%s'" % (email)
         cur = g.db.cursor()
         cur.execute(sql)
-        g.db.commit()
-        
+        g.db.commit()        
         return "True"
 
     except:
