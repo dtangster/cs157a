@@ -13,9 +13,9 @@
 	---------------------------<br/>
 	<a id="highest_rated_books" href="#t" onClick="loadTable($(this));">Highest Rated</a><br/>
 	---------------------------<br/>
-	<a id="reservation" href="#t" onClick="loadTableUser($(this).attr('id'));">Reservation History</a><br/>
+	<a id="reservation" href="#t" onClick="loadTableUser($(this).attr('id'));">Current Reserved Books</a><br/>
 	---------------------------<br/>
-	<a id="loan" href="#t" onClick="loadTableUser($(this).attr('id'));">Loan Historyx</a><br/>
+	<a id="loan" href="#t" onClick="loadTableUser($(this).attr('id'));">Current Loaned</a><br/>
 	---------------------------<br/>
 	<a id="review" href="#t" onClick="loadTable($(this).attr('id'));">Comment</a><br/>
 	---------------------------<br/>
@@ -59,9 +59,9 @@
 								 {% if headerTitle %}
 								 <tr><td>
 									 <a href="" class="small" id={{ entry[i-1] }} onClick="showReview($(this));">Show Comments</a> | 
-									 <a href="#commForm" class="small" id={{ entry[i-1] }}  data-rel="popup" 
+									 <a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
 									      data-position-to="window"  data-transition="fade">Add Comments</a>
-								 </td></tr>
+								  </td></tr>
 								 {% endif %}
 								 </table>											       
 						   {% else %}
@@ -76,10 +76,13 @@
 		</table>		
 	</div>
 </div>
-
 <!--Comment form PopUp-->
-			<div data-role="popup" id="commForm" data-overlay-theme="b" data-theme="b" data-history="false">    
-				<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+	<!--Comment form PopUp-->
+	<!--Comment form PopUp-->
+	
+<!--Comment form PopUp-->
+			<div data-role="popup" id="commForm" data-theme="b" data-history="false">    
+				<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="b" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 				<form id="commentForm">
 					 <div data-role="header">
 							<div style="margin:15px; width:400px;height:20px;"><h2>COMMENT SECTION</h2></div>

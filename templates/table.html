@@ -26,8 +26,10 @@
 				 {% if headerTitle %}
 				 <tr><td>
 					 <a href="" class="small" id={{ entry[i-1] }} onClick="showReview($(this));">Show Comments</a> | 
-					 <a href="#commentPopUp" class="small" id={{ entry[i-1] }}  data-rel="popup" 
-						  data-position-to="window"  data-transition="fade">Add Comments</a>
+					 <a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
+						      data-position-to="window"  data-transition="fade">Add Comments</a>
+
+	
 				 </td></tr>
 				 {% endif %}
 				 </table>											       
