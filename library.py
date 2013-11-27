@@ -163,10 +163,14 @@ def show_main_page():
 def ajax_table_request():
     tablename = request.args.get('table')
 
-    if request.args.get('userSpecific') == "False":
+    if request.args.get('bookSpecific') == "True" and request.args.get('userSpecific') == "False":
+        bid = int(request.args.get('bid'))        
+        table = get_table_book(tablename, bid)
+    elif request.args.get('userSpecific') == "False":
         table = get_table(tablename)
     else:   
         table = get_table_user(tablename) # Run this version if userSpecific is set from client
+
 
     return render_template('table.html', headers=table[0], entries=table[1])
         
@@ -189,6 +193,18 @@ def get_table_user(table):
     cur.execute("SELECT * FROM %s where email = '%s'" % (table, current_user.email))
     entries = cur.fetchall()
     return (headers, entries)
+
+# Book specific table.
+@app.route('/table_book')
+@login_required
+def get_table_book(table, bid):
+    cur = g.db.cursor()
+    cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '%s'" % (table))
+    headers = cur.fetchall()
+    cur.execute("SELECT * FROM %s where bid = %d" % (table, bid))
+    entries = cur.fetchall()
+    return (headers, entries)
+
 
 @app.route('/query', methods=['POST'])
 @login_required
