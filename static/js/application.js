@@ -104,6 +104,8 @@ $(document).ready(function(){
 	//Comment form logic
 	$(".commPOP").click(function() {
 		$("#commForm").show();
+		$("#commentForm").show();
+		$("#commentForm").popup();
         $("#commForm").popup();
     });
 	
@@ -119,13 +121,12 @@ $(document).ready(function(){
                 $("#usr_star").val("");
                 document.getElementById("insertmsg").innerHTML = "You Successfully Commented on Book ID: " + bid;
                 outbox.send(JSON.stringify({ table: 'user_inf' })).trigger("create").show();;
-                $("#commForm").popup("close");
             }
             else {
                  document.getElementById("insertmsg").html("Fail to comment on book!");
             }
- //FFASDFASDFASDFASFASDF
-            $("#commForm").popup("close");
+			    $("#commForm").popup("close");
+            
         });
     });
 	
