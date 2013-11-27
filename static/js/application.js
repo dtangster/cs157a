@@ -46,7 +46,6 @@ $(document).ready(function(){
             }
         });
     });
-
 	
     $("#updateButton").click(function() {
         var name = $("#profName").val();
@@ -238,6 +237,20 @@ function waiveFee(link) {
         });	
 }
 
+// AJAX call to retrieve book data
+function loadBookData(button) {
+    bid = button.attr("id");
+
+    $.post("/book_data", { bid: bid }, function(result) {
+        if (result != "False") {
+            $("#title").val(result.title);
+            $("#author").val(result.author);
+            $("#pub_date").val(result.pub_date);
+            $("#edition").val(result.edition);
+            $("#copies").val(result.copies);
+        }
+    });
+}
 
 // This function expects an HTML object as a parameter
 function loadTable(tableToLoad) {
@@ -267,7 +280,4 @@ function logout() {
         location.reload();  
     });   	
 }
-
-
-
 

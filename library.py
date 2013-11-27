@@ -401,6 +401,21 @@ def waive_fee():
         g.db.rollback()
         return "False";
             
+#retrieve book data
+@app.route('/book_data', methods=['POST']) 
+@login_required
+def get_book_data():    
+    bid = int(request.form['bid'])
+    sql = "SELECT title, author, pub_date, edition, copies FROM book WHERE bid = %d" % (bid)
+    cur = g.db.cursor()
+    cur.execute(sql)
+    row = cur.fetchone()
+    title = str(row[0])
+    author = str(row[1])
+    pub_date = str(row[2])
+    edition = int(row[3])
+    copies = int(row[4])
+    return jsonify({ "title": title, "author": author, "pub_date": pub_date, "edition": edition, "copies": copies })
 
 #user page
 @app.route('/user')		

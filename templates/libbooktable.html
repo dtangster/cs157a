@@ -25,13 +25,13 @@
 		{% for i in range(count.value) %}
 		<td>
 			{% if i == 0 %}        
-				 <button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
+				 {{ entry[i] }}
 			{% elif i == 1%}
 				 <table>
 				 <tr><td>{{ entry[i] }}</td></tr>
 				 {% if headerTitle %}
 				 <tr><td>
-					 <a href="#bookForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
+					 <a onClick="loadBookData($(this));" href="#bookForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
 						      data-position-to="window"  data-transition="fade">Edit</a>
 				 </td></tr>
 				 {% endif %}
@@ -64,8 +64,8 @@
 				<input type="text" name="author" id="author" placeholder="Author"/>
 			</div>
 			<div data-role="fieldcontain">
-				<label for="pubDate">Publication Date</label>
-				<input type="password" name="pubDate" id="pubDate" placeholder="Publication Date"/>
+				<label for="pub_date">Publication Date</label>
+				<input type="password" name="pub_date" id="pub_date" placeholder="Publication Date"/>
 			</div>
 			<div data-role="fieldcontain">
 				<label for="edition">Edition</label>
@@ -73,7 +73,7 @@
 			</div>
 			<div data-role="fieldcontain">
 				<label for="copies">Copies</label>
-				<input type="password" name="copies" id="copies" placeholder="Copies"/>
+				<input type="text" name="copies" id="copies" placeholder="Copies"/>
 			</div>
 		</div>
 		<center>
