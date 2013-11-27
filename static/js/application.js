@@ -254,5 +254,15 @@ function logout() {
     $.get("/logout", function(result) {
         location.replace("localhost:5000"); 
         location.reload();  
-    });   
+    });   	
 }
+
+
+function waiveFee() {
+    $.get("/logout", function(result) {
+        location.replace("localhost:5000"); 
+        location.reload();  
+    });   	
+}
+
+

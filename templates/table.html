@@ -1,12 +1,17 @@
+
 {% set count = {'value': 0} %}	
 {% set headerTitle = [] %}	<!--flag -->
+{% set headerEmail = [] %}
 <thead>
 	<tr>
 		{% for header in headers %}
 			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}
 		{%if header[0] == 'title' %}
-			{% do headerTitle.append(1) %} 
+			{% do headerTitle.append(count.value) %} 
 		{%endif%}
+		{%if header[0] == 'email' %}
+			{% do headerEmail.append(count.value) %} 
+		{%endif%}		
 			</th>
 		{% if count.update({'value': count.value + 1}) %} {% endif %}
 		{% endfor %}
@@ -18,20 +23,30 @@
 	<tr>
 		{% for i in range(count.value) %}
 		<td>
+				 
 			{% if i == 0 %}        
 				<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
 			{% elif i == 1%}
 				 <table>
 				 <tr><td>{{ entry[i] }}</td></tr>
-				 {% if headerTitle %}
+				 {% if i == headerTitle[0] %}
 				 <tr><td>
 					 <a href="" class="small" id="{{ entry[i-1] }}" onClick="load_bookComment($(this));">Show Comments</a> | 
 					 <a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
 						      data-position-to="window"  data-transition="fade">Add Comments</a>
-	
+				 </td></tr>				 
+				 <!--NEEED TO HAVE ACCESS LEVEL-->
+				 {% elif i == headerEmail[0]  and accesslevel == 1%}
+				 <tr><td>
+					 <a href="" class="small" id="{{ entry[i] }}" onClick="waiveFee($(this));">Waive Fee</a> 
 				 </td></tr>
+				 
+				 {%else%}
 				 {% endif %}
-				 </table>											       
+				 </table>
+				 
+
+				 
 		   {% else %}
 				{{ entry[i] }}
 			{% endif %}

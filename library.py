@@ -171,10 +171,10 @@ def ajax_table_request():
     else:   
         table = get_table_user(tablename) # Run this version if userSpecific is set from client
 
-    if current_user.accesslevel == 1:
+    if current_user.accesslevel == 1 and tablename == "book":
         return render_template('libbooktable.html', headers=table[0], entries=table[1])
     else:
-        return render_template('table.html', headers=table[0], entries=table[1])
+        return render_template('table.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
         
 @app.route('/table')
 def get_table(table):
@@ -356,8 +356,7 @@ def un_reserve_book():
     except:
         g.db.rollback()
         return "False";
-        	
-              
+        	  
             
 #add review/comments to book
 @app.route('/add_review', methods=['POST']) 
@@ -382,16 +381,39 @@ def add_review():
     except:
         g.db.rollback()
         return "False";
-              
-
             
+     
+#add review/comments to book
+@app.route('/waive_fee', methods=['POST']) 
+@login_required
+def waive_fee():  
+    try:    
+        bid = int(request.form['bid'])
+        comment = request.form['comment']
+        star = int(request.form['star'])
+        date = strftime("%Y-%m-%d")
+        email = current_user.email
+        
+        sql = "insert into review values(%d, '%s', '%s', %d, '%s')" \
+               % (bid, email, date, star, comment)
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False";
+            
+
 #user page
 @app.route('/user')		
 def user():
     table = get_table("available_books")
 
     if current_user.is_authenticated():
-        return render_template('user.html', headers=table[0], entries=table[1], email=current_user.email)
+        return render_template('user.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
     else:
         return render_template('user.html', headers=table[0], entries=table[1])   
 
@@ -400,7 +422,7 @@ def user():
 @login_required
 def lib():
     if current_user.is_authenticated():
-        return render_template('lib.html', email=current_user.email)
+        return render_template('lib.html', email=current_user.email, accesslevel=current_user.accesslevel)
     else:
         return render_template('lib.html')  
 
@@ -409,7 +431,7 @@ def lib():
 @login_required	
 def dba():
     if current_user.is_authenticated():
-        return render_template('dba.html', email=current_user.email)
+        return render_template('dba.html', email=current_user.email, accesslevel=current_user.accesslevel)
     else:
         return render_template('dba.html')  
         
