@@ -105,7 +105,8 @@
 
 	{% if email is defined %}
 		<div class="msginfo">
-			<p id="insertmsg">Welcome {{ email }}! <a href="#profForm" id="profileButton" data-rel="popup" data-position-to="window" data-transition="fade">Edit Profile</a></p>
+			<p id="insertmsg">Welcome {{ email }}! 
+			<a href="#profForm" id="profileButton" data-rel="popup" data-position-to="window" data-transition="fade">Edit Profile</a></p>
 		</div>
 
 		<!-- Profile form -->
@@ -130,8 +131,8 @@
 						<label for="profPassword">Password</label>
 						<input type="password" name="profPassword" id="profPassword" placeholder="Password"/>
 					</div>
-					<button type="button" id="updateButton" name="updateButton" data-inline="true">Submit</button>
 				</div>
+				<button type="button" id="updateButton" name="updateButton" data-inline="true">Submit</button>
 			</form>
 		</div>
 		<!-- End of profile form -->

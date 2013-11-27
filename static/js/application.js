@@ -36,6 +36,7 @@ $(document).ready(function(){
         });
     });
 
+	/*
     $("#profileButton").click(function() {
         $.post("/profile", function(result) {
             if (result != "False") {
@@ -44,22 +45,25 @@ $(document).ready(function(){
                 $("#profPassword").val(result.password);
             }
         });
-    });
+    });*/
 
+	
     $("#updateButton").click(function() {
         var name = $("#profName").val();
         var phone = $("#profPhone").val();
         var password = $("#profPassword").val(); 
-        
-        $.post("/update_profile", { email: email, phone: phone, password: password }, function(result) {
+		
+       $.post("/update_profile", { name: name, phone:phone, password: password }, function(result) {
             if (result != "False") {
-                document.getElementById("insertmsg").html("Profile updated");    
+			    document.getElementById("insertmsg").html("Profile is updated successfully!");
             }
             else {
-                document.getElementById("insertmsg").html("Failed to update your profile");
+                document.getElementById("insertmsg").html("Fail to update profile!");
             }
-        });
+        });		
+        $("#profForm").popup("close");
     });
+	
 
     $("#login").click(function() {
         var email = $("#email").val();

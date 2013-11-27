@@ -256,12 +256,16 @@ def get_profile():
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
+    name = request.form['name']
+    phone = request.form['phone']
+    password = request.form['password']
+    password, salt = hash_password(password)
+    
+    print name
+    print phone
+    print password
+    print hash
     try:
-        name = request.form['name']
-        phone = request.form['phone']
-        password = request.form['password']
-        password, salt = hash_password(password)
-
         sql = "UPDATE user_inf SET name = '%s', phone = '%s', password = '%s', salt = '%s' \
             WHERE email = '%s'" % (name, phone, password, salt, current_user.email)
 
@@ -271,7 +275,7 @@ def update_profile():
         return "True"
 
     except:
-        g.db.rollback()
+        #g.db.rollback()
         return "False"
 
 #borrow_page

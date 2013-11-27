@@ -5,13 +5,23 @@
 <div class="decornav"></div>
 <div class="user_nav">
 	<br/>
-	<a href="#">Users</a><br/>
-	<a href="#">Loaned Books</a><br/>
-	<a href="#">Overdue Books</a><br/>
-	<a href="#">Users with Balance</a><br/>
+	<font color=#fff>
+	<a id="user_inf" href="#" onClick="loadTable($(this));">Users</a><br/>
+	---------------------------<br/>
+	<a id="debtors" href="#" onClick="loadTable($(this));">Debtors</a><br/>
+	---------------------------<br/>	
+	<a id="overdue_users" href="#" onClick="loadTable($(this));">Overdue Books</a><br/>
+	---------------------------<br/>	
+	<a href="#" onClick="loadTable($(this));">Users with Balance</a><br/>
+	---------------------------<br/>
+	<a id="logout" href="#t" onClick="logout();" style="font-color:black">Logout</a><br />
+	---------------------------<br/>
+	</font>
 </div>			
 
 <!--TABLES-->
+{% set headerPlace= [] %}	<!--flag -->
+{% set headerTitle = [] %}	<!--flag -->
 <div class="related_body">
 	<div data-role="content" data-theme="d">
 	    <table id="tableContent" data-role="table" data-mode="columntoggle" data-filter="true" class="ui-responsive table-stroke">
@@ -20,7 +30,12 @@
 				<tr>
 					{% for header in headers %}
 						<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
-					{% if count.update({'value': count.value + 1}) %} {% endif %}
+					
+					{%if header[0] == 'fee' %}
+						{% do headerTitle.append(1) %} 
+					{%endif%}
+					
+					{% if count.update({'value': count.value + 1}) %} {% endif %}					
 					{% endfor %}
 				</tr>
 			</thead>
