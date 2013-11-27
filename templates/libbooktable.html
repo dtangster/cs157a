@@ -1,0 +1,84 @@
+{% set count = {'value': 0} %}	
+{% set headerTitle = [] %}	<!--flag -->
+
+<div>
+    <button id="addBookButton" data-mini-"true">Add Book</button>
+	<button id="maintenanceButton" data-mini-"true">Perform Maintenance</button>
+</div>
+
+<thead>
+	<tr>
+		{% for header in headers %}
+			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}
+		{%if header[0] == 'title' %}
+			{% do headerTitle.append(1) %} 
+		{%endif%}
+			</th>
+		{% if count.update({'value': count.value + 1}) %} {% endif %}
+		{% endfor %}
+	</tr>
+</thead>
+<tbody>
+</td></tr>
+	{% for entry in entries %}
+	<tr>
+		{% for i in range(count.value) %}
+		<td>
+			{% if i == 0 %}        
+				 <button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
+			{% elif i == 1%}
+				 <table>
+				 <tr><td>{{ entry[i] }}</td></tr>
+				 {% if headerTitle %}
+				 <tr><td>
+					 <a href="#bookForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
+						      data-position-to="window"  data-transition="fade">Edit</a>
+				 </td></tr>
+				 {% endif %}
+				 </table>											       
+		   {% else %}
+				{{ entry[i] }}
+			{% endif %}
+		</td>
+		{% endfor %}  
+	</tr>
+	{% endfor %}
+</tbody>
+
+<!-- Profile form -->
+<div data-role="popup" id="bookForm" data-overlay-theme="b" data-theme="b" data-history="false">    
+	<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+	<form id="bookEditForm">
+		<div data-role="header">
+			<div style="margin:35px; width:100%;"> 
+			 	<h3 style="color: white">Edit Book</h3>
+			</div>
+		</div>
+		<div data-role="content">
+			<div data-role="fieldcontain">
+				<label for="title">Title</label>
+				<input type="text" name="title" id="title" placeholder="Title"/>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="author">Author</label>
+				<input type="text" name="author" id="author" placeholder="Author"/>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="pubDate">Publication Date</label>
+				<input type="password" name="pubDate" id="pubDate" placeholder="Publication Date"/>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="edition">Edition</label>
+				<input type="text" name="edition" id="edition" placeholder="Edition"/>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="copies">Copies</label>
+				<input type="password" name="copies" id="copies" placeholder="Copies"/>
+			</div>
+		</div>
+		<center>
+			<button type="button" id="updateButton" name="updateButton" data-inline="true">Submit</button>
+		</center>
+	</form>
+</div>
+<!-- End of profile form -->

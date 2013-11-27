@@ -220,7 +220,7 @@ function librarianAction(button) {
 function load_bookComment(link) {
     var bid = link.attr("id");
 	
-      $.get("/ajax/table_request", { table: "review", bookSpecific: "True", userSpecific:"False",  bid:bid }, function(result) {
+    $.get("/ajax/table_request", { table: "review", bookSpecific: "True", userSpecific:"False",  bid:bid }, function(result) {
         $("#loadingImage").toggle();
         $("#tableContent").html(result).table("refresh").trigger("create").show();;      
     });    
