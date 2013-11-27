@@ -1,5 +1,6 @@
 $(document).ready(function(){
     table = "available_books";
+    var bid;
 
     // Lines below handle websockets to update browser tables when an update is made on the database
     inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
@@ -72,7 +73,7 @@ $(document).ready(function(){
         
         console.log("HELLO");
 
-        $.post("/update_profile", { title: title, author: author, pub_date: pub_date, edition: edition, copies: copies }, function(result) {
+        $.post("/update_profile", { bid: bid, title: title, author: author, pub_date: pub_date, edition: edition, copies: copies }, function(result) {
             if (result != "False") {
                 document.getElementById("insertmsg").innerHTML = "Book is updated successfully!";
             }
@@ -258,18 +259,6 @@ function waiveFee(link) {
         });	
 }
 
-//waives fee
-function maintenance(link) {
-	  email = 'lib'
-     $.post("/perform_maintenance", { email: email }, function(result) {
-            if (result != "False") {
-				}
-            else {
-            }
-        });	
-}
-
-
 // AJAX call to retrieve book data
 function loadBookData(button) {
     bid = button.attr("id");
@@ -291,10 +280,8 @@ function changeBookData() {
     var pub_date = $("#pub_date").val(); 
     var edition = $("#edition").val();
     var copies = $("#copies").val();
-    
-    console.log("HELLO");
 
-    $.post("/update_profile", { bid: bid, title: title, author: author, pub_date: pub_date, edition: edition, copies: copies }, function(result) {
+    $.post("/update_book_data", { bid: bid, title: title, author: author, pub_date: pub_date, edition: edition, copies: copies }, function(result) {
         if (result != "False") {
             document.getElementById("insertmsg").innerHTML = "Book is updated successfully!";
         }
@@ -342,9 +329,6 @@ function loadTableUser(tableToLoad) {
         $("#tableContent").html(result).table("refresh").trigger("create").show();;      
     });    
 }
-
-
-
 
 function logout() {
     $.get("/logout", function(result) {
