@@ -354,8 +354,7 @@ def un_reserve_book():
     except:
         g.db.rollback()
         return "False";
-        	
-              
+        	  
             
 #add review/comments to book
 @app.route('/add_review', methods=['POST']) 
@@ -380,16 +379,39 @@ def add_review():
     except:
         g.db.rollback()
         return "False";
-              
-
             
+     
+#add review/comments to book
+@app.route('/waive_fee', methods=['POST']) 
+@login_required
+def waive_fee():  
+    try:    
+        bid = int(request.form['bid'])
+        comment = request.form['comment']
+        star = int(request.form['star'])
+        date = strftime("%Y-%m-%d")
+        email = current_user.email
+        
+        sql = "insert into review values(%d, '%s', '%s', %d, '%s')" \
+               % (bid, email, date, star, comment)
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False";
+            
+
 #user page
 @app.route('/user')		
 def user():
     table = get_table("available_books")
 
     if current_user.is_authenticated():
-        return render_template('user.html', headers=table[0], entries=table[1], email=current_user.email)
+        return render_template('user.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
     else:
         return render_template('user.html', headers=table[0], entries=table[1])   
 
@@ -400,7 +422,7 @@ def lib():
     table = get_table("available_books")
 
     if current_user.is_authenticated():
-        return render_template('lib.html', headers=table[0], entries=table[1], email=current_user.email)
+        return render_template('lib.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
     else:
         return render_template('lib.html', headers=table[0], entries=table[1])  
 
@@ -411,7 +433,7 @@ def dba():
     table = get_table("available_books")
 
     if current_user.is_authenticated():
-        return render_template('dba.html', headers=table[0], entries=table[1], email=current_user.email)
+        return render_template('dba.html', headers=table[0], entries=table[1], email=current_user.email, accesslevel=current_user.accesslevel)
     else:
         return render_template('dba.html', headers=table[0], entries=table[1])  
         
