@@ -1,5 +1,7 @@
 {% set count = {'value': 0} %}	
 {% set headerTitle = [] %}	<!--flag -->
+{% set headerEmail = [] %}
+{% set headerOverdue = [] %}
 
 <div>
     <button id="addBookButton" data-mini-"true">Add Book</button>
@@ -11,10 +13,16 @@
 		{% for header in headers %}
 			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}
 		{%if header[0] == 'title' %}
-			{% do headerTitle.append(1) %} 
+			{% do headerTitle.append(count.value) %} 
 		{%endif%}
+		{%if header[0] == 'email' %}
+			{% do headerEmail.append(count.value) %} 
+		{%endif%}		
+		{%if header[0] == 'due_date' %}
+			{% do headerOverdue.append(count.value) %} 
+		{%endif%}		
 			</th>
-		{% if count.update({'value': count.value + 1}) %} {% endif %}
+		{% if count.update({'value': count.value + 1}) %} {% endif %}		
 		{% endfor %}
 	</tr>
 </thead>
@@ -35,7 +43,17 @@
 						      data-position-to="window"  data-transition="fade">Edit</a>
 				 </td></tr>
 				 {% endif %}
-				 </table>											       
+				 </table>
+
+			 
+			{% elif i== headerOverdue[0]  and accesslevel == 1%}
+					 <table><tr><td>
+					 {{ entry[i] }}<br/>
+					 <a href="" class="small" id="{{ entry[i] }}" vemail = {{entry[i-5]}} vbid = {{entry[i-4]}}
+					 onClick="extendDueDate($(this));">Extend Due <br/>Date by 7 days</a> 					 
+					 </td></tr></table>		
+
+				 
 		   {% else %}
 				{{ entry[i] }}
 			{% endif %}

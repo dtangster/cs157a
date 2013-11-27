@@ -252,6 +252,21 @@ function loadBookData(button) {
     });
 }
 
+//extend due date fee
+function extendDueDate(link) {
+    var email = link.attr("vemail");
+	var bid = link.attr("vbid");	
+	
+     $.post("/extend_dueDate", { email: email , bid:bid }, function(result) {
+            if (result != "False") {
+                outbox.send(JSON.stringify({ table: 'debtors', userSpecific: "False" })).trigger("create").show();     
+            }
+            else {
+            }
+        });	
+}
+
+
 // This function expects an HTML object as a parameter
 function loadTable(tableToLoad) {
     $("#loadingImage").toggle();

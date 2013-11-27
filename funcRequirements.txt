@@ -1,18 +1,20 @@
 USER
+* = done
+*register
+*login
+*see available books
+*see highest rated books
+*see reserved books
+*reserve book
+*cancel reserved book
+l*eave comment
+*update profile
 
-register
-login
-see available books
-see highest rated books
-see reserved books
-reserve book
-cancel reserved book
-leave comment
 
 LIBRARIAN
 
-waive fees
-extend due date
+*waive fees
+*extend due date
 reset password
 view users
 view loans books
