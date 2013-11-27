@@ -380,7 +380,7 @@ def add_review():
         return "False";
             
      
-#add review/comments to book
+#waive fee update
 @app.route('/waive_fee', methods=['POST']) 
 @login_required
 def waive_fee():  
@@ -398,6 +398,27 @@ def waive_fee():
         g.db.rollback()
         return "False";
             
+#extend due date update
+@app.route('/extend_dueDate', methods=['POST']) 
+@login_required
+def extend_dueDate():  
+    print request.form['email']
+    print (request.form['bid'])
+    try:    
+        email = str(request.form['email'])
+        bid = int(request.form['bid'])
+        sql = "update loan set due_date =(select due_date + 7 from loan where email = '%s' and bid = %d) \
+               where email='%s' and bid = %d" % (email, bid, email, bid)
+               
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()        
+        return "True"
+    except:
+        g.db.rollback()
+        return "False";            
+
+
 
 #user page
 @app.route('/user')		
