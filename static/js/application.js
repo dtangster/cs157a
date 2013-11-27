@@ -47,6 +47,10 @@ $(document).ready(function(){
         $("#registerForm").show();
     });
 
+    $("#profileButton").click(function() {
+        $("#profileForm").show();
+    });
+
     $("#login").click(function() {
         email = $("#email").val();
         password = $("#password").val();  
@@ -221,8 +225,3 @@ function logout() {
         location.reload();  
     });   
 }
-
-
-
-
-
