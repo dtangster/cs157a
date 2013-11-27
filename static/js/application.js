@@ -36,7 +36,7 @@ $(document).ready(function(){
         });
     });
 
-	/*
+
     $("#profileButton").click(function() {
         $.post("/profile", function(result) {
             if (result != "False") {
@@ -45,7 +45,7 @@ $(document).ready(function(){
                 $("#profPassword").val(result.password);
             }
         });
-    });*/
+    });
 
 	
     $("#updateButton").click(function() {
@@ -55,10 +55,10 @@ $(document).ready(function(){
 		
        $.post("/update_profile", { name: name, phone:phone, password: password }, function(result) {
             if (result != "False") {
-			    document.getElementById("insertmsg").html("Profile is updated successfully!");
+			    document.getElementById("insertmsg").innerHTML = "Profile is updated successfully!";
             }
             else {
-                document.getElementById("insertmsg").html("Fail to update profile!");
+                document.getElementById("insertmsg").innerHML = "Fail to update profile!";
             }
         });		
         $("#profForm").popup("close");
@@ -99,11 +99,11 @@ $(document).ready(function(){
                 $("#phone").val("");
                 $("#password2").val(""); 
                 document.getElementById("insertmsg").innerHTML = "You are registered and logged in!";
-                outbox.send(JSON.stringify({ table: 'user_inf' }));
-                $("#regForm").popup("close");
+                location.replace("localhost:5000"); 
+                location.reload();  
             }
             else {
-                document.getElementById("insertmsg").html("Account already exists!");
+                document.getElementById("insertmsg").innerHTML = "Account already exists!";
             }
                
             $("#regForm").popup("close");
