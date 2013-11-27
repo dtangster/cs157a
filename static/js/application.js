@@ -102,6 +102,8 @@ $(document).ready(function(){
 	
 	
 	
+
+	
 	//Comment form logic
 	$(".commPOP").click(function() {
 		$("#commForm").show();
@@ -121,13 +123,13 @@ $(document).ready(function(){
                 $("#usr_comment").val("");
                 $("#usr_star").val("");
                 document.getElementById("insertmsg").innerHTML = "You Successfully Commented on Book ID: " + bid;
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));
+                outbox.send(JSON.stringify({ table: 'user_inf' })).trigger("create").show();;
             }
             else {
-                document.getElementById("insertmsg").innerHTML = "Fail to comment on book!";
+                 document.getElementById("insertmsg").html("Fail to comment on book!");
             }
-			
-            $("#commForm").popup("close");
+			    $("#commForm").popup("close");
+            
         });
     });
 	
@@ -139,6 +141,9 @@ $(document).ready(function(){
 	    $('#bidnum').text("Enter Comments for book id: " + bid);
 		$('#bidpop').val(bid);
 	});
+	
+	
+
 	
 }); 
 	
