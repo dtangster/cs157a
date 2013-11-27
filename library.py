@@ -436,7 +436,23 @@ def extend_dueDate():
         return "True"
     except:
         g.db.rollback()
-        return "False";            
+        return "False";          
+    
+   
+@app.route('/perform_maintenance', methods=['POST']) 
+@login_required
+def perform_maintenance():
+    print "maintainance func"    
+    try:    
+        sql = "select perform_maintenance()"
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()        
+        return "True"
+    except:
+        g.db.rollback()
+        return "False";  
+      
 
 #user page
 @app.route('/user')		
