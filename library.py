@@ -262,11 +262,7 @@ def update_profile():
     phone = request.form['phone']
     password = request.form['password']
     password, salt = hash_password(password)
-    
-    print name
-    print phone
-    print password
-    print hash
+
     try:
         sql = "UPDATE user_inf SET name = '%s', phone = '%s', password = '%s', salt = '%s' \
             WHERE email = '%s'" % (name, phone, password, salt, current_user.email)
@@ -417,6 +413,29 @@ def get_book_data():
     edition = int(row[3])
     copies = int(row[4])
     return jsonify({ "title": title, "author": author, "pub_date": pub_date, "edition": edition, "copies": copies })
+
+@app.route('/update_book_data', methods=['POST'])
+@login_required
+def update_book_data():
+    bid = int(request.form['bid'])
+    title = str(request.form['title'])
+    author = str(request.form['author'])
+    pub_date = str(request.form['pub_date'])
+    edition = int(request.form['edition'])
+    copies = int(request.form['copies'])
+
+    try:
+        sql = "UPDATE book SET title = '%s', author = '%s', pub_date = '%s', edition = %d, copies = %d \
+            WHERE bid = %d" % (title, author, pub_date, edition, copies, bid)
+
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()
+        return "True"
+
+    except:
+        #g.db.rollback()
+        return "False"
 
 #extend due date update
 @app.route('/extend_dueDate', methods=['POST']) 

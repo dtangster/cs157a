@@ -52,7 +52,7 @@ $(document).ready(function(){
         var phone = $("#profPhone").val();
         var password = $("#profPassword").val(); 
 		
-       $.post("/update_profile", { name: name, phone:phone, password: password }, function(result) {
+        $.post("/update_profile", { name: name, phone: phone, password: password }, function(result) {
             if (result != "False") {
 			    document.getElementById("insertmsg").innerHTML = "Profile is updated successfully!";
             }
@@ -61,6 +61,27 @@ $(document).ready(function(){
             }
         });		
         $("#profForm").popup("close");
+    });
+
+    $("#bookUpdateButton").click(function() {
+        var title = $("#title").val();
+        var author = $("#author").val();
+        var pub_date = $("#pub_date").val(); 
+        var edition = $("#edition").val();
+        var copies = $("#copies").val();
+        
+        console.log("HELLO");
+
+        $.post("/update_profile", { title: title, author: author, pub_date: pub_date, edition: edition, copies: copies }, function(result) {
+            if (result != "False") {
+                document.getElementById("insertmsg").innerHTML = "Book is updated successfully!";
+            }
+            else {
+                document.getElementById("insertmsg").innerHML = "Fail to update book data!";
+            }
+        });   
+
+        $("#bookForm").popup("close");
     });
 	
 
@@ -250,6 +271,27 @@ function loadBookData(button) {
             $("#copies").val(result.copies);
         }
     });
+}
+
+function changeBookData() {
+    var title = $("#title").val();
+    var author = $("#author").val();
+    var pub_date = $("#pub_date").val(); 
+    var edition = $("#edition").val();
+    var copies = $("#copies").val();
+    
+    console.log("HELLO");
+
+    $.post("/update_profile", { bid: bid, title: title, author: author, pub_date: pub_date, edition: edition, copies: copies }, function(result) {
+        if (result != "False") {
+            document.getElementById("insertmsg").innerHTML = "Book is updated successfully!";
+        }
+        else {
+            document.getElementById("insertmsg").innerHML = "Fail to update book data!";
+        }
+    });   
+
+    $("#bookForm").popup("close");
 }
 
 //extend due date fee
