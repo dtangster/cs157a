@@ -53,9 +53,39 @@
 {% block loginMessage %}
 
     {% if email is defined %}
-        <div class="msginfo"><p id="insertmsg">Welcome {{ email }}! <a id="profile">Edit Profile<a></p></div>   
-    {% else %}
-        <div class="msginfo"><p id="insertmsg">Welcome guest!</p></div>     
+
+        <div class="msginfo">
+            <p id="insertmsg">Welcome {{ email }}! <a href="#profForm" id="profileButton" data-rel="popup" data-position-to="window" data-transition="fade">Edit Profile</a></p>
+        </div>
+
+        <!-- Profile form -->
+        <div data-role="popup" id="profForm" data-overlay-theme="b" data-theme="b" data-history="false">    
+            <a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+            <form id="profileForm">
+                <div data-role="header">
+                    <div style="margin:35px; width:100%;"> 
+                        <h3 style="color: white">Update Profile</h3>
+                    </div>
+                </div>
+                <div data-role="content">
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="profName">Name</label>
+                        <input type="text" name="profName" id="profName" placeholder="Name"/>
+                    </div>
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="profPhone">Phone</label>
+                        <input type="text" name="profPhone" id="profPhone" placeholder="Phone ###-###-####"/>
+                    </div>
+                    <div data-role="fieldcontain" class="ui-hide-label">
+                        <label for="profPassword">Password</label>
+                        <input type="password" name="profPassword" id="profPassword" placeholder="Password"/>
+                    </div>
+                    <button type="button" id="updateButton" name="updateButton" data-inline="true">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- End of profile form -->
+
     {% endif %}
 
 {% endblock %}

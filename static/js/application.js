@@ -38,17 +38,14 @@ $(document).ready(function(){
         });
     });
 
-    // Lines below handle the login form logic
-    $("#loginButton").click(function() {
-        $("#loginForm").show();   
-    });
-
-    $("#registerButton").click(function() {
-        $("#registerForm").show();
-    });
-
     $("#profileButton").click(function() {
-        $("#profileForm").show();
+        $.post("/profile", function(result) {
+            if (result != "False") {
+                $("#profName").val("HELLO");
+                $("#profPhone").val("HELLO");
+                $("#profPassword").val("HELLO");
+            }
+        });
     });
 
     $("#login").click(function() {
