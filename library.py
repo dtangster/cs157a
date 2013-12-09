@@ -174,8 +174,10 @@ def ajax_table_request():
     if current_user.accesslevel == 1:
         if tablename == "book":
             return render_template('libbooktable.html', headers=table[0], entries=table[1])
-        elif tablename == "user_inf" or tablename == "user_inf_archive":
+        elif tablename == "user_inf":
             return render_template('libusertable.html', headers=table[0], entries=table[1])
+        elif tablename == "user_archive":
+            return render_template('libloantable.html', headers=table[0], entries=table[1])
         elif tablename == "debtors":
             return render_template('libdebtorstable.html', headers=table[0], entries=table[1])
         elif tablename == "overdue_users":
