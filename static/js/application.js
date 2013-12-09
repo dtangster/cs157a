@@ -162,7 +162,7 @@ $(document).ready(function(){
                 outbox.send(JSON.stringify({ table: 'user_inf' }));
             }
             else {
-                 document.getElementById("insertmsg").html("Fail to comment on book!");
+                document.getElementById("insertmsg").innerHTML = "Fail to comment on book!";
             }
 			    $("#commForm").popup("close");
             
@@ -186,36 +186,44 @@ function userAction(button) {
     if (table == "available_books") {
         $.post("/borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
+                document.getElementById("insertmsg").innerHTML = "Book borrowed successfully";
                 outbox.send(JSON.stringify({ table: table, userSpecific: "False" })); 
             }
             else {
+                document.getElementById("insertmsg").innerHTML = "Failed to borrow book";
             }
         });
     }
     else if (table == "reservable_books") {
         $.post("/reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
+                document.getElementById("insertmsg").innerHTML = "Book reserved successfully";
                 outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));  
             }
             else {
+                document.getElementById("insertmsg").innerHTML = "Failed to reserve book";
             }
         });
     }
     else if (table == "reservation") {
         $.post("/un_reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
+                document.getElementById("insertmsg").innerHTML = "Reservation cancelled";
                 outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));   
             }
             else {
+                document.getElementById("insertmsg").innerHTML = "Failed to cancel reservation";
             }
         });
     }
     else if (table == "loan") {
         $.post("/return_book", { bid: bid }, function(result) {
             if (result != "False") {
+                document.getElementById("insertmsg").innerHTML = "Book returned";
                 outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));     
             }
             else {
+                document.getElementById("insertmsg").innerHTML = "Failed to return book";
             }
         });
     }
@@ -238,9 +246,11 @@ function waiveFee(link) {
 
     $.post("/waive_fee", { email: email }, function(result) {
         if (result != "False") {
+            document.getElementById("insertmsg").innerHTML = "Fee waived";
             outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));     
         }
         else {
+            document.getElementById("insertmsg").innerHTML = "Failed to waive fee";
         }
     });	
 }
@@ -286,9 +296,11 @@ function extendDueDate(link) {
 	
      $.post("/extend_dueDate", { email: email , bid:bid }, function(result) {
         if (result != "False") {
+            document.getElementById("insertmsg").innerHTML = "Due date extended";
             outbox.send(JSON.stringify({ table: 'debtors', userSpecific: "False" }));     
         }
         else {
+            document.getElementById("insertmsg").innerHTML = "Failed to extend due date";
         }
     });	
 }
@@ -299,10 +311,11 @@ function resetPassword(link) {
 
     $.post("/reset_password", { email: email }, function(result) {
         if (result != "False") {
-            console.log(result);
+            document.getElementById("insertmsg").innerHTML = "User password has been reset to 'password'";
             outbox.send(JSON.stringify({ table: 'user_inf', userSpecific: "False" }));       
         }
         else {
+            document.getElementById("insertmsg").innerHTML = "Failed to reset user password";
         }
     });
 
@@ -312,13 +325,12 @@ function resetPassword(link) {
 
 //Perform maintenance to archive old users
 function performMaintenance() {
-    console.log("Maintenance called");
-
     $.post("/perform_maintenance", function(result) {
         if (result != "False") {
-            console.log("Maintenance Performed");        
+            document.getElementById("insertmsg").innerHTML = "Maintenance performed";
         }
         else {
+            document.getElementById("insertmsg").innerHTML = "Failed to perform maintenance";
         }
     });    
 }
