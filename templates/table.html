@@ -1,69 +1,41 @@
 
 {% set count = {'value': 0} %}	
 {% set headerTitle = [] %}	<!--flag -->
-{% set headerEmail = [] %}
-{% set headerOverdue = [] %}
+
 <thead>
 	<tr>
 		{% for header in headers %}
-			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}
-		{%if header[0] == 'title' %}
-			{% do headerTitle.append(count.value) %} 
-		{%endif%}
-		{%if header[0] == 'email' %}
-			{% do headerEmail.append(count.value) %} 
-		{%endif%}		
-		{%if header[0] == 'due_date' %}
-			{% do headerOverdue.append(count.value) %} 
-		{%endif%}		
-			</th>
-		{% if count.update({'value': count.value + 1}) %} {% endif %}		
+			<th data-priority="{{ count.value + 1 }}">{{ header[0] }}</th>
+			{%if header[0] == 'title' %}
+				{% do headerTitle.append(count.value) %} 
+			{%endif%}		
+			{% if count.update({'value': count.value + 1}) %} {% endif %}		
 		{% endfor %}
 	</tr>
 </thead>
 <tbody>
-</td></tr>
-	{% for entry in entries %}
+{% for entry in entries %}
 	<tr>
-		{% for i in range(count.value) %}
-		<td>
-				 
-			{% if i == 0 %}        
-				<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
-			{% elif i == 1%}
-				 <table>
-				 <tr><td>{{ entry[i] }}</td></tr>
-				 
-				{% if i == headerTitle[0] %}
-				 <tr><td>
-					 <a href="" class="small" id="{{ entry[i-1] }}" onClick="load_bookComment($(this));">Show Comments</a> | 
-					 <a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
-						      data-position-to="window"  data-transition="fade">Add Comments</a>
-				 </td></tr>				 
-
-				 {% elif i == headerEmail[0]  and accesslevel == 1%}
-				 <tr><td>
-					 <a href="" class="small" id="{{ entry[i] }}" onClick="waiveFee($(this));">Waive Fee</a> 
-				 </td></tr>
-				 
-				
-				 {%else%}
-				 {% endif %}
-				 </table>
-			
-			 
-			{% elif i== headerOverdue[0]  and accesslevel == 1%}
-					 <table><tr><td>
-					 {{ entry[i] }}<br/>
-					 <a href="" class="small" id="{{ entry[i] }}" vemail = {{entry[i-5]}} vbid = {{entry[i-4]}}
-					 onClick="extendDueDate($(this));">Extend Due <br/>Date by 7 days</a> 					 
-					 </td></tr></table>		
-					 
-		   {% else %}
-				{{ entry[i] }}
+	{% for i in range(count.value) %}
+		<td>		 
+		{% if i == 0 %}        
+			<button data-mini="true" id={{ entry[i] }} onClick="userAction($(this));">{{ entry[i] }}</button>
+		{% elif i == 1 %}
+			<table>
+				<tr><td>{{ entry[i] }}</td></tr>	 
+			{% if i == headerTitle[0] %}
+				<tr><td>
+				<a href="" class="small" id="{{ entry[i-1] }}" onClick="load_bookComment($(this));">Show Comments</a> | 
+				<a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
+					      data-position-to="window"  data-transition="fade">Add Comments</a>
+				</td></tr>				 
 			{% endif %}
+			</table>	 
+		{% else %}
+			{{ entry[i] }}
+		{% endif %}
 		</td>
-		{% endfor %}  
+	{% endfor %}  
 	</tr>
-	{% endfor %}
+{% endfor %}
 </tbody>	
