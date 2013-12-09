@@ -78,7 +78,7 @@ $(document).ready(function(){
                 document.getElementById("insertmsg").innerHTML = "Book is updated successfully!";
             }
             else {
-                document.getElementById("insertmsg").innerHML = "Fail to update book data!";
+                document.getElementById("insertmsg").innerHTML = "Fail to update book data!";
             }
         });   
 
@@ -96,7 +96,7 @@ $(document).ready(function(){
                 location.reload();	
             }
             else {
-                document.getElementById("insertmsg").html("Incorrect username or password");
+                document.getElementById("insertmsg").innerHTML = "Incorrect username or password";
             }
 
             $("#loginForm").toggle();
@@ -239,6 +239,7 @@ function librarianAction(button) {
 
 //function loads comments for specific book
 function load_bookComment(link) {
+    $("#loadingImage").toggle();
     var bid = link.attr("id");
 	
     $.get("/ajax/table_request", { table: "review", bookSpecific: "True", userSpecific:"False",  bid:bid }, function(result) {
