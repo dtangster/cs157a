@@ -11,7 +11,12 @@
 {% for entry in entries %}
     <tr>
     {% for i in range(count.value) %}
-        <td>{{ entry[i] }}</td>
+        <td>
+        	{{ entry[i] }}
+        	{% if i == 2 %}
+        		<a href="" class="small" id="{{ entry[i] }}" onClick="waiveFee($(this));">Waive Fee</a>
+        	{% endif %}
+        </td>
     {% endfor %}  
     </tr>
 {% endfor %}

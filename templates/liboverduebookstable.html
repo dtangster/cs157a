@@ -11,7 +11,13 @@
 {% for entry in entries %}
     <tr>
     {% for i in range(count.value) %}
-        <td>{{ entry[i] }}</td>
+        <td>
+        	{{ entry[i] }}
+        	{% if i == 6 %}
+        	<br/>
+        	<a href="" class="small" id="{{ entry[i] }}" vemail="{{ entry[i] }}" vbid="{{entry[i-4]}}" onClick="extendDueDate($(this));">Extend Due <br/>Date by 7 days</a> 
+        	{% endif %}
+        </td>
     {% endfor %}  
     </tr>
 {% endfor %}
