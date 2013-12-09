@@ -413,12 +413,11 @@ def waive_fee():
 @app.route('/reset_password', methods=['POST']) 
 @login_required
 def reset_password():
-    try:    
-        password = request.form['password']
-        hashed_password, salt = hash_password(password)
-        print hashed_password
+    try: 
+        email = request.form['email']   
+        hashed_password, salt = hash_password("password")
    
-        sql = "UPDATE user_inf SET password = '%s' WHERE email = '%s'" % (hashed_password, current_user.email)
+        sql = "UPDATE user_inf SET password = '%s', salt = '%s' WHERE email = '%s'" % (hashed_password, salt, email)
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()        

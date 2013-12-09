@@ -235,7 +235,7 @@ function load_bookComment(link) {
 //waives fee
 function waiveFee(link) {
     var email = link.attr("id");
-    
+
     $.post("/waive_fee", { email: email }, function(result) {
         if (result != "False") {
             outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));     
@@ -294,11 +294,10 @@ function extendDueDate(link) {
 }
 
 //Reset password
-function resetPassword() {
-    var email = $("#")
-    var password = $("#newPassword").val();
-    
-    $.post("/reset_password", { password: password }, function(result) {
+function resetPassword(link) {    
+    var email = link.attr("id");
+
+    $.post("/reset_password", { email: email }, function(result) {
         if (result != "False") {
             console.log(result);
             outbox.send(JSON.stringify({ table: 'user_inf', userSpecific: "False" }));       
