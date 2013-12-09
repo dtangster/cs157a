@@ -14,7 +14,12 @@
 	<tr>
 		{% for i in range(count.value) %}
 		<td>		
+		{% if i == 0 %}
+			<a onClick="loadBookData($(this));" href="#bookForm" class="small" class="commPOP" id="{{ entry[i] }}" data-rel="popup" data-position-to="window" data-transition="fade">{{ entry[i] }}</a>
+		{% endif %}
+		{% if i != 0 %}
 			{{ entry[i] }}
+		{% endif %}
 		</td>
 		{% endfor %}  
 	</tr>
