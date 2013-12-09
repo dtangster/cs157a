@@ -160,7 +160,7 @@ $(document).ready(function(){
                 $("#usr_comment").val("");
                 $("#usr_star").val("");
                 document.getElementById("insertmsg").innerHTML = "You Successfully Commented on Book ID: " + bid;
-                outbox.send(JSON.stringify({ table: 'user_inf' })).trigger("create").show();;
+                outbox.send(JSON.stringify({ table: 'user_inf' }));
             }
             else {
                  document.getElementById("insertmsg").html("Fail to comment on book!");
@@ -190,7 +190,7 @@ function userAction(button) {
     if (table == "available_books") {
         $.post("/borrow_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })).trigger("create").show(); 
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })); 
             }
             else {
             }
@@ -199,7 +199,7 @@ function userAction(button) {
     else if (table == "reservable_books") {
         $.post("/reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })).trigger("create").show();  
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));  
             }
             else {
             }
@@ -208,16 +208,16 @@ function userAction(button) {
     else if (table == "reservation") {
         $.post("/un_reserve_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "True" })).trigger("create").show();   
+                outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));   
             }
             else {
             }
         });
     }
     else if (table == "loan") {
-        $.post("/un_borrow_book", { bid: bid }, function(result) {
+        $.post("/return_book", { bid: bid }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "True" })).trigger("create").show();     
+                outbox.send(JSON.stringify({ table: table, userSpecific: "True" }));     
             }
             else {
             }
@@ -315,7 +315,6 @@ function loadTable(tableToLoad) {
     table = tableToLoad.attr("id");
 
     $.get("/ajax/table_request", { table: table, userSpecific: "False" }, function(result) {
-        console.log(result);
         $("#loadingImage").toggle();
         $("#tableContent").html(result).table("refresh").trigger("create").show();;
     });    	
