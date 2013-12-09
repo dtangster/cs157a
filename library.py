@@ -298,6 +298,7 @@ def borrow_book():
         sql = "INSERT INTO loan (bid, email, loan_date) VALUES \
                (%d, '%s', '%s')" % (bid, email, date)
         
+        
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()
@@ -334,10 +335,12 @@ def reserve_book():
     try:
         bid = int(request.form['bid'])
         email = current_user.email
-        date = strftime("%Y-%m-%d")
+        #date = strftime("%Y-%m-%d")
         
-        sql = "INSERT INTO reservation (bid, email, reserve_date) VALUES \
-               (%d, '%s', '%s')" % (bid, email, date)
+        #sql = "INSERT INTO reservation (bid, email, reserve_date) VALUES \
+        #       (%d, '%s', '%s')" % (bid, email, date)
+
+        sql = "select create_reservation('%s', %d)" % (email, bid)
 
         cur = g.db.cursor()
         cur.execute(sql)
