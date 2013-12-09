@@ -14,7 +14,7 @@
         <td>
         	{{ entry[i] }}
         	{% if i == 2 %}
-        		<a href="" class="small" id="{{ entry[i] }}" onClick="waiveFee($(this));">Waive Fee</a>
+        		<a href="" class="small" id="{{ entry[i-1] }}" onClick="waiveFee($(this));">Waive Fee</a>
         	{% endif %}
         </td>
     {% endfor %}  
