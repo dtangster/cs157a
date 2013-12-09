@@ -11,8 +11,36 @@
 {% for entry in entries %}
     <tr>
     {% for i in range(count.value) %}
-        <td>{{ entry[i] }}</td>
+        <td>
+        	{{ entry[i] }}
+        	{% if i == 5 %}
+        		<br/>
+        		<a onClick="resetPassword();" href="#passwordForm" class="small" class="commPOP" data-rel="popup" data-position-to="window" data-transition="fade">Reset Password</a>
+        	{% endif %}
+        </td>
     {% endfor %}  
     </tr>
 {% endfor %}
 </tbody>
+
+<!-- Book Reset password form -->
+<div data-role="popup" id="passwordForm" data-overlay-theme="b" data-theme="b" data-history="false">    
+	<a id="butclose" href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+	<form id="passwordEditForm">
+		<div data-role="header">
+			<div style="margin:35px; width:100%;"> 
+			 	<h3 style="color: white">Reset Password</h3>
+			</div>
+		</div>
+		<div data-role="content">
+			<div data-role="fieldcontain">
+				<label for="newPassword">New Password</label>
+				<input type="text" name="newPassword" id="newPassword" placeholder="Password"/>
+			</div>
+		</div>
+		<center>
+			<button type="button" id="resetPasswordButton" name="resetPasswordButton" data-inline="true" onClick="resetPassword();">Submit</button>
+		</center>
+	</form>
+</div>
+<!-- End Reset password form -->

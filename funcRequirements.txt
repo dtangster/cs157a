@@ -2,14 +2,15 @@ USER
 * = done
 *register
 *login
+*logout
 *see available books
 *see highest rated books
 *see reserved books
 *reserve book
 *cancel reserved book
-l*eave comment
+*leave comment
 *update profile
-
+*filter search
 
 LIBRARIAN
 

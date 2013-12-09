@@ -404,6 +404,24 @@ def waive_fee():
     except:
         g.db.rollback()
         return "False";
+
+#reset password
+@app.route('/reset_password', methods=['POST']) 
+@login_required
+def reset_password():
+    try:    
+        password = str(request.form['password'])
+        hashed_password, salt = hash_password(password)
+   
+        sql = "update user_inf set password = '%s', salt = '%s' where email = '%s'" % (hashed_password, salt, current_user.email)
+        cur = g.db.cursor()
+        cur.execute(sql)
+        g.db.commit()        
+        return "True"
+
+    except:
+        g.db.rollback()
+        return "False";
             
 #retrieve book data
 @app.route('/book_data', methods=['POST']) 

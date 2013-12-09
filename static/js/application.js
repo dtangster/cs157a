@@ -293,10 +293,24 @@ function extendDueDate(link) {
     });	
 }
 
+//Reset password
+function resetPassword() {
+    var password = $("#newPassword").val();
+    
+    $.post("/reset_password", { password: password }, function(result) {
+        if (result != "False") {
+            console.log("Password reset");
+            outbox.send(JSON.stringify({ table: 'user_inf', userSpecific: "False" }));       
+        }
+        else {
+        }
+    }); 
+}
+
 //Perform maintenance to archive old users
 function performMaintenance() {
     console.log("Maintenance called");
-    
+
     $.post("/perform_maintenance", function(result) {
         if (result != "False") {
             console.log("Maintenance Performed");        
