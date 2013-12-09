@@ -172,15 +172,12 @@ $(document).ready(function(){
 	
 	
 	//adds bid to popup by replacing input value to selected bid
-	$('a[data-rel="popup"]').click(function () {
+	$('a[data-rel="popup"]').click(function() {
 		var link = $(this);
 		var bid = link.attr('id')
 	    $('#bidnum').text("Enter Comments for book id: " + bid);
 		$('#bidpop').val(bid);
 	});
-	
-	
-
 	
 }); 
 	
@@ -225,18 +222,6 @@ function userAction(button) {
     }
 }
 
-function librarianAction(button) {
-    var bid = button.attr("id"); 
-
-    if (table == "something") {
-
-    }
-    else {
-
-    }
-}
-
-
 //function loads comments for specific book
 function load_bookComment(link) {
     $("#loadingImage").toggle();
@@ -253,7 +238,7 @@ function waiveFee(link) {
     var email = link.attr("id");
      $.post("/waive_fee", { email: email }, function(result) {
             if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" })).trigger("create").show();     
+                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));     
             }
             else {
             }
@@ -300,14 +285,26 @@ function extendDueDate(link) {
 	var bid = link.attr("vbid");	
 	
      $.post("/extend_dueDate", { email: email , bid:bid }, function(result) {
-            if (result != "False") {
-                outbox.send(JSON.stringify({ table: 'debtors', userSpecific: "False" })).trigger("create").show();     
-            }
-            else {
-            }
-        });	
+        if (result != "False") {
+            outbox.send(JSON.stringify({ table: 'debtors', userSpecific: "False" }));     
+        }
+        else {
+        }
+    });	
 }
 
+//Perform maintenance to archive old users
+function performMaintenance() {
+    console.log("Maintenance called");
+    
+    $.post("/perform_maintenance", function(result) {
+        if (result != "False") {
+            console.log("Maintenance Performed");        
+        }
+        else {
+        }
+    });    
+}
 
 // This function expects an HTML object as a parameter
 function loadTable(tableToLoad) {
