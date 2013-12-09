@@ -41,7 +41,7 @@ $(document).ready(function(){
     $("#profileButton").click(function() {
         $.post("/profile", function(result) {
             if (result != "False") {
-                $("#profName").val(result.name);
+                $("#profEmail").val(result.name);
                 $("#profPhone").val(result.phone);
                 $("#profPassword").val(result.password);
             }
@@ -49,7 +49,7 @@ $(document).ready(function(){
     });
 	
     $("#updateButton").click(function() {
-        var name = $("#profName").val();
+        var name = $("#profEmail").val();
         var phone = $("#profPhone").val();
         var password = $("#profPassword").val(); 
 		
@@ -314,6 +314,7 @@ function loadTable(tableToLoad) {
     table = tableToLoad.attr("id");
 
     $.get("/ajax/table_request", { table: table, userSpecific: "False" }, function(result) {
+        console.log(result);
         $("#loadingImage").toggle();
         $("#tableContent").html(result).table("refresh").trigger("create").show();;
     });    	

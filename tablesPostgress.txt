@@ -99,6 +99,11 @@ SELECT name, email, fee
 FROM user_inf WHERE fee > 0 
 ORDER BY name, fee DESC;
 
+DROP VIEW IF EXIST reservable_books;
+CREATE VIEW reservable_books AS
+SELECT * FROM book
+WHERE available = 0;
+
 DROP VIEW IF EXISTS reserved_books;
 CREATE VIEW reserved_books AS
 SELECT name, email, bid, title, author, edition, reserve_date
@@ -127,18 +132,22 @@ BEGIN
     -- Archive users when they are inactive for 1 year
     INSERT INTO user_archive
         (SELECT * FROM user_inf
-         WHERE ADDDATE(last_login, 365) < CURRENT_DATE AND active_loan = 0);
+        WHERE  last_login in (SELECT last_login from user_inf where last_login => last_login +365) 
+         < CURRENT_DATE AND active_loan = 0);
     
     DELETE FROM user_inf WHERE email IN (SELECT email from user_archive);
 
     -- Cancel reservations not picked up after 5 days
-    UPDATE reservation SET status = 'C' WHERE ADDDATE(avail_date, 5) < CURRENT_DATE AND status = 'W';
+    UPDATE reservation SET status = 'C' WHERE 
+    (SELECT last_login from user_inf where last_login => last_login + 5) 
+    < CURRENT_DATE AND status = 'W';
 
     -- ONLY FOR SIMULATION
     -- Assume users picked up their reserved books
     UPDATE reservation SET status = 'P' WHERE status = 'W';
 END; $$
 LANGUAGE plpgsql;
+
 
 
 -- Handle login and moving users out of archive
@@ -216,8 +225,8 @@ CREATE OR REPLACE FUNCTION checkout()
 RETURNS TRIGGER AS $checkout$
     BEGIN
         NEW.due_date = (select date from CURRENT_DATE);
-	    UPDATE loan set due_date = NEW.due_date + 7 where email = new.email; 
-	    UPDATE loan set loan_date = NEW.due_date where email = new.email;    
+        UPDATE loan set due_date = NEW.due_date + 7 where email = new.email; 
+        UPDATE loan set loan_date = NEW.due_date where email = new.email;    
         UPDATE book SET available = available - 1 where bid = new.bid;
         UPDATE user_inf SET active_loan = active_loan + 1 where email = new.email;  
         RETURN NEW;         
