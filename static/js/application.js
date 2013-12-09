@@ -84,7 +84,6 @@ $(document).ready(function(){
 
         $("#bookForm").popup("close");
     });
-	
 
     $("#login").click(function() {
         var email = $("#email").val();
@@ -113,7 +112,7 @@ $(document).ready(function(){
         var password = $("#password2").val();  
 
         $.post("/register", { name: name, email: email, phone: phone, password: password }, function(result) {
-            if (result === "True") {
+            if (result == "True") {
                 $("#registerForm").toggle();
                 $("#email2").val("");
                 $("#name").val("");
@@ -236,13 +235,14 @@ function load_bookComment(link) {
 //waives fee
 function waiveFee(link) {
     var email = link.attr("id");
-     $.post("/waive_fee", { email: email }, function(result) {
-            if (result != "False") {
-                outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));     
-            }
-            else {
-            }
-        });	
+    
+    $.post("/waive_fee", { email: email }, function(result) {
+        if (result != "False") {
+            outbox.send(JSON.stringify({ table: table, userSpecific: "False" }));     
+        }
+        else {
+        }
+    });	
 }
 
 // AJAX call to retrieve book data
@@ -295,16 +295,20 @@ function extendDueDate(link) {
 
 //Reset password
 function resetPassword() {
+    var email = $("#")
     var password = $("#newPassword").val();
     
     $.post("/reset_password", { password: password }, function(result) {
         if (result != "False") {
-            console.log("Password reset");
+            console.log(result);
             outbox.send(JSON.stringify({ table: 'user_inf', userSpecific: "False" }));       
         }
         else {
         }
-    }); 
+    });
+
+    $("#newPassword").val("");
+    $("#passwordForm").popup("close");
 }
 
 //Perform maintenance to archive old users

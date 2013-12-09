@@ -1,11 +1,16 @@
-USER
 * = done
+
+USER
 *register
 *login
 *logout
-*see available books
-*see highest rated books
-*see reserved books
+
+{
+see available books
+see highest rated books
+see reserved books
+} // counts as viewing
+
 *reserve book
 *cancel reserved book
 *leave comment
@@ -16,11 +21,17 @@ LIBRARIAN
 
 *waive fees
 *extend due date
+perform maintenance
 reset password
+add book
+*edit book
+
+{
 view users
 view loans books
 view overdue books
 view users with outstanding balance
+} // counts as viewing
 
 DBA
 

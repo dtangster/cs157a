@@ -26,8 +26,7 @@
 			{% if i == headerTitle[0] %}
 				<tr><td>
 				<a href="" class="small" id="{{ entry[i-1] }}" onClick="load_bookComment($(this));">Show Comments</a> | 
-				<a href="#commForm" class="small" class="commPOP" id={{ entry[i-1] }}  data-rel="popup" 
-					      data-position-to="window"  data-transition="fade">Add Comments</a>
+				<a href="#commForm" class="small" class="commPOP" id="{{ entry[i-1] }}" data-rel="popup" data-position-to="window" data-transition="fade">Add Comments</a>
 				</td></tr>				 
 			{% endif %}
 			</table>	 

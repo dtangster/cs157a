@@ -244,6 +244,10 @@ def register():
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()
+
+        # This line is for logging in the user through Flask-Login 
+        login_user(User(email, accesslevel))
+        
         return "True" # Success
 
     except:
@@ -395,7 +399,7 @@ def waive_fee():
     try:    
         email = str(request.form['email'])
    
-        sql = "update user_inf set fee = 0 where email='%s'" % (email)
+        sql = "UPDATE user_inf SET fee = 0 WHERE email='%s'" % (email)
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()        
@@ -410,10 +414,11 @@ def waive_fee():
 @login_required
 def reset_password():
     try:    
-        password = str(request.form['password'])
+        password = request.form['password']
         hashed_password, salt = hash_password(password)
+        print hashed_password
    
-        sql = "update user_inf set password = '%s', salt = '%s' where email = '%s'" % (hashed_password, salt, current_user.email)
+        sql = "UPDATE user_inf SET password = '%s' WHERE email = '%s'" % (hashed_password, current_user.email)
         cur = g.db.cursor()
         cur.execute(sql)
         g.db.commit()        
