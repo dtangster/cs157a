@@ -272,7 +272,7 @@ function changeBookData() {
             document.getElementById("insertmsg").innerHTML = "Book is updated successfully!";
         }
         else {
-            document.getElementById("insertmsg").innerHML = "Fail to update book data!";
+            document.getElementById("insertmsg").innerHTML = "Fail to update book data!";
         }
     });   
 
