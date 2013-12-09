@@ -490,19 +490,13 @@ def user():
 @app.route('/lib')	
 @login_required
 def lib():
-    if current_user.is_authenticated():
-        return render_template('lib.html', email=current_user.email, accesslevel=current_user.accesslevel)
-    else:
-        return render_template('lib.html')  
+    return render_template('lib.html', email=current_user.email, accesslevel=current_user.accesslevel)  
 
 #dba page
 @app.route('/dba')	
 @login_required	
 def dba():
-    if current_user.is_authenticated():
-        return render_template('dba.html', email=current_user.email, accesslevel=current_user.accesslevel)
-    else:
-        return render_template('dba.html')  
+    return render_template('dba.html', email=current_user.email, accesslevel=current_user.accesslevel) 
         
 @app.route('/login', methods=['POST'])
 def login():
