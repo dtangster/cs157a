@@ -132,15 +132,14 @@ BEGIN
     -- Archive users when they are inactive for 1 year
     INSERT INTO user_archive
         (SELECT * FROM user_inf
-		WHERE  last_login in (SELECT last_login from user_inf where last_login => last_login +365) 
-		 < CURRENT_DATE AND active_loan = 0);
-    
+		WHERE  last_login < current_date - 365 
+		 AND active_loan = 0);
+
     DELETE FROM user_inf WHERE email IN (SELECT email from user_archive);
 
     -- Cancel reservations not picked up after 5 days
     UPDATE reservation SET status = 'C' WHERE 
-	(SELECT last_login from user_inf where last_login => last_login + 5) 
-	< CURRENT_DATE AND status = 'W';
+	 CURRENT_DATE >= (SELECT last_login from user_inf where last_login >= last_login + 5)  AND status = 'W';
 
     -- ONLY FOR SIMULATION
     -- Assume users picked up their reserved books
@@ -255,7 +254,7 @@ BEGIN
     IF  OLD.return_date is NULL AND NEW.return_date is NOT NULL 
 	      AND old.bid  in (select b.bid from reservation b where b.bid = old.bid)
     THEN 
-        UPDATE book SET available = available + 1 WHERE bid = new.bid;
+        --UPDATE book SET available = available + 1 WHERE bid = new.bid;
         UPDATE user_inf SET active_loan = active_loan - 1 WHERE email = NEW.email;
 			UPDATE reservation SET status = 'W', avail_date = (select date from CURRENT_DATE)
 				   WHERE bid = NEW.bid AND status = 'N' and 	reservation_id = (SELECT 
